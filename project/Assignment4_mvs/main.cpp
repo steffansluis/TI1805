@@ -3,9 +3,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 
-//#ifdef WIN32
+#ifdef WIN32
 #include <windows.h>
-//#endif
+#endif
 
 //#include <GL/glut.h>
 #include "glut\glut.h"
