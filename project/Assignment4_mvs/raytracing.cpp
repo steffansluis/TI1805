@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 
-
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -16,6 +15,10 @@
 Vec3Df testRayOrigin;
 Vec3Df testRayDestination;
 
+
+const char* model_obj = "models\dodgeColorTest.obj";
+
+
 //use this function for any preprocessing of the mesh.
 void init()
 {
@@ -23,7 +26,7 @@ void init()
 	//feel free to replace cube by a path to another model
 	//please realize that not all OBJ files will successfully load.
 	//Nonetheless, if they come from Blender, they should.
-    MyMesh.loadMesh("dodgeColorTest.obj", true);
+    MyMesh.loadMesh(model_obj, true);
 	MyMesh.computeVertexNormals();
 
 	//one first move: initialize the first light source
