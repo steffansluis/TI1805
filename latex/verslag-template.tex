@@ -1,0 +1,53 @@
+\documentclass[oneside]{book}
+
+\usepackage{fullpage,hyperref,titlesec}
+\usepackage[dutch]{babel}
+\usepackage[dutch]{babelbib}
+
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter. }{0pt}{\Huge\bfseries}
+
+\begin{document}
+
+\title{}
+\author{
+name and studentnr here
+R.S Sluis - 4088816}
+\date{Delft, \today}
+
+\frontmatter
+
+\maketitle
+
+\setcounter{page}{2}
+
+\pdfbookmark{\contentsname}{toc}
+\tableofcontents
+
+\chapter{Samenvatting}
+
+\mainmatter
+
+\chapter{Inleiding}
+
+\cite{greenwade93}
+
+\chapter{Experimentele methode}
+
+\chapter{Resultaten}
+
+\chapter{Discussie}
+
+\chapter{Conclusie}
+
+\backmatter
+
+\phantomsection
+\addcontentsline{toc}{chapter}{\bibname}
+
+\bibliographystyle{bababbrv}
+\bibliography{bibliography}
+
+\appendix
+\chapter{Aanhangsel}
+
+\end{document}
