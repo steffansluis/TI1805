@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-
 #include "raytracing.h"
 #include "mesh.h"
 #include "traqueboule.h"
@@ -23,6 +22,19 @@ class RGBValue
 	, g(gI)
 	, b(bI)
 	{
+		if (r>1)
+			r=1.0;
+		if (g>1)
+			g=1.0;
+		if (b>1)
+			b=1.0;
+
+		if (r<0)
+			r=0.0;
+		if (g<0)
+			g=0.0;
+		if (b<0)
+			b=0.0;
 	};
 	
 	float operator[](int i) const
@@ -373,7 +385,7 @@ void keyboard(unsigned char key, int x, int y)
 				//svp, decidez vous memes quels parametres vous allez passer à la fonction
 				//e.g., maillage, triangles, sphères etc.
 				float xscale=1.0f-float(x)/(WindowSize_X-1);
-				float yscale=float(y)/(WindowSize_Y-1);
+				float yscale=1.0f-float(y)/(WindowSize_Y-1);
 
 				origin=yscale*(xscale*origin00+(1-xscale)*origin10)+
 					(1-yscale)*(xscale*origin01+(1-xscale)*origin11);

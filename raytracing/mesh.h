@@ -19,7 +19,7 @@ class Material
             *this=m;
         };
  
-        Material& operator=(const Material& m)
+        Material & operator=(const Material & m)
         { 
             Kd_=m.Kd_;         
             Kd_is_set_=m.Kd_is_set_; // diffuse
@@ -180,7 +180,7 @@ public:
     void drawSmooth();
 
 	//this is relevant for you:
-	//Vertices are the vertex positions, textures, and normals of the mesh.
+	//Vertices are the vertex positions, and normals of the mesh.
 	std::vector<Vertex> vertices;
 	//this is relevant for you:
 	//texCoords are the texture coordinates, these are DIFFERENT indices in triangles.

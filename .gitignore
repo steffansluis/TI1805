@@ -1,0 +1,8 @@
+
+#ignore all mvs-project pc-specific stuff
+*.suo
+project/Assignment4_mvs/Assignment4_mvs.opensdf
+project/Assignment4_mvs/Assignment4_mvs.sdf
+project/Assignment4_mvs/Assignment4_mvs.vcxproj
+project/Assignment4_mvs/Assignment4_mvs.vcxproj.filters
+project/Assignment4_mvs/Assignment4_mvs.vcxproj.user
