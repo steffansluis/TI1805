@@ -43,14 +43,17 @@ void yourDebugDraw()
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING);
 	glColor3f(0,1,1);
+
 	glBegin(GL_LINES);
-	glVertex3f(testRayOrigin[0], testRayOrigin[1], testRayOrigin[2]);
-	glVertex3f(testRayDestination[0], testRayDestination[1], testRayDestination[2]);
+		glVertex3f(testRayOrigin[0], testRayOrigin[1], testRayOrigin[2]);
+		glVertex3f(testRayDestination[0], testRayDestination[1], testRayDestination[2]);
 	glEnd();
+
 	glPointSize(10);
-	glBegin(GL_POINTS);
-	glVertex3fv(MyLightPositions[0].pointer());
+		glBegin(GL_POINTS);
+		glVertex3fv(MyLightPositions[0].pointer());
 	glEnd();
+
 	glPopAttrib();
 
 }
