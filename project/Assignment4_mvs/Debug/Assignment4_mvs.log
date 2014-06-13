@@ -1,21 +1,16 @@
-﻿Build started 12-6-2014 21:12:29.
+﻿Build started 13-6-2014 16:25:17.
      1>Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp mesh.cpp raytracing.cpp
-         raytracing.cpp
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(20): error C2146: syntax error : missing ';' before identifier 'model_obj'
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(20): warning C4129: 'd' : unrecognized character escape sequence
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(20): error C2440: 'initializing' : cannot convert from 'const char [25]' to 'int'
-                 There is no context in which this conversion is possible
-         mesh.cpp
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\mesh.cpp(169): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\mesh.cpp(164): warning C4101: 'mtlfile' : unreferenced local variable
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
      1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\traqueboule.h(24): warning C4305: 'initializing' : truncation from 'double' to 'const float'
-         Generating Code...
-     1>Done Building Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" (Build target(s)) -- FAILED.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\include" /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\glut" glut32.lib glu32.lib OpenGL32.Lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.lib" /MACHINE:X86 Debug\main.obj
+         Debug\mesh.obj
+         Debug\raytracing.obj
+         Assignment4_mvs.vcxproj -> C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.exe
+     1>Done Building Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:02.97
+Time Elapsed 00:00:02.99

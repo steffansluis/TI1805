@@ -406,7 +406,9 @@ void keyboard(unsigned char key, int x, int y)
 			}
 		
 
-		result.writeImage("result.ppm");
+		result.writeImage("Render/result.ppm");
+		// if we have some more time, we might want to output .png instead of .ppm
+
 		break;
 	}
 	case 27:     // touche ESC

@@ -16,7 +16,7 @@ Vec3Df testRayOrigin;
 Vec3Df testRayDestination;
 
 
-const char* model_obj = "models\dodgeColorTest.obj";
+const char * model_obj = "models/dodgeColorTest.obj";
 
 
 //use this function for any preprocessing of the mesh.
