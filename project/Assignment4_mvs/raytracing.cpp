@@ -319,6 +319,21 @@ const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Ve
 {
 	std::vector<Triangle*> * myTriangles = NULL;
 
+	bool USE_DEBUG_TRIANGLES = false;
+
+	if (USE_DEBUG_TRIANGLES)
+	{
+		myTriangles = &std::vector<Triangle*>();
+
+		for (int i = 0; i < MyMesh.triangles.size(); i++)
+		{
+			myTriangles->push_back(&MyMesh.triangles[i]);
+		}
+
+		return myTriangles;
+	}
+
+
 	// Figure out which coordinate {X, Y, Z} to use
 	// THIS IS A DUMMY VALUE
 	BTree::Coordinate coordinate = BTree::Coordinate::X;
