@@ -17,6 +17,11 @@ Vec3Df testRayDestination;
 
 // class variables
 
+// B-tree collection objects
+BTree * xTree = NULL;
+BTree * yTree = NULL;
+BTree * zTree = NULL;
+
 // indicate the model and material-file that will be loaded.
 // the model and material file must be affiliated
 const char * model_obj = "models/dodgeColorTest.obj";
@@ -128,16 +133,16 @@ RayIntersection * calculateIntersection(const Vec3Df & origin, const Vec3Df & de
 
 
 	// The amount of triangles that are checked should be limited. 
-	const std::vector<Triangle> & triangles = retrieveTriangles(origin, dest);
+	const std::vector<Triangle*> & triangles = retrieveTriangles(origin, dest);
 
 
 	for (int i = 0; i < triangles.size(); i++)
 	{
 		//std::cout << "triangle: " << i << "\n";
 		// get the vertices for the triangle
-		Vec3Df vertex0 = MyMesh.vertices[triangles[i].v[0]].p;
-		Vec3Df vertex1 = MyMesh.vertices[triangles[i].v[1]].p;
-		Vec3Df vertex2 = MyMesh.vertices[triangles[i].v[2]].p;
+		Vec3Df vertex0 = MyMesh.vertices[triangles[i]->v[0]].p;
+		Vec3Df vertex1 = MyMesh.vertices[triangles[i]->v[1]].p;
+		Vec3Df vertex2 = MyMesh.vertices[triangles[i]->v[2]].p;
 
 		// calculate the normalized 'normal' component of the vertex
 		Vec3Df normal = calculateIntersection_n(vertex0, vertex1, vertex2);
@@ -290,18 +295,38 @@ bool calculateRayInsideTriangle(Vec3Df intersection, Vec3Df normal, Vec3Df v0, V
 // 
 void storeMeshBTree(const std::vector<Triangle> & triangles)
 {
-	// Yet to be implemented
+	// Since this is an intensive task, this only needs to be done once.
+	if (xTree == NULL || yTree == NULL || zTree == NULL)
+	{
+		// create a new B-Tree for the different coordinates
+		xTree = &BTree(BTree::Coordinate::X);
+		yTree = &BTree(BTree::Coordinate::Y);
+		zTree = &BTree(BTree::Coordinate::Z);
+		// This automatically takes care of the sorting
 
-
-
+		for (int i = 0; i < MyMesh.triangles.size(); i++)
+		{
+			// add all the triangles
+			xTree->AddNode(&MyMesh.triangles[i]);
+			yTree->AddNode(&MyMesh.triangles[i]);
+			zTree->AddNode(&MyMesh.triangles[i]);
+		}
+	}
 }
 
 
-const std::vector<Triangle> & retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest)
+const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest)
 {
-	// Yet to be implemented
-	// for now, just return all triangles
-	return MyMesh.triangles;
+	std::vector<Triangle*> * myTriangles;
+
+	// Figure out which coordinate {X, Y, Z} to use
+
+
+	// figure out the bounds for the triangles.
+
+
+
+	return myTriangles;
 }
 
 
@@ -361,6 +386,333 @@ void yourKeyboardFunc(char t, int x, int y)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------------- B-tree implementation -----------------------------*/
+
+/////////////////////////// BTree /////////////////////////////////
+
+
+BTree::BTree(Coordinate coordinate)
+{
+	this->_coordinate = coordinate;
+}
+
+void BTree::AddNode(Triangle* data)
+{
+	if (BTree::head == NULL)
+	{
+		BTree::head = &BTreeNode(data, this->_coordinate);
+	}
+	else
+	{
+		BTree::head->AddNode(data);
+	}
+}
+
+std::vector<Triangle*> * BTree::GetTriangles(float lowerLimit, float upperLimit)
+{
+	std::vector<Triangle*> * output = &std::vector<Triangle*>();
+
+	if (this->head != NULL)
+	{
+		this->head->GetTriangles(output, lowerLimit, upperLimit);
+	}
+
+	return output;
+}
+
+
+
+/////////////////////////// BTreeNode ///////////////////////////////
+
+
+// get the average value for the indicated triangle with the current coordination
+float BTreeNode::GetAverageTriangleValue(Triangle* triangle)
+{
+	int coordIndex;
+
+	switch (this->_coordinate)
+	{
+	case BTree::Coordinate::X:
+		coordIndex = 0;
+		break;
+	case BTree::Coordinate::Y:
+		coordIndex = 1;
+		break;
+	case BTree::Coordinate::Z:
+		coordIndex = 2;
+		break;
+
+	default: 
+		return 0;
+	}
+
+	float value = MyMesh.vertices[triangle->v[0]].p[coordIndex];
+	value += MyMesh.vertices[triangle->v[1]].p[coordIndex];
+	value += MyMesh.vertices[triangle->v[2]].p[coordIndex];
+
+	return value / 3.0;
+}
+
+
+BTreeNode::BTreeNode(Triangle* tData, BTree::Coordinate coordinate)
+{
+	// set depth to '0' (no children)
+	BTreeNode::depth = 0;
+	this->_coordinate = coordinate;
+}
+
+
+
+void BTreeNode::AddNode(Triangle* data)
+{
+	// first, compare the new triangle with our current triangle.
+	int comparison = Compare(data);
+
+	// if it is smaller (or equal):
+	if (comparison <= 0)
+	{
+		// if the left child exists, recursively make him add
+		if (this->leftChild != NULL)
+		{
+			this->leftChild->AddNode(data);
+		}
+		else
+		{
+			// since the left child does not exist, add this as the left child. 
+			this->leftChild = &BTreeNode(data, this->_coordinate);
+			
+			// increment our own depth if necessary.
+			this->depth = max(this->depth, 1);
+			// Balance ourselves out, if necessary
+			this->Balance();
+		}
+	}
+	else
+	{
+		// if the right child exists, recursively make him add
+		if (this->rightChild != NULL)
+		{
+			this->rightChild->AddNode(data);
+		}
+		else
+		{
+			// since the right child does not exist, add this as the right child
+			this->rightChild = &BTreeNode(data, this->_coordinate);
+
+			// increment our own depth if necessary.
+			this->depth = max(this->depth, 1);
+			// balance ourselves out, if necessary
+			this->Balance();
+		}
+	}
+}
+
+// Compares a triangle with the triangle of the current node
+// Outputs -1 if the other triangle is smaller, 0 if they are equal and 1 if it is larger.
+int BTreeNode::Compare(Triangle* data)
+{
+	// since the comparison is represented with 3 values, we take the average of those.
+	float myValue = GetAverageTriangleValue(this->data);
+	float hisValue = GetAverageTriangleValue(data);
+
+	if (hisValue < myValue)
+	{
+		return -1;
+	}
+	else if (hisValue > myValue)
+	{
+		return 1;
+	}
+
+	return 0;	
+}
+
+
+// @Author: Bas Boellaard
+// This method checks if the current triangle is within the set limits for the set coordinate.
+// there are 3 possible outcomes:
+// result = 1 : the upperLimit is smaller than the smallest proper coordinate of the triangle.
+// result = 0  : the triangle is within the limits.
+// result = -1  : the lowerLimit is larger than the largest proper coordinate of the triangle. 
+int BTreeNode::withinLimit(float lowerLimit, float upperLimit)
+{
+	int coordIndex;
+
+	switch (this->_coordinate)
+	{
+	case BTree::Coordinate::X:
+		coordIndex = 0;
+		break;
+	case BTree::Coordinate::Y:
+		coordIndex = 1;
+		break;
+	case BTree::Coordinate::Z:
+		coordIndex = 2;
+		break;
+
+	default:
+		return 0;
+	}
+
+	float coord1 = MyMesh.vertices[this->data->v[0]].p[coordIndex];
+	float coord2 = MyMesh.vertices[this->data->v[1]].p[coordIndex];
+	float coord3 = MyMesh.vertices[this->data->v[2]].p[coordIndex];
+
+	// check if they are all more than the lowerLimit
+	if (coord1 < lowerLimit && coord2 < lowerLimit && coord3 < lowerLimit)
+	{
+		// this triangle is less than the lower limit.
+		return -1;
+	}
+
+	// check whether they are larger than the upperLimit
+	if (coord1 > upperLimit && coord2 > upperLimit && coord3 > upperLimit)
+	{
+		// this triangle is more than the upper limit.
+		return 1;
+	}
+
+	// since neither was the case, this triangle is within the hit range
+	return 0;
+}
+
+
+
+
+void BTreeNode::GetTriangles(std::vector<Triangle*> * collection, float lowerLimit, float upperLimit)
+{
+	// check if the current triangle is within limits
+	int withinLimits = withinLimit(lowerLimit, upperLimit);
+
+	// if the limit is more than (or equal to) 0, we can check the right childs.
+	// this means that the triangles we need have a coordinate larger than this current coordinate.
+	if (withinLimits >= 0 && this->rightChild != NULL)
+	{
+		this->rightChild->GetTriangles(collection, lowerLimit, upperLimit);
+	}
+
+	// if the limit is les than (or equal to) 0, we can check the left childs.
+	// this means that the triangles we need have a coordinate smaller than this current coordinate.
+	if (withinLimits <= 0 && this->leftChild != NULL)
+	{
+		this->leftChild->GetTriangles(collection, lowerLimit, upperLimit);
+	}
+
+	// if however withinLimits equals 0, that means the current triangle was within bounds
+	if (withinLimits == 0)
+	{
+		collection->push_back(this->data);
+	}
+}
+
+
+
+// balance out the node if necessary. 
+// If not, call the parent node to balance.
+void BTreeNode::Balance()
+{
+	int leftDepth = -1;
+	int rightDepth = -1;
+
+	if (this->leftChild != NULL)
+	{
+		leftDepth = BTreeNode::leftChild->depth;
+	}
+
+	if (this->rightChild != NULL)
+	{
+		rightDepth = BTreeNode::rightChild->depth;
+	}
+
+	// if the difference in depth is more than 3, it requires balancing.
+	if (rightDepth - leftDepth >= 3)
+	{
+		// The right part of the node is too large.
+		// assume L = left child ; T = current node (top) ; R = right child
+		// The following changes must be made:
+		// - the parent of T becomes the parent of R
+		// - the child of the parent of T changes appropriately
+		// - R becomes the parent of T
+		// - The right child of T becomes the left child of R
+		// - the left child of R becomes T
+		// - the depth of T becomes the depth of L + 1
+		//
+		// store R in advance
+		BTreeNode* R = this->rightChild;
+
+		R->parent = this->parent;
+
+		if (R->parent->leftChild == this)
+		{
+			R->parent->leftChild = R;
+		}
+		else if (R->parent->rightChild == this)
+		{
+			R->parent->rightChild = R;
+		}
+		else
+		{
+			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
+		}
+
+		this->parent = R;
+		this->rightChild = R->leftChild;
+		R->leftChild = this;
+		this->depth = this->leftChild->depth + 1;
+	}
+	else if (leftDepth - rightDepth >= 3)
+	{
+		// The left part of the node is too large.
+		// assume L = left child ; T = current node (top) ; R = right child
+		// The following changes must be made:
+		// - the parent of T becomes the parent of L
+		// - the child of the parents of T changes appropriately
+		// - L becomes the parent of T
+		// - the left child of T becomes the right child of L
+		// - the right child of L becomes T
+		// the depth of T becomes the depth of R + 1
+		//
+		// store L in advance
+		BTreeNode* L = this->leftChild;
+
+		L->parent = this->parent;
+
+		if (L->parent->leftChild == this)
+		{
+			L->parent->leftChild = L;
+		}
+		else if (L->parent->rightChild == this)
+		{
+			L->parent->rightChild = L;
+		}
+		else
+		{
+			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
+		}
+
+		this->parent = L;
+		this->leftChild = L->rightChild;
+		L->rightChild = this;
+		this->depth = this->rightChild->depth + 1;
+	}
+
+	// if your parent is not null, balance him out.
+	if (this->parent != NULL)
+	{
+		this->parent->Balance();
+	}
+}
 
 
 

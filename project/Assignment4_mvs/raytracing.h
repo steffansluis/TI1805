@@ -14,6 +14,8 @@ extern unsigned int RayTracingResolutionX;  // largeur fenetre
 extern unsigned int RayTracingResolutionY;  // largeur fenetre
 
 class RayIntersection;
+class BTree;
+class BTreeNode;
 
 
 //use this function for any preprocessing of the mesh.
@@ -41,7 +43,7 @@ bool calculateRayInsideTriangle(Vec3Df intersection, Vec3Df normal, Vec3Df v0, V
 
 // data-structures for the triangles
 void storeMeshBTree(const std::vector<Triangle> & triangles);
-const std::vector<Triangle> & retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest);
+const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest);
 
 
 
@@ -85,6 +87,65 @@ public:
 
 	// the index of the triangle that the ray intersects with.
 	int index;
+
+};
+
+
+
+class BTree
+{
+public:
+	enum class Coordinate { X, Y, Z };
+
+private:
+
+	BTreeNode* head;
+
+	Coordinate _coordinate;
+
+public:
+
+	BTree(Coordinate coordinate);
+
+	void AddNode(Triangle* data);
+
+	std::vector<Triangle*> * GetTriangles(float lowerLimit, float upperLimit);
+
+
+};
+
+
+class BTreeNode
+{
+private:
+
+	Triangle* data;
+	int depth;
+
+	BTree::Coordinate _coordinate;
+
+	BTreeNode* parent;
+	BTreeNode* leftChild;
+	BTreeNode* rightChild;
+
+	float GetAverageTriangleValue(Triangle* triangle);
+
+public:
+
+	
+
+	BTreeNode(Triangle* tData, BTree::Coordinate coordinate);
+
+	void AddNode(Triangle* data);
+
+	int Compare(Triangle* data);
+	int withinLimit(float lowerLimit, float upperLimit);
+
+	void GetTriangles(std::vector<Triangle*> * collection, float lowerLimit, float upperLimit);
+
+	
+
+	void Balance();
 
 };
 
