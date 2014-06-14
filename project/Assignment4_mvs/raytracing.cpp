@@ -136,7 +136,7 @@ RayIntersection * calculateIntersection(const Vec3Df & origin, const Vec3Df & de
 	const std::vector<Triangle*> * triangles = retrieveTriangles(origin, dest);
 
 
-	for (int i = 0; i < triangles->size(); i++)
+	for (unsigned int i = 0; i < triangles->size(); i++)
 	{
 		// get the vertices for the triangle
 		Vec3Df vertex0 = MyMesh.vertices[(*triangles)[i]->v[0]].p;
@@ -304,7 +304,7 @@ void storeMeshBTree(const std::vector<Triangle> & triangles)
 		zTree = &BTree(BTree::Coordinate::Z);
 		// This automatically takes care of the sorting
 
-		for (int i = 0; i < MyMesh.triangles.size(); i++)
+		for (unsigned int i = 0; i < MyMesh.triangles.size(); i++)
 		{
 			// add all the triangles
 			xTree->AddNode(&MyMesh.triangles[i]);
@@ -325,7 +325,7 @@ const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Ve
 	{
 		myTriangles = &std::vector<Triangle*>();
 
-		for (int i = 0; i < MyMesh.triangles.size(); i++)
+		for (unsigned int i = 0; i < MyMesh.triangles.size(); i++)
 		{
 			myTriangles->push_back(&MyMesh.triangles[i]);
 		}

@@ -1,13 +1,8 @@
-﻿Build started 14-6-2014 02:38:34.
+﻿Build started 14-6-2014 03:16:54.
      1>Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp raytracing.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt raytracing.cpp
          raytracing.cpp
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(139): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(307): warning C4018: '<' : signed/unsigned mismatch
-         main.cpp
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\traqueboule.h(24): warning C4305: 'initializing' : truncation from 'double' to 'const float'
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\include" /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\glut" glut32.lib glu32.lib OpenGL32.Lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.lib" /MACHINE:X86 Debug\main.obj
          Debug\mesh.obj
@@ -17,4 +12,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.60
+Time Elapsed 00:00:01.43
