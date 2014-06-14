@@ -1,23 +1,20 @@
-﻿Build started 14-6-2014 01:35:36.
+﻿Build started 14-6-2014 02:38:34.
      1>Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp raytracing.cpp
          raytracing.cpp
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(134): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(139): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(307): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(312): warning C4172: returning address of local variable or temporary
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(389): error C2440: '<function-style-cast>' : cannot convert from 'Triangle *' to 'BTreeNode'
-                 No constructor could take the source type, or constructor overload resolution was ambiguous
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(399): error C2511: 'BTreeNode::BTreeNode(Triangle *)' : overloaded member function not found in 'BTreeNode'
-                 c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.h(117) : see declaration of 'BTreeNode'
-     1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\raytracing.cpp(401): error C2597: illegal reference to non-static member 'BTreeNode::depth'
-         Generating Code...
-         Compiling...
          main.cpp
      1>c:\users\bas\dropbox\tu delft\jaar 3\ti1805 computer graphics\assignments\assignment 4\project\assignment4_mvs\traqueboule.h(24): warning C4305: 'initializing' : truncation from 'double' to 'const float'
          Generating Code...
-     1>Done Building Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" (Build target(s)) -- FAILED.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\include" /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\glut" glut32.lib glu32.lib OpenGL32.Lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.lib" /MACHINE:X86 Debug\main.obj
+         Debug\mesh.obj
+         Debug\raytracing.obj
+         Assignment4_mvs.vcxproj -> C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Debug\Assignment4_mvs.exe
+     1>Done Building Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_mvs.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:02.04
+Time Elapsed 00:00:03.60

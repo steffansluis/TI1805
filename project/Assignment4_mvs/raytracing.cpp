@@ -133,16 +133,16 @@ RayIntersection * calculateIntersection(const Vec3Df & origin, const Vec3Df & de
 
 
 	// The amount of triangles that are checked should be limited. 
-	const std::vector<Triangle*> & triangles = retrieveTriangles(origin, dest);
+	const std::vector<Triangle*> * triangles = retrieveTriangles(origin, dest);
 
 
-	for (int i = 0; i < triangles.size(); i++)
+	for (int i = 0; i < triangles->size(); i++)
 	{
 		//std::cout << "triangle: " << i << "\n";
 		// get the vertices for the triangle
-		Vec3Df vertex0 = MyMesh.vertices[triangles[i]->v[0]].p;
-		Vec3Df vertex1 = MyMesh.vertices[triangles[i]->v[1]].p;
-		Vec3Df vertex2 = MyMesh.vertices[triangles[i]->v[2]].p;
+		Vec3Df vertex0 = MyMesh.vertices[(*triangles)[i]->v[0]].p;
+		Vec3Df vertex1 = MyMesh.vertices[(*triangles)[i]->v[1]].p;
+		Vec3Df vertex2 = MyMesh.vertices[(*triangles)[i]->v[2]].p;
 
 		// calculate the normalized 'normal' component of the vertex
 		Vec3Df normal = calculateIntersection_n(vertex0, vertex1, vertex2);
@@ -317,7 +317,7 @@ void storeMeshBTree(const std::vector<Triangle> & triangles)
 
 const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest)
 {
-	std::vector<Triangle*> * myTriangles;
+	std::vector<Triangle*> * myTriangles = NULL;
 
 	// Figure out which coordinate {X, Y, Z} to use
 
