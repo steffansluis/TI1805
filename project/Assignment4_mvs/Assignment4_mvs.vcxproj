@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\include;C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\glut;C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\include;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)include;$(ProjectDir)glut;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)include;$(ProjectDir)glut;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -51,7 +51,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\include;C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\glut;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glut32.lib;glu32.lib;OpenGL32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
