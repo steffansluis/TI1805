@@ -59,7 +59,7 @@ Vec3Df performRayTracing(const Vec3Df & origin, const Vec3Df & dest)
 	myIteration++;
 
 	// First, load the mesh triangles into a smart storage system.
-	storeMeshBTree(MyMesh.triangles);
+	//storeMeshBTree(MyMesh.triangles);
 
 	// call the first iteration of the ray-tracing
 	return performRayTracingIteration(origin, dest, 0);
@@ -133,15 +133,15 @@ RayIntersection * calculateIntersection(const Vec3Df & origin, const Vec3Df & de
 
 
 	// The amount of triangles that are checked should be limited. 
-	const std::vector<Triangle*> * triangles = retrieveTriangles(origin, dest);
+	const std::vector<Triangle*> & triangles = retrieveTriangles(origin, dest);
 
 
-	for (unsigned int i = 0; i < triangles->size(); i++)
+	for (unsigned int i = 0; i < triangles.size(); i++)
 	{
 		// get the vertices for the triangle
-		Vec3Df vertex0 = MyMesh.vertices[(*triangles)[i]->v[0]].p;
-		Vec3Df vertex1 = MyMesh.vertices[(*triangles)[i]->v[1]].p;
-		Vec3Df vertex2 = MyMesh.vertices[(*triangles)[i]->v[2]].p;
+		Vec3Df vertex0 = MyMesh.vertices[triangles[i]->v[0]].p;
+		Vec3Df vertex1 = MyMesh.vertices[triangles[i]->v[1]].p;
+		Vec3Df vertex2 = MyMesh.vertices[triangles[i]->v[2]].p;
 
 		// calculate the normalized 'normal' component of the vertex
 		Vec3Df normal = calculateIntersection_n(vertex0, vertex1, vertex2);
@@ -315,19 +315,17 @@ void storeMeshBTree(const std::vector<Triangle> & triangles)
 }
 
 
-const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest)
+const std::vector<Triangle*> & retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest)
 {
-	std::vector<Triangle*> * myTriangles = NULL;
+	std::vector<Triangle*> & myTriangles = std::vector<Triangle*>();
 
-	bool USE_DEBUG_TRIANGLES = false;
+	bool USE_DEBUG_TRIANGLES = true;
 
 	if (USE_DEBUG_TRIANGLES)
 	{
-		myTriangles = &std::vector<Triangle*>();
-
 		for (unsigned int i = 0; i < MyMesh.triangles.size(); i++)
 		{
-			myTriangles->push_back(&MyMesh.triangles[i]);
+			myTriangles.push_back(&MyMesh.triangles[i]);
 		}
 
 		return myTriangles;
@@ -356,7 +354,7 @@ const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Ve
 		break;
 
 	default:
-		myTriangles = &std::vector<Triangle*>();
+		myTriangles = std::vector<Triangle*>();
 	}
 
 	return myTriangles;
@@ -440,6 +438,8 @@ void yourKeyboardFunc(char t, int x, int y)
 BTree::BTree(Coordinate coordinate)
 {
 	this->_coordinate = coordinate;
+
+	this->head = NULL;
 }
 
 
@@ -449,7 +449,7 @@ void BTree::AddNode(Triangle* data)
 {
 	if (BTree::head == NULL)
 	{
-		BTree::head = &BTreeNode(data, this->_coordinate);
+		BTree::head = &BTreeNode(NULL, data, this->_coordinate);
 	}
 	else
 	{
@@ -460,7 +460,7 @@ void BTree::AddNode(Triangle* data)
 // @Author: Bas Boellaard
 // Returns the triangles that are within bounds of the arguments. 
 // These bounds are applied to the coordinate that this B-Tree sorts on. 
-std::vector<Triangle*> * BTree::GetTriangles(float lowerLimit, float upperLimit)
+std::vector<Triangle*> & BTree::GetTriangles(float lowerLimit, float upperLimit)
 {
 	std::vector<Triangle*> * output = &std::vector<Triangle*>();
 
@@ -469,7 +469,7 @@ std::vector<Triangle*> * BTree::GetTriangles(float lowerLimit, float upperLimit)
 		this->head->GetTriangles(output, lowerLimit, upperLimit);
 	}
 
-	return output;
+	return *output;
 }
 
 
@@ -508,11 +508,17 @@ float BTreeNode::GetAverageTriangleValue(Triangle* triangle)
 
 // @Author: Bas Boellaard
 // Create a new Node for the BTree. 
-BTreeNode::BTreeNode(Triangle* tData, BTree::Coordinate coordinate)
+BTreeNode::BTreeNode(BTreeNode* tParent, Triangle* tData, BTree::Coordinate coordinate)
 {
 	// set depth to '0' (no children)
 	BTreeNode::depth = 0;
 	this->_coordinate = coordinate;
+	this->data = tData;
+
+	this->parent = tParent;
+
+	this->leftChild = NULL;
+	this->rightChild = NULL;
 }
 
 
@@ -535,7 +541,7 @@ void BTreeNode::AddNode(Triangle* data)
 		else
 		{
 			// since the left child does not exist, add this as the left child. 
-			this->leftChild = &BTreeNode(data, this->_coordinate);
+			this->leftChild = &BTreeNode(this, data, this->_coordinate);
 			
 			// Balance ourselves out, if necessary
 			this->Balance();
@@ -551,7 +557,7 @@ void BTreeNode::AddNode(Triangle* data)
 		else
 		{
 			// since the right child does not exist, add this as the right child
-			this->rightChild = &BTreeNode(data, this->_coordinate);
+			this->rightChild = &BTreeNode(this, data, this->_coordinate);
 
 			// balance ourselves out, if necessary
 			this->Balance();
@@ -562,11 +568,11 @@ void BTreeNode::AddNode(Triangle* data)
 // @Author: Bas Boellaard
 // Compares a triangle with the triangle of the current node
 // Outputs -1 if the other triangle is smaller, 0 if they are equal and 1 if it is larger.
-int BTreeNode::Compare(Triangle* data)
+int BTreeNode::Compare(Triangle* tData)
 {
 	// since the comparison is represented with 3 values, we take the average of those.
-	float myValue = GetAverageTriangleValue(this->data);
-	float hisValue = GetAverageTriangleValue(data);
+	float myValue = this->GetAverageTriangleValue(this->data);
+	float hisValue = this->GetAverageTriangleValue(tData);
 
 	if (hisValue < myValue)
 	{

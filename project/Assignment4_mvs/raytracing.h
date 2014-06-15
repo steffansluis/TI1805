@@ -43,7 +43,7 @@ bool calculateRayInsideTriangle(Vec3Df intersection, Vec3Df normal, Vec3Df v0, V
 
 // data-structures for the triangles
 void storeMeshBTree(const std::vector<Triangle> & triangles);
-const std::vector<Triangle*> * retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest);
+const std::vector<Triangle*> & retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest);
 
 
 
@@ -109,7 +109,7 @@ public:
 
 	void AddNode(Triangle* data);
 
-	std::vector<Triangle*> * GetTriangles(float lowerLimit, float upperLimit);
+	std::vector<Triangle*> & GetTriangles(float lowerLimit, float upperLimit);
 
 
 };
@@ -134,7 +134,7 @@ public:
 
 	
 
-	BTreeNode(Triangle* tData, BTree::Coordinate coordinate);
+	BTreeNode(BTreeNode* parent, Triangle* tData, BTree::Coordinate coordinate);
 
 	void AddNode(Triangle* data);
 
