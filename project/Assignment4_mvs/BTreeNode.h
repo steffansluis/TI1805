@@ -33,4 +33,23 @@ public:
 	void Balance();
 };
 
+
+
+class BTreeException : public std::exception
+{
+private:
+	const char* _message;
+
+public:
+
+	BTreeException(const char* message);
+
+	virtual const char* what() const throw();
+
+
+};
+
+
+
+
 #endif
