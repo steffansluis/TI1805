@@ -1,16 +1,18 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <memory>
 #include <vector>
 
-#include "IAccelerationStructure.h"
-#include "ICamera.h"
-#include "IGeometry.h"
-#include "ILight.h"
-#include "Image.h"
-#include "IRayTracer.h"
-#include "RayIntersection.h"
 #include "Vec3D.h"
+
+class Image;
+class IAccelerationStructure;
+class ICamera;
+class IGeometry;
+class ILight;
+class IRayTracer;
+class RayIntersection;
 
 /**
  * Represents a scene of 3D objects which can be rendered to an image.

@@ -46,11 +46,11 @@ std::shared_ptr<const RayIntersection> BaseTriangleGeometry::calculateIntersecti
 	{
 		if (Constants::ENABLE_CULLING)
 		{
-			return NULL;
+			return nullptr;
 		}
 		else if (dot_dir_normal >= -1e-6f)
 		{
-			return NULL;
+			return nullptr;
 		}
 	}
 
