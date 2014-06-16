@@ -23,6 +23,12 @@ public:
 	~MeshGeometry();
 
 	/**
+	 * Returns the underlaying mesh that this object wraps.
+	 * @return The underlaying mesh that this object wraps.
+	 */
+	const Mesh *getMesh() const;
+
+	/**
 	* Gets the acceleration structure that is used to find speed up
 	* the intersection calculations.
 	* @return Pointer to an acceleration structure.

@@ -81,6 +81,7 @@
     <ClInclude Include="BTree.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ConstantTexture.h" />
+    <ClInclude Include="DiffuseMaterial.h" />
     <ClInclude Include="IAccelerationStructure.h" />
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="IGeometry.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="BaseTriangleGeometry.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ConstantTexture.cpp" />
+    <ClCompile Include="DiffuseMaterial.cpp" />
     <ClCompile Include="IAccelerationStructure.cpp" />
     <ClCompile Include="ICamera.cpp" />
     <ClCompile Include="IGeometry.cpp" />

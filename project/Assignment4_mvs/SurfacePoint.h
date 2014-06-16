@@ -19,14 +19,14 @@ public:
 	Vec3Df ambientLight() const;
 
 	/**
-	 * Calculated the light emitted from the surface towards the given vector.
+	 * Calculates the light emitted from the surface towards the given vector.
 	 * @param[in] outgoingVector The vector that the light is reflected towards.
 	 * @return The light emitted from the surface towards the given vector.
 	 */
 	Vec3Df emittedLight(const Vec3Df &outgoingVector) const;
 
 	/**
-	* Calculated the light reflected from the incoming vector towards the outgoing vector.
+	* Calculates the light reflected from the incoming vector towards the outgoing vector.
 	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @param[in] incommingVector The vector from which the light is comming.
 	* @param[in] lightColor The color of the light.

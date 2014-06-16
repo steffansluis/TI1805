@@ -12,6 +12,8 @@ class SurfacePoint;
  */
 class IMaterial {
 public:
+	virtual ~IMaterial();
+
 	const ITexture *getAmbientTexture() const;
 	const ITexture *getDiffuseTexture() const;
 	const ITexture *getEmissiveTexture() const;
@@ -31,7 +33,7 @@ public:
 	Vec3Df ambientLight(const SurfacePoint *surface) const;
 
 	/**
-	* Calculated the light emitted from the surface towards the given vector.
+	* Calculates the light emitted from the surface towards the given vector.
 	* @param[in] surface The surface for which to perform the calculations.
 	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @return The light emitted from the surface towards the given vector.
@@ -39,7 +41,7 @@ public:
 	Vec3Df emittedLight(const SurfacePoint *surface, const Vec3Df &outgoingVector) const;
 
 	/**
-	* Calculated the light reflected from the incoming vector towards the outgoing vector.
+	* Calculates the light reflected from the incoming vector towards the outgoing vector.
 	* @param[in] surface The surface for which to perform the calculations.
 	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @param[in] incommingVector The vector from which the light is comming.

@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "IAccelerationStructure.h"
+#include "DiffuseMaterial.h"
 #include "mesh.h"
 #include "MeshGeometry.h"
 #include "MeshTriangleGeometry.h"
@@ -12,11 +13,15 @@ MeshGeometry::MeshGeometry(const Mesh *mesh)
 : mesh(mesh), triangles(std::vector<IGeometry *>()) {
 	assert(mesh);
 
+	// !!! TEMPORARY
+	DiffuseMaterial *tempMaterial = new DiffuseMaterial();
+
 	this->setAccelerationStructure(new NoAccelerationStructure());
+	this->setMaterial(tempMaterial);
 
 	// Create a MeshTriangleGeometry for each triangle
 	for (std::vector<Triangle>::const_iterator it = this->mesh->triangles.begin(); it != this->mesh->triangles.end(); ++it) {
-		this->triangles.push_back(new MeshTriangleGeometry(mesh, &(*it)));
+		this->triangles.push_back(new MeshTriangleGeometry(this, &(*it)));
 	}
 }
 
@@ -25,6 +30,13 @@ MeshGeometry::~MeshGeometry() {
 	for (std::vector<IGeometry *>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
 		delete (*it);
 	}
+
+	// !!! TEMPORARY
+	delete this->getMaterial();
+}
+
+const Mesh *MeshGeometry::getMesh() const {
+	return this->mesh;
 }
 
 IAccelerationStructure *MeshGeometry::getAccelerationStructure() const {

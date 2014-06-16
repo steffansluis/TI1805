@@ -262,7 +262,7 @@ void keyboard(unsigned char key, int x, int y)
 		
 		// Create a point light at every light position
 		for (std::vector<Vec3Df>::iterator it = MyLightPositions.begin(); it != MyLightPositions.end(); ++it) {
-			scene.addLight(new PointLight((*it), Vec3Df(0.8f, 0, 0)));
+			scene.addLight(new PointLight((*it), Vec3Df(0.8f, 0.8f, 0.8f)));
 		}
 
 		// Create a perspective camera

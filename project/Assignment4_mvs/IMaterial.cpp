@@ -3,6 +3,9 @@
 #include "IMaterial.h"
 #include "ITexture.h"
 
+IMaterial::~IMaterial() {
+}
+
 const ITexture *IMaterial::getAmbientTexture() const {
 	return this->ambientTexture;
 }

@@ -17,7 +17,7 @@ public:
 	 * @param[in] mesh The mesh that this triangle belongs to.
 	 * @param[in] triangle The triangle that this TriangleGeometry wraps.
 	 */
-	MeshTriangleGeometry(const Mesh *mesh, const Triangle *triangle);
+	MeshTriangleGeometry(const MeshGeometry *mesh, const Triangle *triangle);
 
 	Vec3Df getVertex0() const;
 	Vec3Df getVertex1() const;
@@ -57,7 +57,7 @@ private:
 	 */
 	void getTextureCoordinates(float u, float v, float &tu, float &tv) const;
 
-	const Mesh *mesh;
+	const MeshGeometry *mesh;
 	const Triangle *triangle;
 };
 
