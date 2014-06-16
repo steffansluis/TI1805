@@ -21,7 +21,7 @@ Utilitaires pour appliquer une traqueboule a une fenetre OpenGL.
 #include "matrix.h"
 #include "stdio.h"
 #include "Vec3D.h"
-static const float speedfact = 0.2;
+static const float speedfact = 0.2f;
 
 /** votre fonction d'affichage */
 void display();

@@ -34,7 +34,7 @@ void PerspectiveCamera::preprocess(int width, int height) {
 
 	// Find the distance from the eye to the virtual image plane
 	// TODO: Think and verify this, tired atm
-	float distance = 0.5 / tanf(0.5f * this->fieldOfView);
+	float distance = 0.5f / tanf(0.5f * this->fieldOfView);
 
 	// Offset from position to centre of the image plane
 	this->imagePlaneOffset = this->forward * distance;
