@@ -14,7 +14,6 @@ public:
 
 	/**
 	* Gets the vector containing all geometry in this structure.
-	* @param[in] accelerator Pointer to an acceleration structure.
 	* @return Pointer to a vector containing all the geometry in this structure.
 	*/
 	const std::vector<IGeometry*> *getGeometry() const;
