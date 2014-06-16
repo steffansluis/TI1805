@@ -7,9 +7,7 @@
 #include "Vec3D.h"
 
 class IAccelerationStructure;
-class IGeometry;
 class Mesh;
-class SurfacePoint;
 
 /**
  * Represents a triangle mesh.
@@ -23,25 +21,18 @@ public:
 	~MeshGeometry();
 
 	/**
-	 * Returns the underlaying mesh that this object wraps.
-	 * @return The underlaying mesh that this object wraps.
-	 */
-	const Mesh *getMesh() const;
-
-	/**
 	* Gets the acceleration structure that is used to find speed up
 	* the intersection calculations.
 	* @return Pointer to an acceleration structure.
 	*/
-	IAccelerationStructure *getAccelerationStructure() const;
+	std::shared_ptr<IAccelerationStructure> getAccelerationStructure() const;
 
 	/**
 	* Sets the acceleration structure that is used to find speed up
 	* the intersection calculations.
 	* @param[in] accelerator Pointer to an acceleration structure.
-	* @return Pointer to previous acceleration structure.
 	*/
-	IAccelerationStructure *setAccelerationStructure(IAccelerationStructure *accelerator);
+	void setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator);
 
 	/**
 	* Perform any necessary preprocessing.
@@ -55,25 +46,27 @@ public:
 	* @param[in] dir The direction of the ray.
 	* @return Pointer to a RayIntersection if the ray intersects this mesh; otherwise null.
 	*/
-	RayIntersection *calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
+	std::shared_ptr<const RayIntersection> calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
 
 	/**
 	* Gets the surface point on this mesh at the given intersection point.
 	* @param[in] intersection An intersection point between a ray and this object.
 	* @return The surface point on this mesh at the given intersection point.
 	*/
-	const SurfacePoint *getSurfacePoint(const RayIntersection *intersection) const;
+	std::shared_ptr<const SurfacePoint> getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const;
 
 	/**
 	* Gets a random surface point on this mesh.
 	* @return A random surface point on this mesh.
 	*/
-	const SurfacePoint *getRandomSurfacePoint() const;
+	std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
 
 private:
+	static std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> generateTriangles(const Mesh *mesh);
+
 	const Mesh *mesh;
-	IAccelerationStructure *accelerator;
-	std::vector<IGeometry *> triangles;
+	std::shared_ptr<IAccelerationStructure> accelerator;
+	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> triangles;
 };
 
 #endif

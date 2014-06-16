@@ -1,12 +1,14 @@
 #ifndef ILIGHT_H
 #define ILIGHT_H
 
+#include <memory>
+
 #include "Vec3D.h"
 
 /**
  * Represents a light source.
  */
-class ILight {
+class ILight : public std::enable_shared_from_this<ILight> {
 public:
 	virtual ~ILight();
 

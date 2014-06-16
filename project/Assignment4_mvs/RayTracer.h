@@ -33,7 +33,7 @@ private:
 	 * @param iteration The current iteration.
 	 * @return The light reflected towards the ray from the point of intersection.
 	 */
-	Vec3Df performShading(const RayIntersection *intersection, const int iteration) const;
+	Vec3Df performShading(std::shared_ptr<const RayIntersection> intersection, const int iteration) const;
 
 	// Indicate the maximum amount of iterations that are permitted.
 	// This prevent the algorithm from looping back and forth between objects infinitely.

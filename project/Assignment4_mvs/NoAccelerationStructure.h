@@ -18,7 +18,7 @@ public:
 	* @param[in] dir The direction of the ray.
 	* @return A pointer to a RayIntersection representing the intersection point of the ray.
 	*/
-	RayIntersection *calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
+	std::shared_ptr<const RayIntersection> calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
 };
 
 #endif

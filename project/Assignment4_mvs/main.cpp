@@ -252,33 +252,27 @@ void keyboard(unsigned char key, int x, int y)
 		//commencez ici et lancez vos propres fonctions par rayon.
 
 		cout<<"Raytracing"<<endl;
-		
+
 		// Create a scene
 		Scene scene = Scene();
+		
+		// Create a perspective camera
+		auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget);
 
 		// Create a mesh and add it to the scene
-		MeshGeometry mesh = MeshGeometry(&MyMesh);
-		scene.addGeometry(&mesh);
+		auto mesh = std::make_shared<MeshGeometry>(&MyMesh);
+
+		scene.addGeometry(mesh);
 		
 		// Create a point light at every light position
 		for (std::vector<Vec3Df>::iterator it = MyLightPositions.begin(); it != MyLightPositions.end(); ++it) {
-			scene.addLight(new PointLight((*it), Vec3Df(0.8f, 0.8f, 0.8f)));
+			scene.addLight(std::make_shared<PointLight>((*it), Vec3Df(0.8f, 0.8f, 0.8f)));
 		}
-
-		// Create a perspective camera
-		PerspectiveCamera camera = PerspectiveCamera(MyCameraPosition, MyCameraTarget);
 
 		// Render the scene
-		Image *result = scene.render(&camera, WindowSize_X, WindowSize_Y);
+		std::shared_ptr<Image> result = scene.render(camera, WindowSize_X, WindowSize_Y);
 
 		result->writeImage("Render/result.ppm");
-
-		delete result;
-
-		// Delete all lights
-		for (std::vector<ILight *>::const_iterator it = scene.getLights()->begin(); it != scene.getLights()->end(); ++it) {
-			delete (*it);
-		}
 
 		break;
 	}

@@ -25,10 +25,10 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 	}
 
 	// Calculate the intersection that will occur with these parameters
-	RayIntersection *intersection = this->getScene()->calculateIntersection(origin, dir);
+	std::shared_ptr<const RayIntersection> intersection = this->getScene()->calculateIntersection(origin, dir);
 
 	// If the intersection was non-existant, return black
-	if (intersection == NULL)
+	if (intersection == nullptr)
 	{
 		return Vec3Df(0, 0, 0);
 	}
@@ -36,19 +36,17 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 	// Execute all the different graphics techniques.
 	Vec3Df color = this->performShading(intersection, iteration);
 
-	delete intersection;
-
 	return color;
 }
 
 // @Author: Martijn van Dorp
 // Performs basic whitted-style shading.
-Vec3Df RayTracer::performShading(const RayIntersection *intersection, const int iteration) const {
+Vec3Df RayTracer::performShading(std::shared_ptr<const RayIntersection> intersection, const int iteration) const {
 	// Get the surface point at the intersection point, this contains surface parameters useful for shading.
-	const SurfacePoint *surface = intersection->getSurfacePoint();
+	std::shared_ptr<const SurfacePoint> surface = intersection->getSurfacePoint();
 
 	// Get the vector contain the scene's lights.
-	const std::vector<ILight*> *lights = this->getScene()->getLights();
+	std::shared_ptr<const std::vector<std::shared_ptr<ILight>>> lights = this->getScene()->getLights();
 	
 	// The 'view' vector is the opposite of the ray direction
 	Vec3Df viewVector = -intersection->direction;
@@ -60,7 +58,7 @@ Vec3Df RayTracer::performShading(const RayIntersection *intersection, const int 
 	lighting += surface->specularLight(viewVector);
 
 	// Iterate through all lights and sum the reflected light
-	for (std::vector<ILight*>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
+	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
 		// Get the light color and the light vector
 		Vec3Df lightVector;
 		Vec3Df lightColor = (*it)->getLightTowards(surface->point, lightVector);
@@ -69,9 +67,6 @@ Vec3Df RayTracer::performShading(const RayIntersection *intersection, const int 
 		lighting += surface->reflectedLight(viewVector, lightVector, lightColor);
 	}
 	
-	// Delete the surface point
-	delete surface;
-
 	// Return the accumulated lighting
 	return lighting;
 }

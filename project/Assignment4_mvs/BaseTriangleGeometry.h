@@ -22,7 +22,7 @@ public:
 	* @param[in] dir The direction of the ray.
 	* @return Pointer to a RayIntersection if the ray intersects this triangle; otherwise null.
 	*/
-	RayIntersection *calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
+	std::shared_ptr<const RayIntersection> calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
 
 	virtual Vec3Df getVertex0() const = 0;
 	virtual Vec3Df getVertex1() const = 0;
@@ -33,13 +33,13 @@ public:
 	* @param[in] intersection An intersection point between a ray and this object.
 	* @return The surface point on this triangle at the given intersection point.
 	*/
-	virtual const SurfacePoint *getSurfacePoint(const RayIntersection *intersection) const;
+	virtual std::shared_ptr<const SurfacePoint> getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const;
 
 	/**
 	* Gets a random surface point on this triangle.
 	* @return A random surface point on this triangle.
 	*/
-	virtual const SurfacePoint *getRandomSurfacePoint() const;
+	virtual std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
 
 private:
 	/**

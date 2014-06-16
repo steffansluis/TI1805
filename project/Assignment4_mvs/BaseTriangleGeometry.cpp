@@ -31,7 +31,7 @@ void BaseTriangleGeometry::preprocess() {
 //
 // Logic herein relies heavily on the slides from college as well as data from the following source:
 // https://courses.cs.washington.edu/courses/cse457/09sp/lectures/triangle_intersection.pdf
-RayIntersection *BaseTriangleGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
+std::shared_ptr<const RayIntersection> BaseTriangleGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
 	// Get the vertices for the triangle
 	Vec3Df vertex0 = this->getVertex0();
 	Vec3Df vertex1 = this->getVertex1();
@@ -78,13 +78,13 @@ RayIntersection *BaseTriangleGeometry::calculateIntersection(const Vec3Df &origi
 	// finally, we need to check if this ray is actually inside of the triangle. 
 	if (this->calculateRayInsideTriangle(hitPoint, normal, vertex0, vertex1, vertex2))
 	{
-		RayIntersection *intersection = new RayIntersection();
+		auto intersection = std::make_shared<RayIntersection>();
 
 		// since the ray-length is less than the already stored data (or has not been stored yet), we 
 		// can put the data for the intersection into the object.
 		intersection->hitPoint = hitPoint;
 		intersection->normal = normal;
-		intersection->geometry = this;
+		intersection->geometry = this->shared_from_this();
 
 		// also store the original data here.
 		intersection->origin = origin;
@@ -94,13 +94,13 @@ RayIntersection *BaseTriangleGeometry::calculateIntersection(const Vec3Df &origi
 		return intersection;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
-const SurfacePoint *BaseTriangleGeometry::getSurfacePoint(const RayIntersection *intersection) const {
-	SurfacePoint *surface = new SurfacePoint();
+std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const {
+	auto surface = std::make_shared<SurfacePoint>();
 
-	surface->geometry = this;
+	surface->geometry = this->shared_from_this();
 	surface->point = intersection->hitPoint;
 	surface->normal = this->normal;
 
@@ -114,8 +114,8 @@ const SurfacePoint *BaseTriangleGeometry::getSurfacePoint(const RayIntersection 
 	return surface;
 }
 
-const SurfacePoint *BaseTriangleGeometry::getRandomSurfacePoint() const {
-	SurfacePoint *surface = new SurfacePoint();
+std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getRandomSurfacePoint() const {
+	auto surface = std::make_shared<SurfacePoint>();
 	float u, v;
 
 	// Get two numbers in the range [0, 1]
@@ -132,7 +132,7 @@ const SurfacePoint *BaseTriangleGeometry::getRandomSurfacePoint() const {
 		(sqrtU * (1.0f - v)) * this->getVertex1() +
 		(sqrtU * v) * this->getVertex2();
 
-	surface->geometry = this;
+	surface->geometry = this->shared_from_this();
 	surface->point = point;
 	surface->normal = this->normal;
 

@@ -1,6 +1,8 @@
 #ifndef SURFACEPOINT_H
 #define SURFACEPOINT_H
 
+#include <memory>
+
 #include "Vec3D.h"
 
 class IGeometry;
@@ -9,7 +11,7 @@ class IGeometry;
  * Represents a point at the surface of scene geometry.
  * Provides functions and data used for shading.
  */
-class SurfacePoint {
+class SurfacePoint : public std::enable_shared_from_this<const SurfacePoint> {
 public:
 	/**
 	 * Calculates the amount of ambient light hitting the surface.
@@ -60,7 +62,7 @@ public:
 	/**
 	* The geometry which this surface belongs to.
 	*/
-	const IGeometry *geometry;
+	std::shared_ptr<const IGeometry> geometry;
 };
 
 #endif

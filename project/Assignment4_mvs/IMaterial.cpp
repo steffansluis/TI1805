@@ -1,69 +1,69 @@
 #include <assert.h>
 
+#include "ConstantTexture.h"
 #include "IMaterial.h"
 #include "ITexture.h"
+#include "SurfacePoint.h"
 
+static auto black = std::make_shared<ConstantTexture>(Vec3Df(0, 0, 0));
+
+IMaterial::IMaterial() {
+	this->setAmbientTexture(black);
+	this->setDiffuseTexture(black);
+	this->setEmissiveTexture(black);
+	this->setSpecularTexture(black);
+}
 IMaterial::~IMaterial() {
 }
 
-const ITexture *IMaterial::getAmbientTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getAmbientTexture() const {
 	return this->ambientTexture;
 }
-const ITexture *IMaterial::getDiffuseTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getDiffuseTexture() const {
 	return this->diffuseTexture;
 }
-const ITexture *IMaterial::getEmissiveTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getEmissiveTexture() const {
 	return this->emissiveTexture;
 }
-const ITexture *IMaterial::getSpecularTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getSpecularTexture() const {
 	return this->specularTexture;
 }
 
-const ITexture *IMaterial::setAmbientTexture(const ITexture *texture) {
-	assert(texture);
-	
-	const ITexture *oldTexture = this->ambientTexture;
-
-	this->ambientTexture = texture;
-
-	return oldTexture;
+void IMaterial::setAmbientTexture(std::shared_ptr<const ITexture> texture) {
+	if (texture)
+		this->ambientTexture = texture;
+	else
+		this->ambientTexture = black;
 }
-const ITexture *IMaterial::setDiffuseTexture(const ITexture *texture) {
-	assert(texture);
-
-	const ITexture *oldTexture = this->diffuseTexture;
-
-	this->diffuseTexture = texture;
-
-	return oldTexture;
+void IMaterial::setDiffuseTexture(std::shared_ptr<const ITexture> texture) {
+	if (texture)
+		this->diffuseTexture = texture;
+	else
+		this->diffuseTexture = black;
 }
-const ITexture *IMaterial::setEmissiveTexture(const ITexture *texture) {
-	assert(texture);
-
-	const ITexture *oldTexture = this->emissiveTexture;
-
-	this->emissiveTexture = texture;
-
-	return oldTexture;
+void IMaterial::setEmissiveTexture(std::shared_ptr<const ITexture> texture) {
+	if (texture)
+		this->emissiveTexture = texture;
+	else
+		this->emissiveTexture = black;
 }
-const ITexture *IMaterial::setSpecularTexture(const ITexture *texture) {
-	assert(texture);
-
-	const ITexture *oldTexture = this->specularTexture;
-
-	this->specularTexture = texture;
-
-	return oldTexture;
+void IMaterial::setSpecularTexture(std::shared_ptr<const ITexture> texture) {
+	if (texture)
+		this->specularTexture = texture;
+	else
+		this->specularTexture = black;
 }
 
-Vec3Df IMaterial::ambientLight(const SurfacePoint *surface) const {
+Vec3Df IMaterial::ambientLight(std::shared_ptr<const SurfacePoint> surface) const {
+	assert(surface);
+
 	// TODO: Implement ambient lighting / occlusion.
-
 	return Vec3Df();
 }
 
-Vec3Df IMaterial::emittedLight(const SurfacePoint *surface, const Vec3Df &outgoingVector) const {
-	// TODO: Implement emitted light
+Vec3Df IMaterial::emittedLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector) const {
+	assert(surface);
 
+	// TODO: Implement emitted light
 	return Vec3Df();
 }

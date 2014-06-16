@@ -10,57 +10,31 @@
 #include "SurfacePoint.h"
 
 MeshGeometry::MeshGeometry(const Mesh *mesh)
-: mesh(mesh), triangles(std::vector<IGeometry *>()) {
+: mesh(mesh), triangles(MeshGeometry::generateTriangles(mesh)) {
 	assert(mesh);
 
-	// !!! TEMPORARY
-	DiffuseMaterial *tempMaterial = new DiffuseMaterial();
-
-	this->setAccelerationStructure(new NoAccelerationStructure());
-	this->setMaterial(tempMaterial);
-
-	// Create a MeshTriangleGeometry for each triangle
-	for (std::vector<Triangle>::const_iterator it = this->mesh->triangles.begin(); it != this->mesh->triangles.end(); ++it) {
-		this->triangles.push_back(new MeshTriangleGeometry(this, &(*it)));
-	}
+	this->setAccelerationStructure(std::make_shared<NoAccelerationStructure>());
 }
 
 MeshGeometry::~MeshGeometry() {
-	// Delete all MeshTriangleGeometry objects
-	for (std::vector<IGeometry *>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
-		delete (*it);
-	}
-
-	// !!! TEMPORARY
-	delete this->getMaterial();
 }
 
-const Mesh *MeshGeometry::getMesh() const {
-	return this->mesh;
-}
-
-IAccelerationStructure *MeshGeometry::getAccelerationStructure() const {
+std::shared_ptr<IAccelerationStructure> MeshGeometry::getAccelerationStructure() const {
 	// Return the pointer to the acceleration structure
 	return this->accelerator;
 }
 
-IAccelerationStructure *MeshGeometry::setAccelerationStructure(IAccelerationStructure *accelerator) {
+void MeshGeometry::setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator) {
 	assert(accelerator);
-
-	// Store the old acceleration structure pointer
-	IAccelerationStructure *oldAccelerator = this->accelerator;
 
 	// Set the acceleration structure and set its geometry vector to the scene's geometry
 	this->accelerator = accelerator;
-	this->accelerator->setGeometry(&this->triangles);
-
-	// Return the pointer to the old acceleration structure
-	return oldAccelerator;
+	this->accelerator->setGeometry(this->triangles);
 }
 
 void MeshGeometry::preprocess() {
 	// Preprocess all triangles
-	for (std::vector<IGeometry *>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
+	for (std::vector<std::shared_ptr<IGeometry>>::const_iterator it = this->triangles->begin(); it != this->triangles->end(); ++it) {
 		(*it)->preprocess();
 	}
 
@@ -68,20 +42,20 @@ void MeshGeometry::preprocess() {
 	this->accelerator->preprocess();
 }
 
-RayIntersection *MeshGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
+std::shared_ptr<const RayIntersection> MeshGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
 	// Let the acceleration structure handle the intersection in our set of triangles
 	return this->accelerator->calculateIntersection(origin, dir);
 }
 
-const SurfacePoint *MeshGeometry::getSurfacePoint(const RayIntersection *intersection) const {
+std::shared_ptr<const SurfacePoint> MeshGeometry::getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const {
 	// We are intersecting against the triangles within the mesh, so the geometry pointer of RayIntersection
 	// will not point to the mesh geometry but instead to the triangle. There is no real need to implement this.
 	assert(false);
 
-	return NULL;
+	return nullptr;
 }
 
-const SurfacePoint *MeshGeometry::getRandomSurfacePoint() const {
+std::shared_ptr<const SurfacePoint> MeshGeometry::getRandomSurfacePoint() const {
 	// BUG: Sampling is not uniform, needs to be weighted by triangle's surface area / total surface area.
 
 	// Pick a random triangle
@@ -89,5 +63,16 @@ const SurfacePoint *MeshGeometry::getRandomSurfacePoint() const {
 	int index = rand() % size;
 
 	// Return a random point on this triangle
-	return this->triangles[index]->getRandomSurfacePoint();
+	return this->triangles->at(index)->getRandomSurfacePoint();
+}
+
+std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> MeshGeometry::generateTriangles(const Mesh *mesh) {
+	auto triangles = std::make_shared<std::vector<std::shared_ptr<IGeometry>>>();
+
+	// Create a MeshTriangleGeometry for each triangle
+	for (std::vector<Triangle>::const_iterator it = mesh->triangles.begin(); it != mesh->triangles.end(); ++it) {
+		triangles->push_back(std::make_shared<MeshTriangleGeometry>(mesh, &(*it)));
+	}
+
+	return triangles;
 }

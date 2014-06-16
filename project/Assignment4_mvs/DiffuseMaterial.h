@@ -6,6 +6,7 @@
 class DiffuseMaterial : public IMaterial {
 public:
 	DiffuseMaterial();
+	DiffuseMaterial(const Vec3Df &color);
 	~DiffuseMaterial();
 
 	/**
@@ -16,7 +17,7 @@ public:
 	* @param[in] lightColor The color of the light.
 	* @return The light reflected from the incomming towards the outgoing vector.
 	*/
-	Vec3Df reflectedLight(const SurfacePoint *surface, const Vec3Df &outgoingVector, const Vec3Df &incommingVector, const Vec3Df &lightColor) const;
+	Vec3Df reflectedLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector, const Vec3Df &incommingVector, const Vec3Df &lightColor) const;
 
 	/**
 	* Calculates the specularly reflected light towards the given vector.
@@ -25,7 +26,7 @@ public:
 	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @return The light specularly reflected towards the outgoing vector.
 	*/
-	Vec3Df specularLight(const SurfacePoint *surface, const Vec3Df &outgoingVector) const;
+	Vec3Df specularLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector) const;
 };
 
 #endif

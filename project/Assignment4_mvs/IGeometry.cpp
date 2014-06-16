@@ -1,23 +1,33 @@
 #include <assert.h>
 
+#include "DiffuseMaterial.h"
 #include "IGeometry.h"
 #include "IMaterial.h"
+#include "RayIntersection.h"
+#include "SurfacePoint.h"
+
+static auto diffuseMaterial = std::make_shared<const DiffuseMaterial>();
+
+IGeometry::IGeometry()
+: IGeometry(diffuseMaterial) {
+}
+
+IGeometry::IGeometry(std::shared_ptr<const IMaterial> material) {
+	this->material = material;
+}
 
 IGeometry::~IGeometry() {
 }
 
-const IMaterial *IGeometry::getMaterial() const {
+std::shared_ptr<const IMaterial> IGeometry::getMaterial() const {
 	return this->material;
 }
 
-const IMaterial *IGeometry::setMaterial(const IMaterial *material) {
-	assert(material);
-
-	const IMaterial *oldMaterial = this->material;
-
-	this->material = material;
-
-	return oldMaterial;
+void IGeometry::setMaterial(std::shared_ptr<const IMaterial> material) {
+	if (material)
+		this->material = material;
+	else
+		this->material = diffuseMaterial;
 }
 
 void IGeometry::preprocess() {

@@ -1,22 +1,24 @@
 #ifndef RAYINTERSECTION_H
 #define RAYINTERSECTION_H
 
-#include "IGeometry.h"
+#include <memory>
+
 #include "Vec3D.h"
 
+class IGeometry;
 class SurfacePoint;
 
 /**
  * Represents the intersection point between a ray and scene geometry.
  */
-class RayIntersection
+class RayIntersection : public std::enable_shared_from_this<const RayIntersection>
 {
 public:
 	/**
 	 * Gets the surface point of the geometry at the point of intersection.
 	 * @return The surface point of the geometry at the point of intersection.
 	 */
-	const SurfacePoint *getSurfacePoint() const;
+	std::shared_ptr<const SurfacePoint> getSurfacePoint() const;
 
 	/**
 	* The point where the geometry was intersected.
@@ -51,7 +53,7 @@ public:
 	/**
 	* The geometry that the ray intersects with.
 	*/
-	const IGeometry *geometry;
+	std::shared_ptr<const IGeometry> geometry;
 };
 
 

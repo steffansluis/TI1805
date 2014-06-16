@@ -10,16 +10,10 @@ IAccelerationStructure::~IAccelerationStructure() {
 void IAccelerationStructure::preprocess() {
 }
 
-const std::vector<IGeometry*> *IAccelerationStructure::getGeometry() const {
+std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> IAccelerationStructure::getGeometry() const {
 	return this->geometry;
 }
 
-const std::vector<IGeometry*> *IAccelerationStructure::setGeometry(const std::vector<IGeometry*> *geometry) {
-	assert(geometry);
-
-	const std::vector<IGeometry*> *oldGeometry = this->geometry;
-
+void IAccelerationStructure::setGeometry(std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry) {
 	this->geometry = geometry;
-
-	return oldGeometry;
 }

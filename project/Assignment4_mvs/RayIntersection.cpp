@@ -1,6 +1,7 @@
+#include "IGeometry.h"
 #include "RayIntersection.h"
 #include "SurfacePoint.h"
 
-const SurfacePoint *RayIntersection::getSurfacePoint() const {
-	return this->geometry->getSurfacePoint(this);
+std::shared_ptr<const SurfacePoint> RayIntersection::getSurfacePoint() const {
+	return this->geometry->getSurfacePoint(this->shared_from_this());
 }

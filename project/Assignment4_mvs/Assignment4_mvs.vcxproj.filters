@@ -65,12 +65,8 @@
     <ClCompile Include="Image.cpp">
       <Filter>Other</Filter>
     </ClCompile>
-    <ClCompile Include="RayIntersection.cpp">
-      <Filter>Ray Tracers</Filter>
-    </ClCompile>
-    <ClCompile Include="SurfacePoint.cpp">
-      <Filter>Geometry</Filter>
-    </ClCompile>
+    <ClCompile Include="RayIntersection.cpp" />
+    <ClCompile Include="SurfacePoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -143,15 +139,11 @@
     <ClInclude Include="Image.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="RayIntersection.h">
-      <Filter>Ray Tracers</Filter>
-    </ClInclude>
-    <ClInclude Include="SurfacePoint.h">
-      <Filter>Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="RGBValue.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="RayIntersection.h" />
+    <ClInclude Include="SurfacePoint.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Acceleration Structures">
@@ -177,6 +169,9 @@
     </Filter>
     <Filter Include="Other">
       <UniqueIdentifier>{10fe0544-8192-48af-b9a4-4080034d8e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Materials\BRDF">
+      <UniqueIdentifier>{a005a956-ed3b-4ed5-8d20-99e8750f3c5a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

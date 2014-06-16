@@ -5,6 +5,8 @@
 #include "Vec3D.h"
 
 class Mesh;
+class RayIntersection;
+class SurfacePoint;
 class Triangle;
 
 /**
@@ -17,7 +19,7 @@ public:
 	 * @param[in] mesh The mesh that this triangle belongs to.
 	 * @param[in] triangle The triangle that this TriangleGeometry wraps.
 	 */
-	MeshTriangleGeometry(const MeshGeometry *mesh, const Triangle *triangle);
+	MeshTriangleGeometry(const Mesh *mesh, const Triangle *triangle);
 
 	Vec3Df getVertex0() const;
 	Vec3Df getVertex1() const;
@@ -28,14 +30,14 @@ public:
 	* @param[in] intersection An intersection point between a ray and this object.
 	* @return The surface point on this triangle at the given intersection point.
 	*/
-	const SurfacePoint *getSurfacePoint(const RayIntersection *intersection) const;
+	std::shared_ptr<const SurfacePoint> getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const;
 
 	/**
 	* Gets a random surface point on this triangle.
 	* @return A random surface point on this triangle.
 	* @remarks This will be needed when implementing area lights, so that we can sample the light volume.
 	*/
-	const SurfacePoint *getRandomSurfacePoint() const;
+	std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
 
 private:
 	/**
@@ -57,7 +59,7 @@ private:
 	 */
 	void getTextureCoordinates(float u, float v, float &tu, float &tv) const;
 
-	const MeshGeometry *mesh;
+	const Mesh *mesh;
 	const Triangle *triangle;
 };
 
