@@ -1,11 +1,6 @@
-
-
 #define _CRT_SECURE_NO_WARNINGS
 
-
 #include "mesh.h"
-
-
 
 #ifdef WIN32
 #include <windows.h>
@@ -21,12 +16,9 @@
 #include <iostream>
 #include <fstream>
 
-
-   
 using namespace std;
 
 const unsigned int LINE_LEN=256;
-
 
 /************************************************************
  * Normal calculations
@@ -50,7 +42,6 @@ void Mesh::computeVertexNormals () {
     for (unsigned int i = 0; i < vertices.size (); i++)
         vertices[i].n.normalize ();
 }
-
 
 /************************************************************
  * draw
@@ -93,10 +84,7 @@ void Mesh::draw(){
     }
     glEnd();
 }
-
-    
-    
-    
+ 
 bool Mesh::loadMesh(const char * filename, bool randomizeTriangulation)
 {
     vertices.clear();
@@ -334,7 +322,6 @@ bool Mesh::loadMesh(const char * filename, bool randomizeTriangulation)
 	fclose(in);
     return true;
 }
-
 
 bool Mesh::loadMtl(const char * filename, std::map<string, unsigned int> & materialIndex)
 {

@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="raytracing.cpp" />
+    <ClCompile Include="RayTracer.cpp">
+      <Filter>Ray Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="IRayTracer.cpp">
+      <Filter>Ray Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="NoAccelerationStructure.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="IAccelerationStructure.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="ICamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Constants.cpp" />
+    <ClCompile Include="TriangleGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="IGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseTriangleGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshTriangleGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="ILight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfacePoint.cpp">
+      <Filter>Ray Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="RayIntersection.cpp">
+      <Filter>Ray Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="IMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="ITexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="matrix.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="raytracing.h" />
+    <ClInclude Include="traqueboule.h" />
+    <ClInclude Include="Vec3D.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="IRayTracer.h">
+      <Filter>Ray Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracer.h">
+      <Filter>Ray Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="RayIntersection.h">
+      <Filter>Ray Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="IAccelerationStructure.h">
+      <Filter>Acceleration Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="NoAccelerationStructure.h">
+      <Filter>Acceleration Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ICamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="IGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="TriangleGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="RGBValue.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="MeshGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTriangleGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshTriangleGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfacePoint.h">
+      <Filter>Ray Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="IMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="ITexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="BTree.h">
+      <Filter>Acceleration Structures</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Acceleration Structures">
+      <UniqueIdentifier>{986df72d-7a2f-4d12-99ad-f6235ea80ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ray Tracers">
+      <UniqueIdentifier>{edef72d9-5146-4b91-95fe-c2233047f2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{274b87e5-c40d-4138-836a-1f94a77541e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{2225b482-66bf-4432-b1c8-4f58af704144}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{71da2712-b1af-493e-9b55-3c2bbf440d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Materials">
+      <UniqueIdentifier>{32734b41-d502-4dce-b563-748a3108cdfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{7d3d5202-31bc-4dcb-8a53-2ffb42031773}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

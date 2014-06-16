@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VEC3D_H
+#define VEC3D_H
+
 //3D vectorial computations 
 #include <cmath>
 #include <iostream>
@@ -287,3 +289,5 @@ template <class T> std::istream & operator>> (std::istream & input, Vec3D<T> & v
 typedef Vec3D<float> Vec3Df;
 typedef Vec3D<double> Vec3Dd;
 typedef Vec3D<int> Vec3Di;
+
+#endif

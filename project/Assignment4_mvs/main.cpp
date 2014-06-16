@@ -1,7 +1,4 @@
-
-
 #define _CRT_SECURE_NO_WARNINGS
-
 
 #ifdef WIN32
 #include <windows.h>
@@ -16,134 +13,21 @@
 #include "raytracing.h"
 #include "mesh.h"
 #include "traqueboule.h"
+#include "Image.h"
+#include "RGBValue.h"
+
+#include "ILight.h"
+#include "PerspectiveCamera.h"
+#include "PointLight.h"
+#include "MeshGeometry.h"
+#include "MeshTriangleGeometry.h"
+#include "RayTracer.h"
+#include "Scene.h"
 
 Vec3Df MyCameraPosition;
-
+Vec3Df MyCameraTarget;
 std::vector<Vec3Df> MyLightPositions;
-
-//image class just dumped to hide...
-class RGBValue
-{
-	public:
-	RGBValue(float rI=0, float gI=0, float bI=0)
-	: r(rI)
-	, g(gI)
-	, b(bI)
-	{
-		if (r>1)
-			r=1.0;
-		if (g>1)
-			g=1.0;
-		if (b>1)
-			b=1.0;
-
-		if (r<0)
-			r=0.0;
-		if (g<0)
-			g=0.0;
-		if (b<0)
-			b=0.0;
-	};
-	
-	float operator[](int i) const
-	{
-		switch(i)
-		{
-			case 0:
-				return r;
-			case 1:
-				return g;
-			case 2:
-				return b;
-			default: 
-				return r;
-		}
-	}
-	float & operator[](int i)
-	{
-		switch(i)
-		{
-			case 0:
-				return r;
-			case 1:
-				return g;
-			case 2:
-				return b;
-			default: 
-				return r;
-		}
-	}
-	float r, b,g;
-};
-
-
-
-
-
-class Image
-{
-	public:
-	Image(int width, int height)
-	: _width(width)
-	, _height(height)
-	{
-		_image.resize(3*_width*_height);
-	}
-	void setPixel(int i, int j, const RGBValue & rgb)
-	{
-		_image[3*(_width*j+i)]=rgb[0];
-		_image[3*(_width*j+i)+1]=rgb[1];
-		_image[3*(_width*j+i)+2]=rgb[2];
-		
-	}
-	std::vector<float> _image;
-	int _width;
-	int _height;
-
-	bool writeImage(const char * filename);	
-};
-
-bool Image::writeImage(const char * filename)
-{
-	FILE* file;
-    file = fopen(filename, "wb");
-	if (!file)
-	{
-		printf("dump file problem... file\n");
-		return false;
-	}
-
-	fprintf(file, "P6\n%i %i\n255\n",_width, _height);
-
-	
-	std::vector<unsigned char> imageC(_image.size());
-	
-	for (unsigned int i=0; i<_image.size();++i)
-		imageC[i]=(unsigned char)(_image[i]*255.0f);
-	
-	int t = fwrite(&(imageC[0]), _width * _height * 3, 1, file);
-	if (t!=1)
-	{
-		printf("Dump file problem... fwrite\n");
-		return false;
-	}
-
-	fclose(file);
-	return true;
-}
-
-
-
-
-
-
-
-
-
-
 Mesh MyMesh; //Main mesh
-
-
 
 // Utilisé pour essayer différents types de rendu
 // Utilisé via le paramètre "-t" en ligne de commande
@@ -155,8 +39,6 @@ unsigned int WindowSize_Y = 800;  // hauteur fenetre
 
 unsigned int RayTracingResolutionX = 800;  // largeur fenetre
 unsigned int RayTracingResolutionY = 800;  // largeur fenetre
-
-
 
 void dessinerRepere(float length)
 {
@@ -181,7 +63,7 @@ void dessinerRepere(float length)
 
 /**
  * Appel des différentes fonctions de dessin
-*/
+ */
 void dessiner( )
 {
 	switch( type )
@@ -214,11 +96,11 @@ void dessiner( )
 
 void animate()
 {
-	MyCameraPosition=getCameraPosition();
+	MyCameraPosition = getCameraPosition();
+	MyCameraTarget = getLookAtPosition();
+
 	glutPostRedisplay();
 }
-
-
 
 void display(void);
 void reshape(int w, int h);
@@ -271,7 +153,6 @@ int main(int argc, char** argv)
     glPolygonMode(GL_BACK,GL_LINE);
     glShadeModel(GL_SMOOTH);
 
-
 	// cablage des callback
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
@@ -279,10 +160,8 @@ int main(int argc, char** argv)
     glutMouseFunc(tbMouseFunc);    // traqueboule utilise la souris
     glutMotionFunc(tbMotionFunc);  // traqueboule utilise la souris
     glutIdleFunc( animate);
-
-
+	
 	init();
-
 
     // lancement de la boucle principale
     glutMainLoop();
@@ -310,6 +189,7 @@ void display(void)
     glutSwapBuffers();
 	glPopAttrib();
 }
+
 // pour changement de taille ou desiconification
 void reshape(int w, int h)
 {
@@ -320,7 +200,6 @@ void reshape(int w, int h)
     gluPerspective (50, (float)w/h, 1, 10);
     glMatrixMode(GL_MODELVIEW);
 }
-
 
 //transformer le x, y en position 3D
 void produceRay(int x_I, int y_I, Vec3Df * origin, Vec3Df * dest)
@@ -373,41 +252,33 @@ void keyboard(unsigned char key, int x, int y)
 		//commencez ici et lancez vos propres fonctions par rayon.
 
 		cout<<"Raytracing"<<endl;
-				
-		Image result(WindowSize_X,WindowSize_Y);
-		Vec3Df origin00, dest00;
-		Vec3Df origin01, dest01;
-		Vec3Df origin10, dest10;
-		Vec3Df origin11, dest11;
-		Vec3Df origin, dest;
-
-
-		produceRay(0,0, &origin00, &dest00);
-		produceRay(0,WindowSize_Y-1, &origin01, &dest01);
-		produceRay(WindowSize_X-1,0, &origin10, &dest10);
-		produceRay(WindowSize_X-1,WindowSize_Y-1, &origin11, &dest11);
-
-		for (unsigned int y=0; y<WindowSize_Y;++y)
-			for (unsigned int x=0; x<WindowSize_X;++x)
-			{
-				//svp, decidez vous memes quels parametres vous allez passer à la fonction
-				//e.g., maillage, triangles, sphères etc.
-				float xscale=1.0f-float(x)/(WindowSize_X-1);
-				float yscale=1.0f-float(y)/(WindowSize_Y-1);
-
-				origin=yscale*(xscale*origin00+(1-xscale)*origin10)+
-					(1-yscale)*(xscale*origin01+(1-xscale)*origin11);
-				dest=yscale*(xscale*dest00+(1-xscale)*dest10)+
-					(1-yscale)*(xscale*dest01+(1-xscale)*dest11);
-
 		
-				Vec3Df rgb = performRayTracing(origin, dest);
-				result.setPixel(x,y, RGBValue(rgb[0], rgb[1], rgb[2]));
-			}
-		
+		// Create a scene
+		Scene scene = Scene();
 
-		result.writeImage("Render/result.ppm");
-		// if we have some more time, we might want to output .png instead of .ppm
+		// Create a mesh and add it to the scene
+		MeshGeometry mesh = MeshGeometry(&MyMesh);
+		scene.addGeometry(&mesh);
+		
+		// Create a point light at every light position
+		for (std::vector<Vec3Df>::iterator it = MyLightPositions.begin(); it != MyLightPositions.end(); ++it) {
+			scene.addLight(new PointLight((*it), Vec3Df(0.8f, 0, 0)));
+		}
+
+		// Create a perspective camera
+		PerspectiveCamera camera = PerspectiveCamera(MyCameraPosition, MyCameraTarget);
+
+		// Render the scene
+		Image *result = scene.render(&camera, WindowSize_X, WindowSize_Y);
+
+		result->writeImage("Render/result.ppm");
+
+		delete result;
+
+		// Delete all lights
+		for (std::vector<ILight *>::const_iterator it = scene.getLights()->begin(); it != scene.getLights()->end(); ++it) {
+			delete (*it);
+		}
 
 		break;
 	}
@@ -417,4 +288,3 @@ void keyboard(unsigned char key, int x, int y)
 
 	yourKeyboardFunc(key,x,y);
 }
-
