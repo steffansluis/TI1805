@@ -67,6 +67,12 @@
     </ClCompile>
     <ClCompile Include="RayIntersection.cpp" />
     <ClCompile Include="SurfacePoint.cpp" />
+    <ClCompile Include="BTree.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="BTreeNode.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -144,6 +150,9 @@
     </ClInclude>
     <ClInclude Include="RayIntersection.h" />
     <ClInclude Include="SurfacePoint.h" />
+    <ClInclude Include="BTreeNode.h">
+      <Filter>Acceleration Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Acceleration Structures">

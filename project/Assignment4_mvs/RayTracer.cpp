@@ -34,9 +34,7 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 	}
 
 	// Execute all the different graphics techniques.
-	Vec3Df color = this->performShading(intersection, iteration);
-
-	return color;
+	return this->performShading(intersection, iteration);
 }
 
 // @Author: Martijn van Dorp

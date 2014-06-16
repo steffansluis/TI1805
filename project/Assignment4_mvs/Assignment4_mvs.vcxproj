@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="BaseTriangleGeometry.h" />
     <ClInclude Include="BTree.h" />
+    <ClInclude Include="BTreeNode.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ConstantTexture.h" />
     <ClInclude Include="DiffuseMaterial.h" />
@@ -111,6 +112,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseTriangleGeometry.cpp" />
+    <ClCompile Include="BTree.cpp" />
+    <ClCompile Include="BTreeNode.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ConstantTexture.cpp" />
     <ClCompile Include="DiffuseMaterial.cpp" />
