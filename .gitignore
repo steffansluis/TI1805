@@ -1,8 +1,14 @@
-
-#ignore all mvs-project pc-specific stuff
+# Ignore all mvs-project pc-specific stuff
 *.suo
 project/Assignment4_mvs/Assignment4_mvs.opensdf
 project/Assignment4_mvs/Assignment4_mvs.sdf
-#project/Assignment4_mvs/Assignment4_mvs.vcxproj
-project/Assignment4_mvs/Assignment4_mvs.vcxproj.filters
 project/Assignment4_mvs/Assignment4_mvs.vcxproj.user
+
+# Ignore the output files
+project/Assignment4_mvs/Debug/*
+!project/Assignment4_mvs/Debug/models/
+!project/Assignment4_mvs/Debug/glut32.dll
+
+project/Assignment4_mvs/Release/*
+!project/Assignment4_mvs/Release/models/
+!project/Assignment4_mvs/Release/glut32.dll
