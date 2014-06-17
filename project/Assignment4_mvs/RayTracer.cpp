@@ -9,10 +9,32 @@
 #include "Vec3D.h"
 
 // Returns the color of your pixel.
-Vec3Df RayTracer::performRayTracing(const Vec3Df &origin, const Vec3Df &dir) const {
+Vec3Df RayTracer::performRayTracing(const Vec3Df &origin, const Vec3Df &dir) {
+
+	// print the iteration
+	if (this->iterationCounter % 100 == 0)
+	{
+		std::cout << "iteration: " << this->iterationCounter << "\n";
+	}
+
+	this->iterationCounter++;
+	
+
 	// call the first iteration of the ray-tracing
 	return this->performRayTracingIteration(origin, dir, 0);
 }
+
+
+
+void RayTracer::resetCounter()
+{
+	this->iterationCounter = 0;
+}
+
+
+
+
+
 
 // @Author: Bas Boellaard
 // This performs ray-tracing and has an iteration for limited amount of iterations. 

@@ -9,15 +9,26 @@
  */
 class RayTracer : public IRayTracer {
 public:
+
+
 	/**
 	* Traces the given ray through the scene and returns the light reflected tkwards the ray.
 	* @param[in] origin The origin of the ray.
 	* @param[in] dir The direction of the ray.
 	* @return The light towards the given ray.
 	*/
-	Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir) const;
+	Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir);
+
+
+	void resetCounter();
+
 
 private:
+
+	// A counter for the iteration of the ray-tracing algorithm. 
+	int iterationCounter = 0;
+
+
 	/**
 	* Traces the given ray through the scene and returns the light reflected tkwards the ray.
 	* Stops recursion when iteration reaches the max iterations limit.
