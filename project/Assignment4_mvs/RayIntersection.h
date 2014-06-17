@@ -18,7 +18,7 @@ public:
 	 * Gets the surface point of the geometry at the point of intersection.
 	 * @return The surface point of the geometry at the point of intersection.
 	 */
-	std::shared_ptr<const SurfacePoint> getSurfacePoint() const;
+	void getSurfacePoint(SurfacePoint &surface) const;
 
 	/**
 	* The point where the geometry was intersected.

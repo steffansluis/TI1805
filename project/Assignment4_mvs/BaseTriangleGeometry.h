@@ -15,14 +15,15 @@ public:
 	*/
 	void preprocess();
 
-	/**
-	* Calculates the intersection between the given ray and the triangle.
-	* Returns null if the ray does not intersect the triangle.
+	/*
+	* Returns whether any object is hit by the given ray and sets the intersection parameter
+	* to the RayIntersection representing the closest point of intersection.
 	* @param[in] origin The origin of the ray.
 	* @param[in] dir The direction of the ray.
-	* @return Pointer to a RayIntersection if the ray intersects this triangle; otherwise null.
+	* @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	* @return True if the ray intersected an object; otherwise false.
 	*/
-	std::shared_ptr<const RayIntersection> calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
+	bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const;
 
 	virtual Vec3Df getVertex0() const = 0;
 	virtual Vec3Df getVertex1() const = 0;
@@ -33,13 +34,13 @@ public:
 	* @param[in] intersection An intersection point between a ray and this object.
 	* @return The surface point on this triangle at the given intersection point.
 	*/
-	virtual std::shared_ptr<const SurfacePoint> getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const;
+	virtual void getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const;
 
 	/**
 	* Gets a random surface point on this triangle.
 	* @return A random surface point on this triangle.
 	*/
-	virtual std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
+	virtual void getRandomSurfacePoint(SurfacePoint &surface) const;
 
 	BoundingBox getBoundingBox() const;
 

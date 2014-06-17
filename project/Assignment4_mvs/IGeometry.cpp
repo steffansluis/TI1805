@@ -32,3 +32,11 @@ void IGeometry::setMaterial(std::shared_ptr<const IMaterial> material) {
 
 void IGeometry::preprocess() {
 }
+
+bool IGeometry::calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const {
+	// If no intersection was found or the closest intersection is beyond the maximum distance, return false; otherwise true.
+	if (!this->calculateClosestIntersection(origin, dir, intersection) || intersection.distance > maxDistance)
+		return false;
+	else
+		return true;
+}

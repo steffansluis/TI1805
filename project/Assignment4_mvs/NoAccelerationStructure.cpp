@@ -1,32 +1,55 @@
 #include "IGeometry.h"
+#include <limits>
+
 #include "NoAccelerationStructure.h"
 #include "RayIntersection.h"
 
-std::shared_ptr<const RayIntersection> NoAccelerationStructure::calculateIntersection(const Vec3Df & origin, const Vec3Df & dir) const {
+bool NoAccelerationStructure::calculateClosestIntersection(const Vec3Df & origin, const Vec3Df & dir, RayIntersection &intersection) const {
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry = this->getGeometry();
 
-	std::shared_ptr<const RayIntersection> bestIntersection = nullptr;
+	RayIntersection lastIntersection;	
+	intersection = RayIntersection();
+	intersection.distance = std::numeric_limits<float>::infinity();
+
+	bool intersectsAny = false;
 
 	// Iterate through all geometry in the scene
 	for (std::vector<std::shared_ptr<IGeometry>>::const_iterator it = geometry->begin(); it != geometry->end(); ++it) {
 		// Find the intersection between the ray and the geometry
-		std::shared_ptr<const RayIntersection> intersection = (*it)->calculateIntersection(origin, dir);
+		bool intersects = (*it)->calculateClosestIntersection(origin, dir, lastIntersection);
 
 		// If no intersection was found, continue
-		if (intersection == nullptr) {
+		if (!intersects) {
 			continue;
 		}
 
-		// If this is the first intersection, assign it to best intersection
-		if (bestIntersection == nullptr) {
-			bestIntersection = intersection;
+		// If this is the first intersection, set it intersection the the last intersection
+		if (!intersectsAny) {
+			intersection = lastIntersection;
+			intersectsAny = true;
 		}
-		// Otherwise, assign intersection to best intersection only if it is closer.
-		else if (intersection->distance < bestIntersection->distance) {
-			bestIntersection = intersection;
+		// Otherwise, set intersection to last intersection only if it is closer than the current best intersection
+		else if (lastIntersection.distance < intersection.distance) {
+			intersection = lastIntersection;
 		}
 	}
 
-	// Return the best (e.g. closest) intersection.
-	return bestIntersection;
+	return intersectsAny;
+}
+
+bool NoAccelerationStructure::calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const {
+	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry = this->getGeometry();
+
+	// Iterate through all geometry in the scene
+	for (std::vector<std::shared_ptr<IGeometry>>::const_iterator it = geometry->begin(); it != geometry->end(); ++it) {
+		// Find the intersection between the ray and the geometry
+		bool intersects = (*it)->calculateAnyIntersection(origin, dir, maxDistance, intersection);
+
+		// If an intersection was found, return it
+		if (intersects) {
+			return true;
+		}
+	}
+
+	return false;
 }

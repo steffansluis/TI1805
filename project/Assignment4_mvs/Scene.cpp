@@ -27,9 +27,14 @@ Scene::Scene() {
 Scene::~Scene() {
 }
 
-std::shared_ptr<const RayIntersection> Scene::calculateIntersection(const Vec3Df & origin, const Vec3Df & dest) const {
+bool Scene::calculateClosestIntersection(const Vec3Df & origin, const Vec3Df & dir, RayIntersection &intersection) const {
 	// Delegate the intersection calculations to the acceleration structure
-	return this->accelerator->calculateIntersection(origin, dest);
+	return this->accelerator->calculateClosestIntersection(origin, dir, intersection);
+}
+
+bool Scene::calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const {
+	// Delegate the intersection calculations to the acceleration structure
+	return this->accelerator->calculateAnyIntersection(origin, dir, maxDistance, intersection);
 }
 
 void Scene::addGeometry(std::shared_ptr<IGeometry> geometry) {

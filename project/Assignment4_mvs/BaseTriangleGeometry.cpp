@@ -31,7 +31,7 @@ void BaseTriangleGeometry::preprocess() {
 //
 // Logic herein relies heavily on the slides from college as well as data from the following source:
 // https://courses.cs.washington.edu/courses/cse457/09sp/lectures/triangle_intersection.pdf
-std::shared_ptr<const RayIntersection> BaseTriangleGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
+bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
 	// Get the vertices for the triangle
 	Vec3Df vertex0 = this->getVertex0();
 	Vec3Df vertex1 = this->getVertex1();
@@ -46,11 +46,11 @@ std::shared_ptr<const RayIntersection> BaseTriangleGeometry::calculateIntersecti
 	{
 		if (Constants::ENABLE_CULLING)
 		{
-			return nullptr;
+			return false;
 		}
 		else if (dot_dir_normal >= -1e-6f)
 		{
-			return nullptr;
+			return false;
 		}
 	}
 
@@ -90,31 +90,26 @@ std::shared_ptr<const RayIntersection> BaseTriangleGeometry::calculateIntersecti
 		intersection->direction = dir;
 		intersection->distance = t;
 
-		return intersection;
+		return true;
 	}
 
-	return nullptr;
+	return false;
 }
 
-std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const {
-	auto surface = std::make_shared<SurfacePoint>();
-
-	surface->geometry = this->shared_from_this();
-	surface->point = intersection->hitPoint;
-	surface->normal = this->normal;
+void BaseTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const {
+	surface.geometry = this->shared_from_this();
+	surface.point = intersection.hitPoint;
+	surface.normal = this->normal;
 
 	// Calculate the hitpoint in local space
-	Vec3Df localPoint = intersection->hitPoint - this->getVertex0();
+	Vec3Df localPoint = intersection.hitPoint - this->getVertex0();
 
 	// Calculates the barycentric coordinates of hit point.
-	surface->texCoords[0] = Vec3Df::dotProduct(localPoint, this->tangent);
-	surface->texCoords[1] = Vec3Df::dotProduct(localPoint, this->bitangent);
-
-	return surface;
+	surface.texCoords[0] = Vec3Df::dotProduct(localPoint, this->tangent);
+	surface.texCoords[1] = Vec3Df::dotProduct(localPoint, this->bitangent);
 }
 
-std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getRandomSurfacePoint() const {
-	auto surface = std::make_shared<SurfacePoint>();
+void BaseTriangleGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	float u, v;
 
 	// Get two numbers in the range [0, 1]
@@ -131,15 +126,13 @@ std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getRandomSurfacePoint(
 		(sqrtU * (1.0f - v)) * this->getVertex1() +
 		(sqrtU * v) * this->getVertex2();
 
-	surface->geometry = this->shared_from_this();
-	surface->point = point;
-	surface->normal = this->normal;
+	surface.geometry = this->shared_from_this();
+	surface.point = point;
+	surface.normal = this->normal;
 
 	// Calculates the barycentric coordinates of hit point.
-	surface->texCoords[0] = Vec3Df::dotProduct(point, this->tangent);
-	surface->texCoords[1] = Vec3Df::dotProduct(point, this->bitangent);
-
-	return surface;
+	surface.texCoords[0] = Vec3Df::dotProduct(point, this->tangent);
+	surface.texCoords[1] = Vec3Df::dotProduct(point, this->bitangent);
 }
 
 BoundingBox BaseTriangleGeometry::getBoundingBox() const {

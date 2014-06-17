@@ -20,7 +20,7 @@ void BTreeAccelerator::preprocess() {
 	}
 }
 
-std::shared_ptr<const RayIntersection> BTreeAccelerator::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
+bool BTreeAccelerator::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
 	// Not the most elegant solution but it should work
 	Vec3Df dest = dir * 10000.0f;
 
@@ -33,7 +33,22 @@ std::shared_ptr<const RayIntersection> BTreeAccelerator::calculateIntersection(c
 	simpleIntersectionAlgorithm.preprocess();
 
 	// Use the simple intersection algorithm to find the closest intersections
-	return simpleIntersectionAlgorithm.calculateIntersection(origin, dir);
+	return simpleIntersectionAlgorithm.calculateClosestIntersection(origin, dir, intersection);
+}
+
+bool BTreeAccelerator::calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const {
+	Vec3Df dest = dir * maxDistance;
+
+	// Use the retrieveTriangles to find a list of potential intersecting objects
+	std::vector<std::shared_ptr<IGeometry>> candidateSet = this->retrieveTriangles(origin, dest);
+
+	// Constructor a NoAccelerationStructure to perform a simple intersection test
+	NoAccelerationStructure simpleIntersectionAlgorithm;
+	simpleIntersectionAlgorithm.setGeometry(std::shared_ptr<std::vector<std::shared_ptr<IGeometry>>>(&candidateSet, null_deleter));
+	simpleIntersectionAlgorithm.preprocess();
+
+	// Use the simple intersection algorithm to find the closest intersections
+	return simpleIntersectionAlgorithm.calculateAnyIntersection(origin, dir, maxDistance, intersection);
 }
 
 std::vector<std::shared_ptr<IGeometry>> BTreeAccelerator::retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest) const {

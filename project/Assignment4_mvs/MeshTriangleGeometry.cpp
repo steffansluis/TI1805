@@ -24,28 +24,24 @@ Vec3Df MeshTriangleGeometry::getVertex2() const {
 	return this->mesh->vertices[this->triangle->v[2]].p;
 }
 
-std::shared_ptr<const SurfacePoint> MeshTriangleGeometry::getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const {
-	std::shared_ptr<SurfacePoint> surface = std::const_pointer_cast<SurfacePoint>(BaseTriangleGeometry::getSurfacePoint(intersection));
+void MeshTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const {
+	BaseTriangleGeometry::getSurfacePoint(intersection, surface);
 
 	// Get the normal by interpolating the vertex normals
 	// surface->normal = this->getSurfaceNormal(surface->u, surface->v);
 
 	// Find the texture coordinates
 	// this->getTextureCoordinates(surface->u, surface->v, surface->u, surface->v);
-
-	return surface;
 }
 
-std::shared_ptr<const SurfacePoint> MeshTriangleGeometry::getRandomSurfacePoint() const {
-	std::shared_ptr<SurfacePoint> surface = std::const_pointer_cast<SurfacePoint>(BaseTriangleGeometry::getRandomSurfacePoint());
+void MeshTriangleGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
+	BaseTriangleGeometry::getRandomSurfacePoint(surface);
 
 	// Get the normal by interpolating the vertex normals
 	// surface->normal = this->getSurfaceNormal(surface->u, surface->v);
 
 	// Find the texture coordinates
 	// this->getTextureCoordinates(surface->u, surface->v, surface->u, surface->v);
-
-	return surface;
 }
 
 Vec3Df MeshTriangleGeometry::getSurfaceNormal(const Vec2Df &uv) const {
