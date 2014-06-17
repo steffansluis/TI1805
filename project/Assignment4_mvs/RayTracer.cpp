@@ -85,8 +85,16 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
 		// Get the light color and the light vector
+		Vec3Df lightPoint;
+		Vec3Df lightColor;
 		Vec3Df lightVector;
-		Vec3Df lightColor = (*it)->getLightTowards(surface.point, lightVector);
+		
+		// Sample the light for a position and color
+		(*it)->sampleLight(surface.point, lightPoint, lightColor);
+
+		// Compute the light vector
+		lightVector = (surface.point - lightPoint);
+		lightVector.normalize();
 
 		// Evaluate the BRDF, essentially
 		lighting += surface.reflectedLight(lightVector, viewVector, lightColor);
