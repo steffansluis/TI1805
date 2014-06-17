@@ -1,6 +1,7 @@
 #ifndef ITEXTURE_H
 #define ITEXTURE_H
 
+#include "Vec2D.h"
 #include "Vec3D.h"
 
 /**
@@ -12,11 +13,10 @@ public:
 
 	/**
 	 * Samples the texture at the given texture coordinates.
-	 * @param u The u-coordinate.
-	 * @param v The v-coordinate.
+	 * @param uv The uv-coordinates.
 	 * @return The color at the given texture coordinates.
 	 */
-	virtual Vec3Df sample(float u, float v) const = 0;
+	virtual Vec3Df sample(const Vec2Df &uv) const = 0;
 };
 
 #endif

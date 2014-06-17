@@ -2,6 +2,7 @@
 #define MESHTRIANGLEGEOMETRY_H
 
 #include "BaseTriangleGeometry.h"
+#include "Vec2D.h"
 #include "Vec3D.h"
 
 class Mesh;
@@ -43,21 +44,18 @@ private:
 	/**
 	 * Calculates the surface normal at the given barycentric coordinates
 	 * by interpolating the triangle's vertex normals.
-	 * @param u The u-coordinate.
-	 * @param v The v-coordinate.
+	 * @param[in] uv The barycentric coordinates.
 	 * @return The surface normal at the given barycentric coordinates.
 	 */
-	Vec3Df getSurfaceNormal(float u, float v) const;
+	Vec3Df getSurfaceNormal(const Vec2Df &uv) const;
 
 	/**
 	 * Calculates the texture coordinates at the given barycentric coordinates
 	 * by interpolating the triangle's texture coordinates.
-	 * @param u The u-coordinate.
-	 * @param v The v-coordinate.
-	 * @param[out] tu The texture u-coordinate.
-	 * @param[out] tv The texture v-coordinate.
+	 * @param[in] uv The barycentric coordinates.
+	 * @param[out] tUv The uv texture coordinate.
 	 */
-	void getTextureCoordinates(float u, float v, float &tu, float &tv) const;
+	void getTextureCoordinates(const Vec2Df &uv, Vec2Df &tUV) const;
 
 	const Mesh *mesh;
 	const Triangle *triangle;

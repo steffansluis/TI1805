@@ -3,8 +3,10 @@
 
 #include <memory>
 
+#include "Vec2D.h"
 #include "Vec3D.h"
 
+class Scene;
 class IGeometry;
 
 /**
@@ -16,9 +18,10 @@ public:
 	/**
 	 * Calculates the amount of ambient light hitting the surface.
 	 * This is not physically correct.
+	 * @param[in] scene The scene.
 	 * @return The amount of ambient light hitting the surface.
 	 */
-	Vec3Df ambientLight() const;
+	Vec3Df ambientLight(std::shared_ptr<const Scene> scene) const;
 
 	/**
 	 * Calculates the light emitted from the surface towards the given vector.
@@ -29,20 +32,21 @@ public:
 
 	/**
 	* Calculates the light reflected from the incoming vector towards the outgoing vector.
-	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @param[in] incommingVector The vector from which the light is comming.
+	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @param[in] lightColor The color of the light.
 	* @return The light reflected from the incomming towards the outgoing vector.
 	*/
-	Vec3Df reflectedLight(const Vec3Df &outgoingVector, const Vec3Df &incommingVector, const Vec3Df &lightColor) const;
+	Vec3Df reflectedLight(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &lightColor) const;
 
 	/**
 	 * Calculates the specularly reflected light towards the given vector.
 	 * This is not physically correct.
 	 * @param[in] outgoingVector The vector that the light is reflected towards.
+	 * @param[in] scene The scene.
 	 * @return The light specularly reflected towards the outgoing vector.
 	 */
-	Vec3Df specularLight(const Vec3Df &outgoingVector) const;
+	Vec3Df specularLight(const Vec3Df &outgoingVector, std::shared_ptr<const Scene> scene) const;
 
 	/**
 	 * The point on the surface.
@@ -57,7 +61,7 @@ public:
 	/**
 	* The texture coordinates of the surface.
 	*/
-	float u, v;
+	Vec2Df texCoords;
 
 	/**
 	* The geometry which this surface belongs to.

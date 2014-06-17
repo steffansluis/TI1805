@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "Constants.h"
 #include "PerspectiveCamera.h"

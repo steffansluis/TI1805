@@ -73,6 +73,19 @@
     <ClCompile Include="BTreeNode.cpp">
       <Filter>Acceleration Structures</Filter>
     </ClCompile>
+    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="LambertianBRDF.cpp">
+      <Filter>Materials\BRDF</Filter>
+    </ClCompile>
+    <ClCompile Include="OrenNayarBRDF.cpp">
+      <Filter>Materials\BRDF</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinnPhongBRDF.cpp">
+      <Filter>Materials\BRDF</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongBRDF.cpp">
+      <Filter>Materials\BRDF</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -152,6 +165,23 @@
     <ClInclude Include="SurfacePoint.h" />
     <ClInclude Include="BTreeNode.h">
       <Filter>Acceleration Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="BRDF.h">
+      <Filter>Materials\BRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2D.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="LambertianBRDF.h">
+      <Filter>Materials\BRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="OrenNayarBRDF.h">
+      <Filter>Materials\BRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinnPhongBRDF.h">
+      <Filter>Materials\BRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongBRDF.h">
+      <Filter>Materials\BRDF</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

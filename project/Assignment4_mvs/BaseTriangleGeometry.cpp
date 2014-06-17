@@ -83,7 +83,6 @@ std::shared_ptr<const RayIntersection> BaseTriangleGeometry::calculateIntersecti
 		// since the ray-length is less than the already stored data (or has not been stored yet), we 
 		// can put the data for the intersection into the object.
 		intersection->hitPoint = hitPoint;
-		intersection->normal = normal;
 		intersection->geometry = this->shared_from_this();
 
 		// also store the original data here.
@@ -108,8 +107,8 @@ std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getSurfacePoint(std::s
 	Vec3Df localPoint = intersection->hitPoint - this->getVertex0();
 
 	// Calculates the barycentric coordinates of hit point.
-	surface->u = Vec3Df::dotProduct(localPoint, this->tangent);
-	surface->v = Vec3Df::dotProduct(localPoint, this->bitangent);
+	surface->texCoords[0] = Vec3Df::dotProduct(localPoint, this->tangent);
+	surface->texCoords[1] = Vec3Df::dotProduct(localPoint, this->bitangent);
 
 	return surface;
 }
@@ -137,10 +136,22 @@ std::shared_ptr<const SurfacePoint> BaseTriangleGeometry::getRandomSurfacePoint(
 	surface->normal = this->normal;
 
 	// Calculates the barycentric coordinates of hit point.
-	surface->u = Vec3Df::dotProduct(point, this->tangent);
-	surface->v = Vec3Df::dotProduct(point, this->bitangent);
+	surface->texCoords[0] = Vec3Df::dotProduct(point, this->tangent);
+	surface->texCoords[1] = Vec3Df::dotProduct(point, this->bitangent);
 
 	return surface;
+}
+
+BoundingBox BaseTriangleGeometry::getBoundingBox() const {
+	// Construct an empty bounding box
+	BoundingBox result = BoundingBox();
+
+	// Insert all three vertices
+	result.includePoint(this->getVertex0());
+	result.includePoint(this->getVertex1());
+	result.includePoint(this->getVertex2());
+
+	return result;
 }
 
 // @Author: Bas Boellaard

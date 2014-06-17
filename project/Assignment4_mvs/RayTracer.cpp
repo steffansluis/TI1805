@@ -51,9 +51,9 @@ Vec3Df RayTracer::performShading(std::shared_ptr<const RayIntersection> intersec
 
 	// Calculate ambient, emitted and specularly reflected light.
 	Vec3Df lighting = Vec3Df();
-	lighting += surface->ambientLight();
+	lighting += surface->ambientLight(this->getScene());
 	lighting += surface->emittedLight(viewVector);
-	lighting += surface->specularLight(viewVector);
+	lighting += surface->specularLight(viewVector, this->getScene());
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
@@ -62,7 +62,7 @@ Vec3Df RayTracer::performShading(std::shared_ptr<const RayIntersection> intersec
 		Vec3Df lightColor = (*it)->getLightTowards(surface->point, lightVector);
 
 		// Evaluate the BRDF, essentially
-		lighting += surface->reflectedLight(viewVector, lightVector, lightColor);
+		lighting += surface->reflectedLight(lightVector, viewVector, lightColor);
 	}
 	
 	// Return the accumulated lighting

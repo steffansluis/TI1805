@@ -15,11 +15,10 @@ public:
 	
 	/**
 	* Samples the texture at the given texture coordinates.
-	* @param u The u-coordinate.
-	* @param v The v-coordinate.
+	* @param uv The uv-coordinates.
 	* @return The color at the given texture coordinates.
 	*/
-	Vec3Df sample(float u, float v) const;
+	Vec3Df sample(const Vec2Df &uv) const;
 
 private:
 	Vec3Df color;

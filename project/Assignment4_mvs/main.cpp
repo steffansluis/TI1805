@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
+#include <cassert>
 #include "raytracing.h"
 #include "mesh.h"
 #include "traqueboule.h"

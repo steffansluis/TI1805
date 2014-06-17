@@ -1,6 +1,8 @@
 #ifndef IRAYTRACER_H
 #define IRAYTRACER_H
 
+#include <memory>
+
 #include "Vec3D.h"
 
 class Scene;
@@ -16,14 +18,14 @@ public:
 	 * Gets a pointer to the scene.
 	 * @return A pointer to the scene.
 	 */
-	const Scene *getScene() const;
+	std::shared_ptr<const Scene> getScene() const;
 
 	/**
 	* Sets the pointer to the scene.
 	* @param[in] scene Pointer to a scene.
 	* @return A pointer to the old scene.
 	*/
-	const Scene *setScene(const Scene *scene);
+	void setScene(std::shared_ptr<const Scene> scene);
 
 	/**
 	 * Traces the given ray through the scene and returns the light reflected tkwards the ray.
@@ -34,7 +36,7 @@ public:
 	virtual Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir) const = 0;
 
 private:
-	const Scene *scene;
+	std::shared_ptr<const Scene> scene;
 };
 
 #endif

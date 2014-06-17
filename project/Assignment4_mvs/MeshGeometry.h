@@ -61,9 +61,14 @@ public:
 	*/
 	std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
 
+	BoundingBox getBoundingBox() const;
+
 private:
 	static std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> generateTriangles(const Mesh *mesh);
 
+	static BoundingBox createBoundingBox(const Mesh *mesh);
+
+	BoundingBox boundingBox;
 	const Mesh *mesh;
 	std::shared_ptr<IAccelerationStructure> accelerator;
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> triangles;

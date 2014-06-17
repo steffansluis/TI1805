@@ -17,7 +17,7 @@ class RayIntersection;
 /**
  * Represents a scene of 3D objects which can be rendered to an image.
  */
-class Scene {
+class Scene : std::enable_shared_from_this<const Scene> {
 public:
 	Scene();
 	~Scene();

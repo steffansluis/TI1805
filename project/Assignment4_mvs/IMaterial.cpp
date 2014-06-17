@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "ConstantTexture.h"
 #include "IMaterial.h"
@@ -54,7 +54,7 @@ void IMaterial::setSpecularTexture(std::shared_ptr<const ITexture> texture) {
 		this->specularTexture = black;
 }
 
-Vec3Df IMaterial::ambientLight(std::shared_ptr<const SurfacePoint> surface) const {
+Vec3Df IMaterial::ambientLight(std::shared_ptr<const SurfacePoint> surface, std::shared_ptr<const Scene> scene) const {
 	assert(surface);
 
 	// TODO: Implement ambient lighting / occlusion.

@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "DiffuseMaterial.h"
 #include "IGeometry.h"

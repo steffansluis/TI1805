@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "Image.h"
 #include "IAccelerationStructure.h"
@@ -79,7 +79,7 @@ void Scene::setRayTracer(std::shared_ptr<IRayTracer> rayTracer) {
 
 	// Set the ray tracer and set its scene pointer to the current scene
 	this->rayTracer = rayTracer;
-	this->rayTracer->setScene(this);
+	this->rayTracer->setScene(this->shared_from_this());
 }
 
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {

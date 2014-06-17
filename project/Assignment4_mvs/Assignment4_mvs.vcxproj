@@ -78,6 +78,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseTriangleGeometry.h" />
+    <ClInclude Include="BlinnPhongBRDF.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="BRDF.h" />
     <ClInclude Include="BTree.h" />
     <ClInclude Include="BTreeNode.h" />
     <ClInclude Include="Constants.h" />
@@ -91,12 +94,15 @@
     <ClInclude Include="IMaterial.h" />
     <ClInclude Include="IRayTracer.h" />
     <ClInclude Include="ITexture.h" />
+    <ClInclude Include="LambertianBRDF.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="MeshGeometry.h" />
     <ClInclude Include="MeshTriangleGeometry.h" />
     <ClInclude Include="NoAccelerationStructure.h" />
+    <ClInclude Include="OrenNayarBRDF.h" />
     <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="PhongBRDF.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RayIntersection.h" />
@@ -107,11 +113,14 @@
     <ClInclude Include="SurfacePoint.h" />
     <ClInclude Include="traqueboule.h" />
     <ClInclude Include="TriangleGeometry.h" />
+    <ClInclude Include="Vec2D.h" />
     <ClInclude Include="Vec3D.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseTriangleGeometry.cpp" />
+    <ClCompile Include="BlinnPhongBRDF.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BTree.cpp" />
     <ClCompile Include="BTreeNode.cpp" />
     <ClCompile Include="Constants.cpp" />
@@ -125,12 +134,15 @@
     <ClCompile Include="IMaterial.cpp" />
     <ClCompile Include="IRayTracer.cpp" />
     <ClCompile Include="ITexture.cpp" />
+    <ClCompile Include="LambertianBRDF.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="MeshGeometry.cpp" />
     <ClCompile Include="MeshTriangleGeometry.cpp" />
     <ClCompile Include="NoAccelerationStructure.cpp" />
+    <ClCompile Include="OrenNayarBRDF.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="PhongBRDF.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="RayIntersection.cpp" />
