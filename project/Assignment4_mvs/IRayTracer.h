@@ -33,7 +33,7 @@ public:
 	 * @param[in] dir The direction of the ray.
 	 * @return The light towards the given ray.
 	 */
-	virtual Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir) const = 0;
+	virtual Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir) = 0;
 
 private:
 	const Scene *scene;
