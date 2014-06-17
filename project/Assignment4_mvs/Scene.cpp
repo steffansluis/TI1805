@@ -97,7 +97,6 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	auto result = std::make_shared<Image>(width, height);
 
 	// Iterate through each pixel
-	// !!! Only iterating through centre right now to speed things up
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 			Vec3Df origin;

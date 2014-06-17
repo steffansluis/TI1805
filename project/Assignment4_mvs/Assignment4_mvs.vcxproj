@@ -111,6 +111,7 @@
     <ClInclude Include="RGBValue.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SurfacePoint.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="traqueboule.h" />
     <ClInclude Include="TriangleGeometry.h" />
     <ClInclude Include="Vec2D.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="raytracing.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SurfacePoint.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TriangleGeometry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

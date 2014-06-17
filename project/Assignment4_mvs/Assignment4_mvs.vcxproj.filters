@@ -86,6 +86,9 @@
     <ClCompile Include="PhongBRDF.cpp">
       <Filter>Materials\BRDF</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -182,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="PhongBRDF.h">
       <Filter>Materials\BRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
