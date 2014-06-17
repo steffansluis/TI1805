@@ -11,7 +11,7 @@ class SurfacePoint;
 /**
  * Represents the intersection point between a ray and scene geometry.
  */
-class RayIntersection : public std::enable_shared_from_this<const RayIntersection>
+class RayIntersection
 {
 public:
 	/**

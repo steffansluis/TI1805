@@ -66,12 +66,18 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 // @Author: Martijn van Dorp
 // Performs basic whitted-style shading.
 Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int iteration) const {
+	// Needed for the shadow intersection test but can be ignored.
+	RayIntersection shadowIntersection;
+
+	// Get a pointer to the scene.
+	const Scene *scene = this->getScene();
+
 	// Get the surface point at the intersection point, this contains surface parameters useful for shading.
 	SurfacePoint surface;
 	intersection.getSurfacePoint(surface);
 
 	// Get the vector contain the scene's lights.
-	std::shared_ptr<const std::vector<std::shared_ptr<ILight>>> lights = this->getScene()->getLights();
+	std::shared_ptr<const std::vector<std::shared_ptr<ILight>>> lights = scene->getLights();
 	
 	// The 'view' vector is the opposite of the ray direction
 	Vec3Df viewVector = -intersection.direction;
@@ -80,7 +86,7 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 	Vec3Df lighting = Vec3Df();
 	lighting += surface.ambientLight(this->getScene());
 	lighting += surface.emittedLight(viewVector);
-	lighting += surface.specularLight(viewVector, this->getScene());
+	lighting += surface.specularLight(viewVector, scene);
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
@@ -92,9 +98,16 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 		// Sample the light for a position and color
 		(*it)->sampleLight(surface.point, lightPoint, lightColor);
 
-		// Compute the light vector
+		// Compute the vector from the light towards the intersection
 		lightVector = (surface.point - lightPoint);
-		lightVector.normalize();
+		float lightDistance = lightVector.normalize();
+
+		const float smallNumber = 1e-6f;
+
+		// If the segment between the light and intersection intersects any geometry
+		// then the intersection is in shadow, continue to the next light.
+		if (scene->calculateAnyIntersection(lightPoint + lightVector * smallNumber, lightVector, lightDistance - 2.0f * smallNumber, shadowIntersection))
+			continue;
 
 		// Evaluate the BRDF, essentially
 		lighting += surface.reflectedLight(lightVector, viewVector, lightColor);

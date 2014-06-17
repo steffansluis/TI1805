@@ -13,7 +13,7 @@ class IGeometry;
  * Represents a point at the surface of scene geometry.
  * Provides functions and data used for shading.
  */
-class SurfacePoint : public std::enable_shared_from_this<const SurfacePoint> {
+class SurfacePoint {
 public:
 	/**
 	 * Calculates the amount of ambient light hitting the surface.

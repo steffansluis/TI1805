@@ -78,17 +78,15 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 	// finally, we need to check if this ray is actually inside of the triangle. 
 	if (this->calculateRayInsideTriangle(hitPoint, normal, vertex0, vertex1, vertex2))
 	{
-		auto intersection = std::make_shared<RayIntersection>();
-
 		// since the ray-length is less than the already stored data (or has not been stored yet), we 
 		// can put the data for the intersection into the object.
-		intersection->hitPoint = hitPoint;
-		intersection->geometry = this->shared_from_this();
+		intersection.hitPoint = hitPoint;
+		intersection.geometry = this->shared_from_this();
 
 		// also store the original data here.
-		intersection->origin = origin;
-		intersection->direction = dir;
-		intersection->distance = t;
+		intersection.origin = origin;
+		intersection.direction = dir;
+		intersection.distance = t;
 
 		return true;
 	}
