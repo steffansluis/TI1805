@@ -94,7 +94,7 @@ Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) 
 	return Vec3Df();
 }
 
-Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &outgoingVector) const {
+Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const {
 	// TODO: Implement emitted light
 	return Vec3Df();
 }

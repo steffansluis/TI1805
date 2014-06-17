@@ -41,11 +41,11 @@ DiffuseMaterial::DiffuseMaterial(const Vec3Df &color, float roughness) {
 DiffuseMaterial::~DiffuseMaterial() {
 }
 
-Vec3Df DiffuseMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &lightColor) const {
-	return this->diffuseBrdf->reflectance(incommingVector, outgoingVector, surface.normal, surface.texCoords) * lightColor;
+Vec3Df DiffuseMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const {
+	return this->diffuseBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 }
 
-Vec3Df DiffuseMaterial::specularLight(const SurfacePoint &surface, const Vec3Df &outgoingVector, const Scene *) const {
+Vec3Df DiffuseMaterial::specularLight(const SurfacePoint &surface, const Vec3Df &reflectedVector, const Scene *) const {
 	// This is a diffuse material, no specular light is reflected
 	return Vec3Df(0, 0, 0);
 }

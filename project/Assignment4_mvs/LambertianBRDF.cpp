@@ -12,18 +12,18 @@ LambertianBRDF::LambertianBRDF(const IMaterial *material)
 }
 
 // TODO: Implement the lambertian BRDF, this should be pretty much identical to your diffuseOnly sharer for assignment 3.
-// Keep in mind the direction of the two vectors, you may have to flip a sign somewhere.
 // http://en.wikipedia.org/wiki/Lambertian_reflectance
+// http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#Formulation
 // this->material->sampleDiffuseColor(texCoords) = diffuse color
 
-// It is irrelevant which direction is towards the light source and which direction is towards the observer due to helmholz reciprocity.
-// http://en.wikipedia.org/wiki/Helmholtz_reciprocity
+// The incommingVector, reflectedVector and normal correspond to Li, Lr and n respectivly in this image
+// http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#mediaviewer/File:Oren-nayar-reflection.png
 
 // For now every object's material defaults to DiffuseMaterial, the DiffuseMaterial uses the LambertianBRDF by default.
 // If you want to test a different brdf, modifiy the DiffuseMaterial(color, roughness) constructor to set diffuseBrdf to whichever one you need to test.
 // DiffuseMaterial.cpp also contains the default color and roughness, change these as you wish.
 
-Vec3Df LambertianBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
+Vec3Df LambertianBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
 	// TODO: Diffuse shading
 	return this->material->sampleDiffuseColor(texCoords);
 }
