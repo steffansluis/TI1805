@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <exception>
 
 #include "BTreeNode.h"
 
@@ -253,6 +254,7 @@ void BTreeNode::Balance()
 		else
 		{
 			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
+			throw BTreeException("something happened");
 		}
 
 		this->parent = R;
@@ -305,3 +307,22 @@ void BTreeNode::Balance()
 		this->parent->Balance();
 	}
 }
+
+
+
+
+
+
+////////////////// Custom Exceptions ////////////////////////
+
+BTreeException::BTreeException(const char* message)
+{
+	this->_message = message;
+}
+
+const char* BTreeException::what() const throw()
+{
+	return this->_message;
+}
+
+
