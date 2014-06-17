@@ -39,27 +39,39 @@ public:
 	*/
 	void preprocess();
 
-	/**
-	* Calculates the intersection between the given ray and the mesh.
-	* Returns null if the ray does not intersect the mesh.
+	/*
+	* Calculates whether the mesh is hit by the given ray and sets the intersection parameter
+	* to the RayIntersection representing the closest point of intersection.
 	* @param[in] origin The origin of the ray.
 	* @param[in] dir The direction of the ray.
-	* @return Pointer to a RayIntersection if the ray intersects this mesh; otherwise null.
+	* @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	* @return True if the ray intersected an object; otherwise false.
 	*/
-	std::shared_ptr<const RayIntersection> calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const;
+	bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const;
+
+	/*
+	* Returns whether the mesh is hit by the given ray and sets the intersection parameter
+	* to the RayIntersection representing the point of intersection.
+	* @param[in] origin The origin of the ray.
+	* @param[in] dir The direction of the ray.
+	* @param maxDistance The maximum distance at which the intersection may occur.
+	* @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	* @return True if the ray intersected an object; otherwise false.
+	*/
+	bool calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const;
 
 	/**
 	* Gets the surface point on this mesh at the given intersection point.
 	* @param[in] intersection An intersection point between a ray and this object.
 	* @return The surface point on this mesh at the given intersection point.
 	*/
-	std::shared_ptr<const SurfacePoint> getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const;
+	void getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const;
 
 	/**
 	* Gets a random surface point on this mesh.
 	* @return A random surface point on this mesh.
 	*/
-	std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
+	void getRandomSurfacePoint(SurfacePoint &surface) const;
 
 	BoundingBox getBoundingBox() const;
 

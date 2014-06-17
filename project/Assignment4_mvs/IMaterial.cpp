@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "ConstantTexture.h"
 #include "IMaterial.h"
 #include "ITexture.h"
@@ -91,16 +89,12 @@ float IMaterial::sampleShininess(const Vec2Df &texCoords) const {
 	return this->shininess->sample(texCoords)[0];
 }
 
-Vec3Df IMaterial::ambientLight(std::shared_ptr<const SurfacePoint> surface, const Scene *scene) const {
-	assert(surface);
-
+Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) const {
 	// TODO: Implement ambient lighting / occlusion.
 	return Vec3Df();
 }
 
-Vec3Df IMaterial::emittedLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector) const {
-	assert(surface);
-
+Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const {
 	// TODO: Implement emitted light
 	return Vec3Df();
 }

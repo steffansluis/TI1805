@@ -45,24 +45,33 @@ void MeshGeometry::preprocess() {
 	this->accelerator->preprocess();
 }
 
-std::shared_ptr<const RayIntersection> MeshGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
+bool MeshGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
 	// If the ray does not intersect the bounding box, return null
 	if (!this->boundingBox.intersects(origin, dir))
-		return nullptr;
+		return false;
 
 	// Let the acceleration structure handle the intersection in our set of triangles
-	return this->accelerator->calculateIntersection(origin, dir);
+	return this->accelerator->calculateClosestIntersection(origin, dir, intersection);
 }
 
-std::shared_ptr<const SurfacePoint> MeshGeometry::getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const {
+bool MeshGeometry::calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const {
+	float distance;
+
+	// If the ray does not intersect the bounding box within the given maximum distance, return null
+	if (!this->boundingBox.intersects(origin, dir, distance) || distance > maxDistance)
+		return false;
+
+	// Let the acceleration structure handle the intersection in our set of triangles
+	return this->accelerator->calculateAnyIntersection(origin, dir, maxDistance, intersection);
+}
+
+void MeshGeometry::getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const {
 	// We are intersecting against the triangles within the mesh, so the geometry pointer of RayIntersection
 	// will not point to the mesh geometry but instead to the triangle. There is no real need to implement this.
 	assert(false);
-
-	return nullptr;
 }
 
-std::shared_ptr<const SurfacePoint> MeshGeometry::getRandomSurfacePoint() const {
+void MeshGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	// BUG: Sampling is not uniform, needs to be weighted by triangle's surface area / total surface area.
 
 	// Pick a random triangle
@@ -70,7 +79,7 @@ std::shared_ptr<const SurfacePoint> MeshGeometry::getRandomSurfacePoint() const 
 	int index = rand() % size;
 
 	// Return a random point on this triangle
-	return this->triangles->at(index)->getRandomSurfacePoint();
+	this->triangles->at(index)->getRandomSurfacePoint(surface);
 }
 
 BoundingBox MeshGeometry::getBoundingBox() const {
@@ -82,7 +91,7 @@ BoundingBox MeshGeometry::createBoundingBox(const Mesh *mesh) {
 	BoundingBox result = BoundingBox();
 
 	// Insert all vertices
-	for (int i = 0; i < mesh->vertices.size(); i++) {
+	for (unsigned int i = 0; i < mesh->vertices.size(); i++) {
 		result.includePoint(mesh->vertices[i].p);
 	}
 

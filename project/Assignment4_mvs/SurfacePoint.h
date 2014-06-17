@@ -13,7 +13,7 @@ class IGeometry;
  * Represents a point at the surface of scene geometry.
  * Provides functions and data used for shading.
  */
-class SurfacePoint : public std::enable_shared_from_this<const SurfacePoint> {
+class SurfacePoint {
 public:
 	/**
 	 * Calculates the amount of ambient light hitting the surface.
@@ -25,28 +25,28 @@ public:
 
 	/**
 	 * Calculates the light emitted from the surface towards the given vector.
-	 * @param[in] outgoingVector The vector that the light is reflected towards.
+	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @return The light emitted from the surface towards the given vector.
 	 */
-	Vec3Df emittedLight(const Vec3Df &outgoingVector) const;
+	Vec3Df emittedLight(const Vec3Df &reflectedVector) const;
 
 	/**
 	* Calculates the light reflected from the incoming vector towards the outgoing vector.
 	* @param[in] incommingVector The vector from which the light is comming.
-	* @param[in] outgoingVector The vector that the light is reflected towards.
+	* @param[in] reflectedVector The vector that the light is reflected towards.
 	* @param[in] lightColor The color of the light.
 	* @return The light reflected from the incomming towards the outgoing vector.
 	*/
-	Vec3Df reflectedLight(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &lightColor) const;
+	Vec3Df reflectedLight(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const;
 
 	/**
 	 * Calculates the specularly reflected light towards the given vector.
 	 * This is not physically correct.
-	 * @param[in] outgoingVector The vector that the light is reflected towards.
+	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] scene The scene.
 	 * @return The light specularly reflected towards the outgoing vector.
 	 */
-	Vec3Df specularLight(const Vec3Df &outgoingVector, const Scene *scene) const;
+	Vec3Df specularLight(const Vec3Df &reflectedVector, const Scene *scene) const;
 
 	/**
 	 * The point on the surface.

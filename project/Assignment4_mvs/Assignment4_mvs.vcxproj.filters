@@ -95,8 +95,8 @@
     <ClCompile Include="BTreeAccelerator.cpp">
       <Filter>Acceleration Structures</Filter>
     </ClCompile>
-    <ClCompile Include="Testing.cpp">
-      <Filter>Testing</Filter>
+    <ClCompile Include="SphereGeometry.cpp">
+      <Filter>Geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,8 +201,8 @@
     <ClInclude Include="BTreeAccelerator.h">
       <Filter>Acceleration Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Testing.h">
-      <Filter>Testing</Filter>
+    <ClInclude Include="SphereGeometry.h">
+      <Filter>Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

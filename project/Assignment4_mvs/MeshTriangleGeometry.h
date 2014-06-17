@@ -31,14 +31,14 @@ public:
 	* @param[in] intersection An intersection point between a ray and this object.
 	* @return The surface point on this triangle at the given intersection point.
 	*/
-	std::shared_ptr<const SurfacePoint> getSurfacePoint(std::shared_ptr<const RayIntersection> intersection) const;
+	void getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const;
 
 	/**
 	* Gets a random surface point on this triangle.
 	* @return A random surface point on this triangle.
 	* @remarks This will be needed when implementing area lights, so that we can sample the light volume.
 	*/
-	std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
+	void getRandomSurfacePoint(SurfacePoint &surface) const;
 
 private:
 	/**

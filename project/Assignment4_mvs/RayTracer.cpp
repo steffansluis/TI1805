@@ -50,10 +50,11 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 	}
 
 	// Calculate the intersection that will occur with these parameters
-	std::shared_ptr<const RayIntersection> intersection = this->getScene()->calculateIntersection(origin, dir);
+	RayIntersection intersection;
+	bool intersects = this->getScene()->calculateClosestIntersection(origin, dir, intersection);
 
-	// If the intersection was non-existant, return black
-	if (intersection == nullptr)
+	// If there was no intersection, return black
+	if (!intersects)
 	{
 		return Vec3Df(0, 0, 0);
 	}
@@ -64,30 +65,56 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 
 // @Author: Martijn van Dorp
 // Performs basic whitted-style shading.
-Vec3Df RayTracer::performShading(std::shared_ptr<const RayIntersection> intersection, const int iteration) const {
+Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int iteration) const {
+	// Needed for the shadow intersection test but can be ignored.
+	RayIntersection shadowIntersection;
+
+	// Get a pointer to the scene.
+	const Scene *scene = this->getScene();
+
 	// Get the surface point at the intersection point, this contains surface parameters useful for shading.
-	std::shared_ptr<const SurfacePoint> surface = intersection->getSurfacePoint();
+	SurfacePoint surface;
+	intersection.getSurfacePoint(surface);
 
 	// Get the vector contain the scene's lights.
-	std::shared_ptr<const std::vector<std::shared_ptr<ILight>>> lights = this->getScene()->getLights();
+	std::shared_ptr<const std::vector<std::shared_ptr<ILight>>> lights = scene->getLights();
 	
 	// The 'view' vector is the opposite of the ray direction
-	Vec3Df viewVector = -intersection->direction;
+	Vec3Df viewVector = -intersection.direction;
 
 	// Calculate ambient, emitted and specularly reflected light.
 	Vec3Df lighting = Vec3Df();
-	lighting += surface->ambientLight(this->getScene());
-	lighting += surface->emittedLight(viewVector);
-	lighting += surface->specularLight(viewVector, this->getScene());
+	lighting += surface.ambientLight(this->getScene());
+	lighting += surface.emittedLight(viewVector);
+	lighting += surface.specularLight(viewVector, scene);
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
 		// Get the light color and the light vector
+		Vec3Df lightPoint;
+		Vec3Df lightColor;
 		Vec3Df lightVector;
-		Vec3Df lightColor = (*it)->getLightTowards(surface->point, lightVector);
+		
+		// Sample the light for a position and color
+		(*it)->sampleLight(surface.point, lightPoint, lightColor);
+
+		// Compute the vector from the intersection towards the light
+		lightVector = (lightPoint - surface.point);
+		float lightDistance = lightVector.normalize();
+
+		// For the shadow ray we use a small offset from the surface
+		// so that a surface will not accidently shadow itsself.
+		// Similiarly we make the shadow segment sligthly shorter so
+		// that the light does not shadow itsself either in case of a geometric light.
+		const float smallNumber = 1e-6f;
+
+		// If the segment between the light and intersection intersects any geometry
+		// then the intersection is in shadow, continue to the next light.
+		if (scene->calculateAnyIntersection(surface.point + lightVector * smallNumber, lightVector, lightDistance - 2.0f * smallNumber, shadowIntersection))
+			continue;
 
 		// Evaluate the BRDF, essentially
-		lighting += surface->reflectedLight(lightVector, viewVector, lightColor);
+		lighting += surface.reflectedLight(lightVector, viewVector, lightColor);
 	}
 	
 	// Return the accumulated lighting

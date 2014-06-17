@@ -14,33 +14,43 @@ public:
 	virtual ~IAccelerationStructure();
 
 	/**
-	* Gets the vector containing all geometry in this structure.
-	* @return Pointer to a vector containing all the geometry in this structure.
-	*/
+	 * Gets the vector containing all geometry in this structure.
+	 * @return Pointer to a vector containing all the geometry in this structure.
+	 */
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> getGeometry() const;
 
 	/**
-	* Sets the vector containing all geometry in this structure.
-	* @param[in] accelerator Pointer to vector containing all the geometry in this structure
-	* @return Pointer to the old geometry vector.
-	*/
+	 * Sets the vector containing all geometry in this structure.
+	 * @param[in] accelerator Pointer to vector containing all the geometry in this structure
+	 * @return Pointer to the old geometry vector.
+	 */
 	void setGeometry(std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry);
 
 	/**
-	* Perform any necessary preprocessing.
-	*/
+	 * Perform any necessary preprocessing.
+	 */
 	virtual void preprocess();
 
 	/*
-	 * Finds the closest object hit by the given ray and returns a pointer to the RayIntersection representing
-	 * the intersection.
+	 * Returns whether any object is hit by the given ray and sets the intersection parameter
+	 * to the RayIntersection representing the closest point of intersection.
 	 * @param[in] origin The origin of the ray.
 	 * @param[in] dir The direction of the ray.
-	 * @return A pointer to a RayIntersection representing the intersection point of the ray.
+	 * @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	 * @return True if the ray intersected an object; otherwise false.
 	 */
-	virtual std::shared_ptr<const RayIntersection> calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const = 0;
-	
-	// TODO: calculateIntersection for shadow rays
+	virtual bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const = 0;
+
+	/*
+	 * Returns whether any object is hit by the given ray and sets the intersection parameter
+	 * to the RayIntersection representing the point of intersection.
+	 * @param[in] origin The origin of the ray.
+	 * @param[in] dir The direction of the ray.
+	 * @param maxDistance The maximum distance at which the intersection may occur.
+	 * @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	 * @return True if the ray intersected an object; otherwise false.
+	 */
+	virtual bool calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const = 0;
 
 private:
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry;

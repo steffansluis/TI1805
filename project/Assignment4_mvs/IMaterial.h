@@ -47,35 +47,35 @@ public:
 	* @param[in] scene The scene.
 	* @return The amount of ambient light hitting the surface.
 	*/
-	Vec3Df ambientLight(std::shared_ptr<const SurfacePoint> surface, const Scene *scene) const;
+	Vec3Df ambientLight(const SurfacePoint &surface, const Scene *scene) const;
 
 	/**
 	* Calculates the light emitted from the surface towards the given vector.
 	* @param[in] surface The surface for which to perform the calculations.
-	* @param[in] outgoingVector The vector that the light is reflected towards.
+	* @param[in] reflectedVector The vector that the light is reflected towards.
 	* @return The light emitted from the surface towards the given vector.
 	*/
-	Vec3Df emittedLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &outgoingVector) const;
+	Vec3Df emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const;
 
 	/**
 	* Calculates the light reflected from the incoming vector towards the outgoing vector.
 	* @param[in] surface The surface for which to perform the calculations.
 	* @param[in] incommingVector The vector from which the light is comming.
-	* @param[in] outgoingVector The vector that the light is reflected towards.
+	* @param[in] reflectedVector The vector that the light is reflected towards.
 	* @param[in] lightColor The color of the light.
 	* @return The light reflected from the incomming towards the outgoing vector.
 	*/
-	virtual Vec3Df reflectedLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &lightColor) const = 0;
+	virtual Vec3Df reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const = 0;
 
 	/**
 	* Calculates the specularly reflected light towards the given vector.
 	* This is not physically correct.
 	* @param[in] surface The surface for which to perform the calculations.
-	* @param[in] outgoingVector The vector that the light is reflected towards.
+	* @param[in] reflectedVector The vector that the light is reflected towards.
 	* @param[in] scene The scene.
 	* @return The light specularly reflected towards the outgoing vector.
 	*/
-	virtual Vec3Df specularLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &outgoingVector, const Scene *scene) const = 0;
+	virtual Vec3Df specularLight(const SurfacePoint &surface, const Vec3Df &reflectedVector, const Scene *scene) const = 0;
 
 private:
 	std::shared_ptr<const ITexture> ambientTexture;
