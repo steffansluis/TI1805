@@ -82,6 +82,7 @@
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BRDF.h" />
     <ClInclude Include="BTree.h" />
+    <ClInclude Include="BTreeAccelerator.h" />
     <ClInclude Include="BTreeNode.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ConstantTexture.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BRDF.cpp" />
     <ClCompile Include="BTree.cpp" />
+    <ClCompile Include="BTreeAccelerator.cpp" />
     <ClCompile Include="BTreeNode.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ConstantTexture.cpp" />

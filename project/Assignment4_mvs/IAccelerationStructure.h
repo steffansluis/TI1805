@@ -4,9 +4,10 @@
 #include <memory>
 #include <vector>
 
-#include "IGeometry.h"
-#include "RayIntersection.h"
 #include "Vec3D.h"
+
+class IGeometry;
+class RayIntersection;
 
 class IAccelerationStructure {
 public:

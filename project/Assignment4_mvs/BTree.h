@@ -1,11 +1,11 @@
 #ifndef BTREE_H
 #define BTREE_H
 
+#include <memory>
 #include <vector>
 
-#include "mesh.h"
-
 class BTreeNode;
+class IGeometry;
 
 class BTree
 {
@@ -21,9 +21,9 @@ public:
 
 	BTree(Coordinate coordinate);
 
-	void AddNode(Triangle* data);
+	void AddNode(std::shared_ptr<IGeometry> data);
 
-	std::vector<Triangle*> & GetTriangles(float lowerLimit, float upperLimit);
+	std::vector<std::shared_ptr<IGeometry>> GetTriangles(float lowerLimit, float upperLimit) const;
 };
 
 #endif

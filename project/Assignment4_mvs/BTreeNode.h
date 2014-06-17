@@ -1,14 +1,17 @@
 #ifndef BTREENODE_H
 #define BTREENODE_H
 
+#include <memory>
+
 #include "BTree.h"
-#include "mesh.h"
+
+class IGeometry;
 
 class BTreeNode
 {
 private:
 
-	Triangle* data;
+	std::shared_ptr<IGeometry> data;
 	int depth;
 
 	BTree::Coordinate _coordinate;
@@ -17,18 +20,18 @@ private:
 	BTreeNode* leftChild;
 	BTreeNode* rightChild;
 
-	float GetAverageTriangleValue(Triangle* triangle);
+	float GetAverageTriangleValue(std::shared_ptr<IGeometry> triangle) const;
 
 public:
-	BTreeNode(BTreeNode* parent, Triangle* tData, BTree::Coordinate coordinate);
+	BTreeNode(BTreeNode* parent, std::shared_ptr<IGeometry> tData, BTree::Coordinate coordinate);
 
-	void AddNode(Triangle* data);
+	void AddNode(std::shared_ptr<IGeometry> data);
 
-	int Compare(Triangle* data);
+	int Compare(std::shared_ptr<IGeometry> data) const;
 
-	int withinLimit(float lowerLimit, float upperLimit);
+	int withinLimit(float lowerLimit, float upperLimit) const;
 
-	void GetTriangles(std::vector<Triangle*> * collection, float lowerLimit, float upperLimit);
+	void GetTriangles(std::vector<std::shared_ptr<IGeometry>> &collection, float lowerLimit, float upperLimit) const;
 
 	void Balance();
 };

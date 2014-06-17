@@ -1,4 +1,6 @@
+#include "IGeometry.h"
 #include "NoAccelerationStructure.h"
+#include "RayIntersection.h"
 
 std::shared_ptr<const RayIntersection> NoAccelerationStructure::calculateIntersection(const Vec3Df & origin, const Vec3Df & dir) const {
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry = this->getGeometry();

@@ -92,6 +92,9 @@
     <ClCompile Include="BRDF.cpp">
       <Filter>Materials\BRDF</Filter>
     </ClCompile>
+    <ClCompile Include="BTreeAccelerator.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -191,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="BTreeAccelerator.h">
+      <Filter>Acceleration Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

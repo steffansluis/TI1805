@@ -1,5 +1,6 @@
 #include "BTree.h"
 #include "BTreeNode.h"
+#include "IGeometry.h"
 
 // @Author: Bas Boellaard
 // Create a new B-Tree that sorts on the indicated coordinate.
@@ -13,11 +14,11 @@ BTree::BTree(Coordinate coordinate)
 
 // @Author: Bas Boellaard
 // Add a new triangle to the B-Tree. If this is the first item, it will replace the head.
-void BTree::AddNode(Triangle* data)
+void BTree::AddNode(std::shared_ptr<IGeometry> data)
 {
 	if (BTree::head == NULL)
 	{
-		BTree::head = &BTreeNode(NULL, data, this->_coordinate);
+		BTree::head = new BTreeNode(NULL, data, this->_coordinate);
 	}
 	else
 	{
@@ -29,14 +30,14 @@ void BTree::AddNode(Triangle* data)
 // @Author: Bas Boellaard
 // Returns the triangles that are within bounds of the arguments. 
 // These bounds are applied to the coordinate that this B-Tree sorts on. 
-std::vector<Triangle*> & BTree::GetTriangles(float lowerLimit, float upperLimit)
+std::vector<std::shared_ptr<IGeometry>> BTree::GetTriangles(float lowerLimit, float upperLimit) const
 {
-	std::vector<Triangle*> * output = &std::vector<Triangle*>();
+	auto output = std::vector<std::shared_ptr<IGeometry>>();
 
 	if (this->head != NULL)
 	{
 		this->head->GetTriangles(output, lowerLimit, upperLimit);
 	}
 
-	return *output;
+	return output;
 }
