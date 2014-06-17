@@ -17,8 +17,9 @@ OrenNayarBRDF::OrenNayarBRDF(const IMaterial *material)
 // this->material->sampleRoughness(texCoords) = roughness (Sigma in the equations)
 
 // Tips:
-// cos(theta_i) and cos(theta_r) can be computed using the dot product
-// cos(phi_i - phi_r) can be computed by projecting the incoming and outgoing vectors onto the normal and then taking the dot product.
+// cos(theta_i) and cos(theta_r) can be computed using the dot product with the normal.
+// cos(phi_i - phi_r) can be computed by projecting the incoming and reflected vectors onto the normal and then taking the dot product
+// between the two projected vectors. (Vec3Df::projectOn with an empty vector for the second parameter).
 
 // The incommingVector, reflectedVector and normal correspond to Li, Lr and n respectivly in this image
 // http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#mediaviewer/File:Oren-nayar-reflection.png
