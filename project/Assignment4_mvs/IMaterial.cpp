@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "ConstantTexture.h"
 #include "IMaterial.h"
@@ -8,53 +8,90 @@
 static auto black = std::make_shared<ConstantTexture>(Vec3Df(0, 0, 0));
 
 IMaterial::IMaterial() {
-	this->setAmbientTexture(black);
-	this->setDiffuseTexture(black);
-	this->setEmissiveTexture(black);
-	this->setSpecularTexture(black);
+	this->setAmbientColor(black);
+	this->setDiffuseColor(black);
+	this->setEmissiveColor(black);
+	this->setSpecularColor(black);
 }
 IMaterial::~IMaterial() {
 }
 
-std::shared_ptr<const ITexture> IMaterial::getAmbientTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getAmbientColor() const {
 	return this->ambientTexture;
 }
-std::shared_ptr<const ITexture> IMaterial::getDiffuseTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getDiffuseColor() const {
 	return this->diffuseTexture;
 }
-std::shared_ptr<const ITexture> IMaterial::getEmissiveTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getEmissiveColor() const {
 	return this->emissiveTexture;
 }
-std::shared_ptr<const ITexture> IMaterial::getSpecularTexture() const {
+std::shared_ptr<const ITexture> IMaterial::getSpecularColor() const {
 	return this->specularTexture;
 }
+std::shared_ptr<const ITexture> IMaterial::getRoughness() const {
+	return this->roughness;
+}
+std::shared_ptr<const ITexture> IMaterial::getShininess() const {
+	return this->shininess;
+}
 
-void IMaterial::setAmbientTexture(std::shared_ptr<const ITexture> texture) {
+void IMaterial::setAmbientColor(std::shared_ptr<const ITexture> texture) {
 	if (texture)
 		this->ambientTexture = texture;
 	else
 		this->ambientTexture = black;
 }
-void IMaterial::setDiffuseTexture(std::shared_ptr<const ITexture> texture) {
+void IMaterial::setDiffuseColor(std::shared_ptr<const ITexture> texture) {
 	if (texture)
 		this->diffuseTexture = texture;
 	else
 		this->diffuseTexture = black;
 }
-void IMaterial::setEmissiveTexture(std::shared_ptr<const ITexture> texture) {
+void IMaterial::setEmissiveColor(std::shared_ptr<const ITexture> texture) {
 	if (texture)
 		this->emissiveTexture = texture;
 	else
 		this->emissiveTexture = black;
 }
-void IMaterial::setSpecularTexture(std::shared_ptr<const ITexture> texture) {
+void IMaterial::setSpecularColor(std::shared_ptr<const ITexture> texture) {
 	if (texture)
 		this->specularTexture = texture;
 	else
 		this->specularTexture = black;
 }
+void IMaterial::setRoughness(std::shared_ptr<const ITexture> texture) {
+	if (texture)
+		this->roughness = roughness;
+	else
+		this->roughness = black;
+}
+void IMaterial::setShininess(std::shared_ptr<const ITexture> texture) {
+	if (texture)
+		this->roughness = roughness;
+	else
+		this->roughness = black;
+}
 
-Vec3Df IMaterial::ambientLight(std::shared_ptr<const SurfacePoint> surface) const {
+Vec3Df IMaterial::sampleAmbientColor(const Vec2Df &texCoords) const {
+	return this->ambientTexture->sample(texCoords);
+}
+Vec3Df IMaterial::sampleDiffuseColor(const Vec2Df &texCoords) const {
+	return this->diffuseTexture->sample(texCoords);
+}
+Vec3Df IMaterial::sampleEmissiveColor(const Vec2Df &texCoords) const {
+	return this->emissiveTexture->sample(texCoords);
+}
+Vec3Df IMaterial::sampleSpecularColor(const Vec2Df &texCoords) const {
+	return this->specularTexture->sample(texCoords);
+}
+float IMaterial::sampleRoughness(const Vec2Df &texCoords) const {
+	return this->roughness->sample(texCoords)[0];
+}
+float IMaterial::sampleShininess(const Vec2Df &texCoords) const {
+	return this->shininess->sample(texCoords)[0];
+}
+
+Vec3Df IMaterial::ambientLight(std::shared_ptr<const SurfacePoint> surface, const Scene *scene) const {
 	assert(surface);
 
 	// TODO: Implement ambient lighting / occlusion.

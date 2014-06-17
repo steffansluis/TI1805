@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 #include <math.h>
 
 #include "IAccelerationStructure.h"
@@ -38,11 +38,18 @@ void MeshGeometry::preprocess() {
 		(*it)->preprocess();
 	}
 
-	//Preprocess the acceleration structure
+	// Compute the bounding box
+	this->boundingBox = MeshGeometry::createBoundingBox(this->mesh);
+
+	// Preprocess the acceleration structure
 	this->accelerator->preprocess();
 }
 
 std::shared_ptr<const RayIntersection> MeshGeometry::calculateIntersection(const Vec3Df &origin, const Vec3Df &dir) const {
+	// If the ray does not intersect the bounding box, return null
+	if (!this->boundingBox.intersects(origin, dir))
+		return nullptr;
+
 	// Let the acceleration structure handle the intersection in our set of triangles
 	return this->accelerator->calculateIntersection(origin, dir);
 }
@@ -64,6 +71,22 @@ std::shared_ptr<const SurfacePoint> MeshGeometry::getRandomSurfacePoint() const 
 
 	// Return a random point on this triangle
 	return this->triangles->at(index)->getRandomSurfacePoint();
+}
+
+BoundingBox MeshGeometry::getBoundingBox() const {
+	return this->boundingBox;
+}
+
+BoundingBox MeshGeometry::createBoundingBox(const Mesh *mesh) {
+	// Construct an empty bounding box
+	BoundingBox result = BoundingBox();
+
+	// Insert all vertices
+	for (int i = 0; i < mesh->vertices.size(); i++) {
+		result.includePoint(mesh->vertices[i].p);
+	}
+
+	return result;
 }
 
 std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> MeshGeometry::generateTriangles(const Mesh *mesh) {

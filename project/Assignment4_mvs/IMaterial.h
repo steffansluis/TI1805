@@ -3,8 +3,10 @@
 
 #include <memory>
 
+#include "Vec2D.h"
 #include "Vec3D.h"
 
+class Scene;
 class ITexture;
 class SurfacePoint;
 
@@ -17,23 +19,35 @@ public:
 	IMaterial();
 	virtual ~IMaterial();
 
-	std::shared_ptr<const ITexture> getAmbientTexture() const;
-	std::shared_ptr<const ITexture> getDiffuseTexture() const;
-	std::shared_ptr<const ITexture> getEmissiveTexture() const;
-	std::shared_ptr<const ITexture> getSpecularTexture() const;
+	std::shared_ptr<const ITexture> getAmbientColor() const;
+	std::shared_ptr<const ITexture> getDiffuseColor() const;
+	std::shared_ptr<const ITexture> getEmissiveColor() const;
+	std::shared_ptr<const ITexture> getSpecularColor() const;
+	std::shared_ptr<const ITexture> getRoughness() const;
+	std::shared_ptr<const ITexture> getShininess() const;
 
-	void setAmbientTexture(std::shared_ptr<const ITexture> texture);
-	void setDiffuseTexture(std::shared_ptr<const ITexture> texture);
-	void setEmissiveTexture(std::shared_ptr<const ITexture> texture);
-	void setSpecularTexture(std::shared_ptr<const ITexture> texture);
+	void setAmbientColor(std::shared_ptr<const ITexture> texture);
+	void setDiffuseColor(std::shared_ptr<const ITexture> texture);
+	void setEmissiveColor(std::shared_ptr<const ITexture> texture);
+	void setSpecularColor(std::shared_ptr<const ITexture> texture);
+	void setRoughness(std::shared_ptr<const ITexture> roughness);
+	void setShininess(std::shared_ptr<const ITexture> shininess);
+
+	Vec3Df sampleAmbientColor(const Vec2Df &texCoords) const;
+	Vec3Df sampleDiffuseColor(const Vec2Df &texCoords) const;
+	Vec3Df sampleEmissiveColor(const Vec2Df &texCoords) const;
+	Vec3Df sampleSpecularColor(const Vec2Df &texCoords) const;
+	float sampleRoughness(const Vec2Df &texCoords) const;
+	float sampleShininess(const Vec2Df &texCoords) const;
 
 	/**
 	* Calculates the amount of ambient light hitting the surface.
 	* This is not physically correct.
 	* @param[in] surface The surface for which to perform the calculations.
+	* @param[in] scene The scene.
 	* @return The amount of ambient light hitting the surface.
 	*/
-	Vec3Df ambientLight(std::shared_ptr<const SurfacePoint> surface) const;
+	Vec3Df ambientLight(std::shared_ptr<const SurfacePoint> surface, const Scene *scene) const;
 
 	/**
 	* Calculates the light emitted from the surface towards the given vector.
@@ -46,27 +60,30 @@ public:
 	/**
 	* Calculates the light reflected from the incoming vector towards the outgoing vector.
 	* @param[in] surface The surface for which to perform the calculations.
-	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @param[in] incommingVector The vector from which the light is comming.
+	* @param[in] outgoingVector The vector that the light is reflected towards.
 	* @param[in] lightColor The color of the light.
 	* @return The light reflected from the incomming towards the outgoing vector.
 	*/
-	virtual Vec3Df reflectedLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &outgoingVector, const Vec3Df &incommingVector, const Vec3Df &lightColor) const = 0;
+	virtual Vec3Df reflectedLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &lightColor) const = 0;
 
 	/**
 	* Calculates the specularly reflected light towards the given vector.
 	* This is not physically correct.
 	* @param[in] surface The surface for which to perform the calculations.
 	* @param[in] outgoingVector The vector that the light is reflected towards.
+	* @param[in] scene The scene.
 	* @return The light specularly reflected towards the outgoing vector.
 	*/
-	virtual Vec3Df specularLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &outgoingVector) const = 0;
+	virtual Vec3Df specularLight(std::shared_ptr<const SurfacePoint>, const Vec3Df &outgoingVector, const Scene *scene) const = 0;
 
 private:
 	std::shared_ptr<const ITexture> ambientTexture;
 	std::shared_ptr<const ITexture> diffuseTexture;
 	std::shared_ptr<const ITexture> emissiveTexture;
 	std::shared_ptr<const ITexture> specularTexture;
+	std::shared_ptr<const ITexture> roughness;
+	std::shared_ptr<const ITexture> shininess;
 };
 
 #endif

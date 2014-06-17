@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "Image.h"
 #include "IAccelerationStructure.h"
@@ -77,6 +77,9 @@ std::shared_ptr<const IRayTracer> Scene::getRayTracer() const {
 void Scene::setRayTracer(std::shared_ptr<IRayTracer> rayTracer) {
 	assert(rayTracer);
 
+	if (this->rayTracer)
+		this->rayTracer->setScene(NULL);
+
 	// Set the ray tracer and set its scene pointer to the current scene
 	this->rayTracer = rayTracer;
 	this->rayTracer->setScene(this);
@@ -97,7 +100,6 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	auto result = std::make_shared<Image>(width, height);
 
 	// Iterate through each pixel
-	// !!! Only iterating through centre right now to speed things up
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 			Vec3Df origin;

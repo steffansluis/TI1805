@@ -1,6 +1,8 @@
 #ifndef IRAYTRACER_H
 #define IRAYTRACER_H
 
+#include <memory>
+
 #include "Vec3D.h"
 
 class Scene;
@@ -23,7 +25,7 @@ public:
 	* @param[in] scene Pointer to a scene.
 	* @return A pointer to the old scene.
 	*/
-	const Scene *setScene(const Scene *scene);
+	void setScene(const Scene *scene);
 
 	/**
 	 * Traces the given ray through the scene and returns the light reflected tkwards the ray.

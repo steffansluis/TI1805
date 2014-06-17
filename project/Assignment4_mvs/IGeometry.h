@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "BoundingBox.h"
 #include "Vec3D.h"
 
 class IMaterial;
@@ -57,6 +58,11 @@ public:
 	* @remarks This will be needed when implementing area lights, so that we can sample the light volume.
 	*/
 	virtual std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const = 0;
+
+	/**
+	 * Returns a bounding box that bounds this geometry.
+	 */
+	virtual BoundingBox getBoundingBox() const = 0;
 
 private:
 	std::shared_ptr<const IMaterial> material;

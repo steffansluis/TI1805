@@ -25,11 +25,6 @@ public:
 	*/
 	Vec3Df hitPoint;
 
-	/**
-	* The surface normal at the point of intersection.
-	*/
-	Vec3Df normal;
-
 	// This is the original data for the ray. 
 	// The equation for the ray is as follows:
 	// R(t) = origin + distance * direction;

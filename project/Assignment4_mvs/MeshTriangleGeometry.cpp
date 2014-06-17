@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 
 #include "MeshGeometry.h"
 #include "MeshTriangleGeometry.h"
@@ -48,21 +48,21 @@ std::shared_ptr<const SurfacePoint> MeshTriangleGeometry::getRandomSurfacePoint(
 	return surface;
 }
 
-Vec3Df MeshTriangleGeometry::getSurfaceNormal(float u, float v) const {
+Vec3Df MeshTriangleGeometry::getSurfaceNormal(const Vec2Df &uv) const {
 	// Get the vertex normals
 	Vec3Df normal0 = this->mesh->vertices[this->triangle->v[0]].n;
 	Vec3Df normal1 = this->mesh->vertices[this->triangle->v[1]].n;
 	Vec3Df normal2 = this->mesh->vertices[this->triangle->v[2]].n;
 
 	// Interpolate between the vertices
-	Vec3Df normal = normal0 + u * normal1 + v * normal2;
+	Vec3Df normal = normal0 + uv[0] * normal1 + uv[1] * normal2;
 
 	normal.normalize();
 
 	return normal;
 }
 
-void MeshTriangleGeometry::getTextureCoordinates(float u, float v, float &tu, float &tv) const {
+void MeshTriangleGeometry::getTextureCoordinates(const Vec2Df &uv, Vec2Df &tUV) const {
 	// Check if the mesh has texture coordinates
 	if (mesh->texcoords.size() > 0) {
 		// Get the vertex texture coordinates
@@ -71,14 +71,14 @@ void MeshTriangleGeometry::getTextureCoordinates(float u, float v, float &tu, fl
 		Vec3Df uv2 = this->mesh->texcoords[this->triangle->v[2]];
 
 		// Interpolate between the vertices
-		Vec3Df uv = uv0 + u * uv1 + v * uv2;
+		Vec3Df uv3 = uv0 + uv[0] * uv1 + uv[1] * uv2;
 
-		tu = uv[0];
-		tv = uv[1];
+		tUV[0] = uv3[0];
+		tUV[1] = uv3[1];
 	}
 	// Otherwise return the barycentric coordinates
 	else {
-		tu = u;
-		tv = v;
+		tUV[0] = uv[0];
+		tUV[1] = uv[1];
 	}
 }

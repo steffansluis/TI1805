@@ -1,3 +1,4 @@
+#include <cassert>
 #include <vector>
 
 #include "ILight.h"
@@ -18,6 +19,8 @@ Vec3Df RayTracer::performRayTracing(const Vec3Df &origin, const Vec3Df &dir) con
 // If you need your method to do a color-lookup for another ray, please call this method with an 
 // incremented iteration-count.
 Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df &dir, const int iteration) const {
+	assert(this->getScene());
+
 	// If the maximum amount of iterations has been reached, return the zero-vector (black).
 	if (iteration >= RayTracer::maxIterations)
 	{
@@ -51,9 +54,9 @@ Vec3Df RayTracer::performShading(std::shared_ptr<const RayIntersection> intersec
 
 	// Calculate ambient, emitted and specularly reflected light.
 	Vec3Df lighting = Vec3Df();
-	lighting += surface->ambientLight();
+	lighting += surface->ambientLight(this->getScene());
 	lighting += surface->emittedLight(viewVector);
-	lighting += surface->specularLight(viewVector);
+	lighting += surface->specularLight(viewVector, this->getScene());
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
@@ -62,7 +65,7 @@ Vec3Df RayTracer::performShading(std::shared_ptr<const RayIntersection> intersec
 		Vec3Df lightColor = (*it)->getLightTowards(surface->point, lightVector);
 
 		// Evaluate the BRDF, essentially
-		lighting += surface->reflectedLight(viewVector, lightVector, lightColor);
+		lighting += surface->reflectedLight(lightVector, viewVector, lightColor);
 	}
 	
 	// Return the accumulated lighting

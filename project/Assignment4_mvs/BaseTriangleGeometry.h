@@ -41,6 +41,8 @@ public:
 	*/
 	virtual std::shared_ptr<const SurfacePoint> getRandomSurfacePoint() const;
 
+	BoundingBox getBoundingBox() const;
+
 private:
 	/**
 	* Calculates the whether the given point lies in this triangle.

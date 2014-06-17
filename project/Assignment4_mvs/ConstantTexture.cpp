@@ -5,7 +5,7 @@ ConstantTexture::ConstantTexture(const Vec3Df &color) {
 	this->color = color;
 }
 
-Vec3Df ConstantTexture::sample(float u, float v) const {
+Vec3Df ConstantTexture::sample(const Vec2Df &uv) const {
 	// Returns the texture's color constant
 	return this->color;
 }
