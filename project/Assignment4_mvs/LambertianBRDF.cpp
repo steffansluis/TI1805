@@ -23,7 +23,7 @@ LambertianBRDF::LambertianBRDF(const IMaterial *material)
 // If you want to test a different brdf, modifiy the DiffuseMaterial(color, roughness) constructor to set diffuseBrdf to whichever one you need to test.
 // DiffuseMaterial.cpp also contains the default color and roughness, change these as you wish.
 
-Vec3Df LambertianBRDF::evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
+Vec3Df LambertianBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
 	// TODO: Diffuse shading
 	return this->material->sampleDiffuseColor(texCoords);
 }

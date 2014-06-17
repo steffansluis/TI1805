@@ -18,7 +18,7 @@ BlinnPhongBRDF::BlinnPhongBRDF(const IMaterial *material)
 // this->material->sampleSpecularColor(texCoords) = specular color
 // this->material->sampleShininess(texCoords) = shininess
 
-Vec3Df BlinnPhongBRDF::evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
+Vec3Df BlinnPhongBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
 	// TODO: Blinn-Phong brdf
 	return this->material->sampleSpecularColor(texCoords);
 }

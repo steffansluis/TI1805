@@ -20,7 +20,7 @@ OrenNayarBRDF::OrenNayarBRDF(const IMaterial *material)
 // cos(theta_i) and cos(theta_r) can be computed using the dot product
 // cos(phi_i - phi_r) can be compute by projecting the incoming and outgoing vectors onto the normal and then taking the dot product.
 
-Vec3Df OrenNayarBRDF::evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
+Vec3Df OrenNayarBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const {
 	// TODO: oren-nayar brdf
 	return this->material->sampleDiffuseColor(texCoords);
 }

@@ -42,7 +42,7 @@ DiffuseMaterial::~DiffuseMaterial() {
 }
 
 Vec3Df DiffuseMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &lightColor) const {
-	return this->diffuseBrdf->evaluate(incommingVector, outgoingVector, surface.normal, surface.texCoords) * lightColor;
+	return this->diffuseBrdf->reflectance(incommingVector, outgoingVector, surface.normal, surface.texCoords) * lightColor;
 }
 
 Vec3Df DiffuseMaterial::specularLight(const SurfacePoint &surface, const Vec3Df &outgoingVector, const Scene *) const {

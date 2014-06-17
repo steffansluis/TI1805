@@ -23,7 +23,7 @@ public:
 	* @param[in] texCoords The texture coordinates.
 	* @return The amount of light reflected from the incomming towards the outgoing vector.
 	*/
-	virtual Vec3Df evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const = 0;
+	virtual Vec3Df reflectance(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const = 0;
 
 protected:
 	const IMaterial *material;
