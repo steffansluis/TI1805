@@ -69,6 +69,13 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 
 	float t = (d - dot_origin_normal) / dot_dir_normal;
 
+	// If the distance it negative it means the intersection occured behind the ray,
+	// thus we should return false.
+	if (t < 0) 
+	{
+		return false;
+	}
+
 	// we now know enough to calculate the entire ray.
 	// R(t) = origin + t * direction
 	Vec3Df hitPoint = origin + t * dir;

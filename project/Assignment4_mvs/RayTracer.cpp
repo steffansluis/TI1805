@@ -102,13 +102,15 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 		lightVector = (lightPoint - surface.point);
 		float lightDistance = lightVector.normalize();
 
+		// For the shadow ray we use a small offset from the surface
+		// so that a surface will not accidently shadow itsself.
+		// Similiarly we make the shadow segment sligthly shorter so
+		// that the light does not shadow itsself either in case of a geometric light.
 		const float smallNumber = 1e-6f;
 
 		// If the segment between the light and intersection intersects any geometry
 		// then the intersection is in shadow, continue to the next light.
-		// BUG: If we trace the shadow ray from the geometry towards the light it is always apparently in shadow, something with the triangle intersection code?
-		// if (scene->calculateAnyIntersection(surface.point + lightVector * smallNumber, lightVector, lightDistance - 2.0f * smallNumber, shadowIntersection))
-		if (scene->calculateAnyIntersection(lightPoint - lightVector * smallNumber, -lightVector, lightDistance - 2.0f * smallNumber, shadowIntersection))
+		if (scene->calculateAnyIntersection(surface.point + lightVector * smallNumber, lightVector, lightDistance - 2.0f * smallNumber, shadowIntersection))
 			continue;
 
 		// Evaluate the BRDF, essentially
