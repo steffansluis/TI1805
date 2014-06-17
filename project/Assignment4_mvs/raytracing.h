@@ -29,7 +29,7 @@ void produceRay(int x_I, int y_I, Vec3Df & origin, Vec3Df & dest);
 void yourDebugDraw();
 
 //want keyboard interaction? Here it is...
-void yourKeyboardFunc(char t, int x, int y);
+void yourKeyboardFunc(unsigned char t, int x, int y);
 
 // Builds and renders a scene
 void rayTrace();
