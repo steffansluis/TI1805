@@ -89,6 +89,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Textures</Filter>
     </ClCompile>
+    <ClCompile Include="BRDF.cpp">
+      <Filter>Materials\BRDF</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />

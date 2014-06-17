@@ -77,9 +77,12 @@ std::shared_ptr<const IRayTracer> Scene::getRayTracer() const {
 void Scene::setRayTracer(std::shared_ptr<IRayTracer> rayTracer) {
 	assert(rayTracer);
 
+	if (this->rayTracer)
+		this->rayTracer->setScene(NULL);
+
 	// Set the ray tracer and set its scene pointer to the current scene
 	this->rayTracer = rayTracer;
-	this->rayTracer->setScene(this->shared_from_this());
+	this->rayTracer->setScene(this);
 }
 
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {

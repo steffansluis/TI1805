@@ -5,7 +5,7 @@
 
 #include "BRDF.h"
 
-class ITexture;
+class IMatertial;
 
 /**
  * Implements the lambertian reflectance model.
@@ -13,9 +13,9 @@ class ITexture;
 class LambertianBRDF : public BRDF {
 public:
 	/**
-	 * Initializes a lambertian brdf with the given texture.
+	 * Initializes a lambertian brdf with the given material.
 	 */
-	LambertianBRDF(std::shared_ptr<const ITexture> diffuseTexture);
+	LambertianBRDF(const IMaterial *material);
 
 	/**
 	* Calculates the amount of light reflected from the incoming vector towards the outgoing vector.
@@ -26,9 +26,6 @@ public:
 	* @return The amount of light reflected from the incomming towards the outgoing vector.
 	*/
 	Vec3Df evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const;
-
-private:
-	std::shared_ptr<const ITexture> diffuseTexture;
 };
 
 #endif

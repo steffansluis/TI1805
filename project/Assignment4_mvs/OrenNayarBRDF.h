@@ -5,7 +5,7 @@
 
 #include "BRDF.h"
 
-class ITexture;
+class IMaterial;
 
 /**
 * Implements the Oren-Nayar reflectance model.
@@ -13,9 +13,9 @@ class ITexture;
 class OrenNayarBRDF : public BRDF {
 public:
 	/**
-	* Initializes a Oren-Nayar brdf with the given texture.
+	* Initializes a Oren-Nayar brdf with the given material.
 	*/
-	OrenNayarBRDF(std::shared_ptr<const ITexture> diffuseTexture, float roughness);
+	OrenNayarBRDF(const IMaterial *material);
 
 	/**
 	* Calculates the amount of light reflected from the incoming vector towards the outgoing vector.
@@ -26,10 +26,6 @@ public:
 	* @return The amount of light reflected from the incomming towards the outgoing vector.
 	*/
 	Vec3Df evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const;
-
-private:
-	std::shared_ptr<const ITexture> diffuseTexture;
-	float roughness;
 };
 
 #endif

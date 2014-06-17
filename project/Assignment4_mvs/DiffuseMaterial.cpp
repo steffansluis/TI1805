@@ -11,29 +11,33 @@
 #include "ITexture.h"
 #include "SurfacePoint.h"
 
-// Default white texture
-static std::shared_ptr<const ITexture> defaultTexture = std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1));
-static float roughness = 0.3f;
-static float shininess = 45.0f;
-
-static std::shared_ptr<const BRDF> lambertianBrdf = std::make_shared<LambertianBRDF>(defaultTexture);
-static std::shared_ptr<const BRDF> orenNayarBrdf = std::make_shared<LambertianBRDF>(defaultTexture, roughness);
-static std::shared_ptr<const BRDF> blinnPhongBrdf = std::make_shared<BlinnPhongBRDF>(defaultTexture, shininess);
-static std::shared_ptr<const BRDF> phongBrdf = std::make_shared<PhongBRDF>(defaultTexture, shininess);
-
-// Change the lambertianBrdf to whatever BRDF you want to test
-static std::shared_ptr<const BRDF> defaultBrdf = lambertianBrdf;
+// Default settings, you can change these for testing
+static Vec3Df defaultColor = Vec3Df(1, 1, 1);
+static float defaultRoughness = 0.0f;
 
 DiffuseMaterial::DiffuseMaterial() 
-: DiffuseMaterial(Vec3Df(1, 1, 1)) {
+: DiffuseMaterial(::defaultColor, defaultRoughness) {
 }
 
-DiffuseMaterial::DiffuseMaterial(const Vec3Df &color) 
-: diffuseBrdf(defaultBrdf) {
-	auto texture = std::make_shared<ConstantTexture>(color);
+DiffuseMaterial::DiffuseMaterial(const Vec3Df &color)
+: DiffuseMaterial(color, defaultRoughness) {
+}
 
-	this->setAmbientTexture(texture);
-	this->setDiffuseTexture(texture);
+DiffuseMaterial::DiffuseMaterial(const Vec3Df &color, float roughness) {
+	auto colorTexture = std::make_shared<ConstantTexture>(color);
+	auto roughnessTexture = std::make_shared<ConstantTexture>(Vec3Df(roughness, 0, 0));
+	
+	std::shared_ptr<const BRDF> lambertianBrdf = std::make_shared<LambertianBRDF>(this);
+	std::shared_ptr<const BRDF> orenNayarBrdf = std::make_shared<LambertianBRDF>(this);
+	std::shared_ptr<const BRDF> blinnPhongBrdf = std::make_shared<BlinnPhongBRDF>(this);
+	std::shared_ptr<const BRDF> phongBrdf = std::make_shared<PhongBRDF>(this);
+
+	// Change BRDF to whichever you need to test here, for now
+	this->diffuseBrdf = lambertianBrdf;
+
+	this->setAmbientColor(colorTexture);
+	this->setDiffuseColor(colorTexture);
+	this->setRoughness(roughnessTexture);
 }
 
 DiffuseMaterial::~DiffuseMaterial() {
@@ -45,7 +49,7 @@ Vec3Df DiffuseMaterial::reflectedLight(std::shared_ptr<const SurfacePoint> surfa
 	return this->diffuseBrdf->evaluate(incommingVector, outgoingVector, surface->normal, surface->texCoords) * lightColor;
 }
 
-Vec3Df DiffuseMaterial::specularLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector, std::shared_ptr<const Scene> scene) const {
+Vec3Df DiffuseMaterial::specularLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector, const Scene *) const {
 	assert(surface);
 
 	// This is a diffuse material, no specular light is reflected

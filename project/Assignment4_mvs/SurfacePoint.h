@@ -21,7 +21,7 @@ public:
 	 * @param[in] scene The scene.
 	 * @return The amount of ambient light hitting the surface.
 	 */
-	Vec3Df ambientLight(std::shared_ptr<const Scene> scene) const;
+	Vec3Df ambientLight(const Scene *scene) const;
 
 	/**
 	 * Calculates the light emitted from the surface towards the given vector.
@@ -46,7 +46,7 @@ public:
 	 * @param[in] scene The scene.
 	 * @return The light specularly reflected towards the outgoing vector.
 	 */
-	Vec3Df specularLight(const Vec3Df &outgoingVector, std::shared_ptr<const Scene> scene) const;
+	Vec3Df specularLight(const Vec3Df &outgoingVector, const Scene *scene) const;
 
 	/**
 	 * The point on the surface.

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <vector>
 
 #include "ILight.h"
@@ -18,6 +19,8 @@ Vec3Df RayTracer::performRayTracing(const Vec3Df &origin, const Vec3Df &dir) con
 // If you need your method to do a color-lookup for another ray, please call this method with an 
 // incremented iteration-count.
 Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df &dir, const int iteration) const {
+	assert(this->getScene());
+
 	// If the maximum amount of iterations has been reached, return the zero-vector (black).
 	if (iteration >= RayTracer::maxIterations)
 	{

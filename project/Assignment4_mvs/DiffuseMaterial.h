@@ -9,6 +9,7 @@ class DiffuseMaterial : public IMaterial {
 public:
 	DiffuseMaterial();
 	DiffuseMaterial(const Vec3Df &color);
+	DiffuseMaterial(const Vec3Df &color, float roughness);
 	~DiffuseMaterial();
 
 	/**
@@ -29,7 +30,7 @@ public:
 	* @param[in] scene The scene.
 	* @return The light specularly reflected towards the outgoing vector.
 	*/
-	Vec3Df specularLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector, std::shared_ptr<const Scene> scene) const;
+	Vec3Df specularLight(std::shared_ptr<const SurfacePoint> surface, const Vec3Df &outgoingVector, const Scene *scene) const;
 
 private:
 	std::shared_ptr<const BRDF> diffuseBrdf;

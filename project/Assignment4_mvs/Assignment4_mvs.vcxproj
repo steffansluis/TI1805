@@ -122,6 +122,7 @@
     <ClCompile Include="BaseTriangleGeometry.cpp" />
     <ClCompile Include="BlinnPhongBRDF.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="BRDF.cpp" />
     <ClCompile Include="BTree.cpp" />
     <ClCompile Include="BTreeNode.cpp" />
     <ClCompile Include="Constants.cpp" />

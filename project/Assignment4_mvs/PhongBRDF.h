@@ -5,7 +5,7 @@
 
 #include "BRDF.h"
 
-class ITexture;
+class IMaterial;
 
 /**
 * Implements the Phong reflectance model.
@@ -13,9 +13,9 @@ class ITexture;
 class PhongBRDF : public BRDF {
 public:
 	/**
-	* Initializes a Phong brdf with the given texture.
+	* Initializes a Phong brdf with the given material.
 	*/
-	PhongBRDF(std::shared_ptr<const ITexture> specularTexture, float shininess);
+	PhongBRDF(const IMaterial *material);
 
 	/**
 	* Calculates the amount of light reflected from the incoming vector towards the outgoing vector.
@@ -26,10 +26,6 @@ public:
 	* @return The amount of light reflected from the incomming towards the outgoing vector.
 	*/
 	Vec3Df evaluate(const Vec3Df &incommingVector, const Vec3Df &outgoingVector, const Vec3Df &normal, const Vec2Df &texCoords) const;
-
-private:
-	std::shared_ptr<const ITexture> specularTexture;
-	float shininess;
 };
 
 #endif
