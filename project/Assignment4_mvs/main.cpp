@@ -7,22 +7,13 @@
 //#include <GL/glut.h>
 #include "glut\glut.h"
 
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 #include <cassert>
+
 #include "raytracing.h"
 #include "mesh.h"
 #include "traqueboule.h"
-#include "Image.h"
-#include "RGBValue.h"
-
-#include "ILight.h"
-#include "PerspectiveCamera.h"
-#include "PointLight.h"
-#include "MeshGeometry.h"
-#include "MeshTriangleGeometry.h"
-#include "RayTracer.h"
-#include "Scene.h"
 
 Vec3Df MyCameraPosition;
 Vec3Df MyCameraTarget;
@@ -251,28 +242,7 @@ void keyboard(unsigned char key, int x, int y)
 		//C'est nouveau!!!
 		//commencez ici et lancez vos propres fonctions par rayon.
 
-		cout<<"Raytracing"<<endl;
-
-		// Create a scene
-		Scene scene = Scene();
-		
-		// Create a perspective camera
-		auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget);
-
-		// Create a mesh and add it to the scene
-		auto mesh = std::make_shared<MeshGeometry>(&MyMesh);
-
-		scene.addGeometry(mesh);
-		
-		// Create a point light at every light position
-		for (std::vector<Vec3Df>::iterator it = MyLightPositions.begin(); it != MyLightPositions.end(); ++it) {
-			scene.addLight(std::make_shared<PointLight>((*it), Vec3Df(0.8f, 0.8f, 0.8f)));
-		}
-
-		// Render the scene
-		std::shared_ptr<Image> result = scene.render(camera, WindowSize_X, WindowSize_Y);
-
-		result->writeImage("Render/result.ppm");
+		rayTrace();
 
 		break;
 	}

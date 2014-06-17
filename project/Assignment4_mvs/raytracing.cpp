@@ -1,5 +1,4 @@
-#include <stdio.h>
-
+#include <cstdio>
 
 #ifdef WIN32
 #include <windows.h>
@@ -9,6 +8,16 @@
 #include "glut\glut.h"
 
 #include "raytracing.h"
+
+#include "Image.h"
+
+#include "ILight.h"
+#include "PerspectiveCamera.h"
+#include "PointLight.h"
+#include "MeshGeometry.h"
+#include "RayTracer.h"
+#include "Scene.h"
+
 
 //temporary variables
 Vec3Df testRayOrigin;
@@ -64,4 +73,29 @@ void yourKeyboardFunc(char t, int x, int y)
 	produceRay(x, y, testRayOrigin, testRayDestination);
 
 	std::cout<<t<<" pressed! The mouse was in location "<<x<<","<<y<<"!"<<std::endl;
+}
+
+void rayTrace() {
+	std::cout << "Raytracing" << std::endl;
+
+	// Create a scene
+	Scene scene = Scene();
+
+	// Create a perspective camera
+	auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget);
+
+	// Create a mesh and add it to the scene
+	auto mesh = std::make_shared<MeshGeometry>(&MyMesh);
+
+	scene.addGeometry(mesh);
+
+	// Create a point light at every light position
+	for (std::vector<Vec3Df>::iterator it = MyLightPositions.begin(); it != MyLightPositions.end(); ++it) {
+		scene.addLight(std::make_shared<PointLight>((*it), Vec3Df(0.8f, 0.8f, 0.8f)));
+	}
+
+	// Render the scene
+	std::shared_ptr<Image> result = scene.render(camera, WindowSize_X, WindowSize_Y);
+
+	result->writeImage("Render/result.ppm");
 }
