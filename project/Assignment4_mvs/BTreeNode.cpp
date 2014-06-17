@@ -254,7 +254,7 @@ void BTreeNode::Balance()
 		else
 		{
 			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
-			throw BTreeException("something happened");
+			throw BTreeException("This node is an orphan!!");
 		}
 
 		this->parent = R;
@@ -290,6 +290,7 @@ void BTreeNode::Balance()
 		else
 		{
 			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
+			throw BTreeException("This node is an orphan!!");
 		}
 
 		this->parent = L;

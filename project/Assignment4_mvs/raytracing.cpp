@@ -18,6 +18,9 @@ Vec3Df testRayDestination;
 // the model and material file must be affiliated
 const char * model_obj = "models/dodgeColorTest.obj";
 
+// use a counter to keep track of the render process
+int rayIteration = 0;
+
 //use this function for any preprocessing of the mesh.
 void init()
 {
@@ -55,10 +58,18 @@ void yourDebugDraw()
 
 }
 
-void yourKeyboardFunc(char t, int x, int y)
+void yourKeyboardFunc(unsigned char t, int x, int y)
 {
 	// do what you want with the keyboard input t.
 	// x, y are the screen position
+	switch (t)
+	{
+	case 'r':
+		// reset the counter
+		rayIteration = 0;
+	}
+
+
 
 	//here I use it to get the coordinates of a ray, which I then draw in the debug function.
 	produceRay(x, y, testRayOrigin, testRayDestination);
