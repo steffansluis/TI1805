@@ -112,6 +112,7 @@
     <ClInclude Include="RGBValue.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SurfacePoint.h" />
+    <ClInclude Include="Testing.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="traqueboule.h" />
     <ClInclude Include="TriangleGeometry.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="raytracing.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SurfacePoint.cpp" />
+    <ClCompile Include="Testing.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TriangleGeometry.cpp" />
   </ItemGroup>

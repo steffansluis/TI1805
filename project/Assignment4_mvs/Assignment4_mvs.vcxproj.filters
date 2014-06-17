@@ -95,6 +95,9 @@
     <ClCompile Include="BTreeAccelerator.cpp">
       <Filter>Acceleration Structures</Filter>
     </ClCompile>
+    <ClCompile Include="Testing.cpp">
+      <Filter>Testing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -198,6 +201,9 @@
     <ClInclude Include="BTreeAccelerator.h">
       <Filter>Acceleration Structures</Filter>
     </ClInclude>
+    <ClInclude Include="Testing.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Acceleration Structures">
@@ -226,6 +232,9 @@
     </Filter>
     <Filter Include="Materials\BRDF">
       <UniqueIdentifier>{a005a956-ed3b-4ed5-8d20-99e8750f3c5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Testing">
+      <UniqueIdentifier>{da648214-ecd4-410b-a764-86224e650426}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
