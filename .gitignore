@@ -4,6 +4,7 @@ project/Assignment4_mvs/Assignment4_mvs.opensdf
 project/Assignment4_mvs/Assignment4_mvs.sdf
 project/Assignment4_mvs/Assignment4_mvs.vcxproj.user
 project/Assignment4_mvs/Assignment4_mvs/Assignment4_Testing/.vcxproj.user
+project/Assignment4_mvs/ipch/
 
 # Ignore the output files
 project/Assignment4_mvs/Debug/*
@@ -14,5 +15,9 @@ project/Assignment4_mvs/Release/*
 !project/Assignment4_mvs/Release/models/
 !project/Assignment4_mvs/Release/glut32.dll
 
+project/Assignment4_mvs/Test/*
+!project/Assignment4_mvs/Test/Assignment4_mvs.lib
+
 project/Assignment4_mvs/Assignment4_Testing/Debug/
 project/Assignment4_mvs/Assignment4_Testing/Release/
+project/Assignment4_mvs/Assignment4_Testing/Test/
