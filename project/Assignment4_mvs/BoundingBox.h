@@ -7,7 +7,6 @@ class BoundingBox {
 public:
 	/**
 	 * Initializes a bounding box to be empty.
-	 * (Tip: set min to std::numeric_limits<float>::infinity and max to -std::numeric_limits<float>::infinity)
 	 */
 	BoundingBox();
 
@@ -23,7 +22,6 @@ public:
 	* @param[in] origin The origin of the vector
 	* @param[in] dir The direction of the vector
 	* @return Returns true if the ray intersects the bounding box; otherwise false.
-	* (Tip: just call the other intersects overload and ignore the distance)
 	*/
 	bool intersects(const Vec3Df &origin, const Vec3Df &dir) const;
 
