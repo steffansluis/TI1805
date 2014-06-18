@@ -28,20 +28,20 @@ void MeshTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, 
 	BaseTriangleGeometry::getSurfacePoint(intersection, surface);
 
 	// Get the normal by interpolating the vertex normals
-	// surface->normal = this->getSurfaceNormal(surface->u, surface->v);
+	surface.normal = this->getSurfaceNormal(surface.texCoords);
 
 	// Find the texture coordinates
-	// this->getTextureCoordinates(surface->u, surface->v, surface->u, surface->v);
+	this->getTextureCoordinates(surface.texCoords, surface.texCoords);
 }
 
 void MeshTriangleGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	BaseTriangleGeometry::getRandomSurfacePoint(surface);
 
 	// Get the normal by interpolating the vertex normals
-	// surface->normal = this->getSurfaceNormal(surface->u, surface->v);
+	surface.normal = this->getSurfaceNormal(surface.texCoords);
 
 	// Find the texture coordinates
-	// this->getTextureCoordinates(surface->u, surface->v, surface->u, surface->v);
+	this->getTextureCoordinates(surface.texCoords, surface.texCoords);
 }
 
 Vec3Df MeshTriangleGeometry::getSurfaceNormal(const Vec2Df &uv) const {
@@ -51,7 +51,7 @@ Vec3Df MeshTriangleGeometry::getSurfaceNormal(const Vec2Df &uv) const {
 	Vec3Df normal2 = this->mesh->vertices[this->triangle->v[2]].n;
 
 	// Interpolate between the vertices
-	Vec3Df normal = normal0 + uv[0] * normal1 + uv[1] * normal2;
+	Vec3Df normal = uv[0] * normal0 + uv[1] * normal1 + (1.0f - uv[0] - uv[1]) * normal2;
 
 	normal.normalize();
 
@@ -67,7 +67,7 @@ void MeshTriangleGeometry::getTextureCoordinates(const Vec2Df &uv, Vec2Df &tUV) 
 		Vec3Df uv2 = this->mesh->texcoords[this->triangle->v[2]];
 
 		// Interpolate between the vertices
-		Vec3Df uv3 = uv0 + uv[0] * uv1 + uv[1] * uv2;
+		Vec3Df uv3 = uv[0] * uv0 + uv[1] * uv1 + (1.0f - uv[0] - uv[1]) * uv2;
 
 		tUV[0] = uv3[0];
 		tUV[1] = uv3[1];

@@ -12,7 +12,7 @@ void BaseTriangleGeometry::preprocess() {
 	Vec3Df vertex0 = this->getVertex0();
 	Vec3Df vertex1 = this->getVertex1();
 	Vec3Df vertex2 = this->getVertex2();
-
+	
 	// The normal-vector of the triangle is the vector that is orthogonal to the plane on which
 	// all three vectors lie. 
 	// This can be calculated by taking the cross product of two aribtrary vectors that
@@ -105,39 +105,14 @@ void BaseTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, 
 	surface.geometry = this->shared_from_this();
 	surface.point = intersection.hitPoint;
 	surface.normal = this->normal;
-
-	// Calculate the hitpoint in local space
-	Vec3Df localPoint = intersection.hitPoint - this->getVertex0();
-
-	// Calculates the barycentric coordinates of hit point.
-	surface.texCoords[0] = Vec3Df::dotProduct(localPoint, this->tangent);
-	surface.texCoords[1] = Vec3Df::dotProduct(localPoint, this->bitangent);
+	surface.texCoords = this->calculateBarycentricCoordinates(intersection.hitPoint);
 }
 
 void BaseTriangleGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
-	float u, v;
-
-	// Get two numbers in the range [0, 1]
-	Random::sampleUnitSquare(u, v);
-
-	// Calculate the square root of the first number
-	float sqrtU = sqrtf(u);
-
-	// Interpolate the vertices of the triangle in such a 
-	// way that this provides uniform sampling.
-	// Source: http://www.cs.princeton.edu/~funk/tog02.pdf section 4.2
-	Vec3Df point = 
-		(1.0f - sqrtU) * this->getVertex0() +
-		(sqrtU * (1.0f - v)) * this->getVertex1() +
-		(sqrtU * v) * this->getVertex2();
-
 	surface.geometry = this->shared_from_this();
-	surface.point = point;
+	surface.point = this->calculateRandomPoint();
 	surface.normal = this->normal;
-
-	// Calculates the barycentric coordinates of hit point.
-	surface.texCoords[0] = Vec3Df::dotProduct(point, this->tangent);
-	surface.texCoords[1] = Vec3Df::dotProduct(point, this->bitangent);
+	surface.texCoords = this->calculateBarycentricCoordinates(surface.point);
 }
 
 BoundingBox BaseTriangleGeometry::getBoundingBox() const {
@@ -195,4 +170,46 @@ bool BaseTriangleGeometry::calculateRayInsideTriangle(const Vec3Df &hitPoint, co
 
 	// since it has passed all checks, the intersection lies within the triangle
 	return true;
+}
+
+Vec2Df BaseTriangleGeometry::calculateBarycentricCoordinates(const Vec3Df &point) const {
+	// Get the vertices for the triangle
+	Vec3Df vertex0 = this->getVertex0();
+	Vec3Df vertex1 = this->getVertex1();
+	Vec3Df vertex2 = this->getVertex2();
+
+	Vec3Df v0 = vertex1 - vertex0;
+	Vec3Df v1 = vertex2 - vertex0;
+	Vec3Df v2 = point - vertex0;
+
+	float d00 = Vec3Df::dotProduct(v0, v0);
+	float d01 = Vec3Df::dotProduct(v0, v1);
+	float d11 = Vec3Df::dotProduct(v1, v1);
+	float d20 = Vec3Df::dotProduct(v2, v0);
+	float d21 = Vec3Df::dotProduct(v2, v1);
+	float denom = d00 * d11 - d01 * d01;
+
+	float v = (d11 * d20 - d01 * d21) / denom;
+	float w = (d00 * d21 - d01 * d20) / denom;
+	float u = 1.0f - v - w;
+}
+
+Vec3Df BaseTriangleGeometry::calculateRandomPoint() const {
+	float u, v;
+
+	// Get two numbers in the range [0, 1]
+	Random::sampleUnitSquare(u, v);
+
+	// Calculate the square root of the first number
+	float sqrtU = sqrtf(u);
+
+	// Interpolate the vertices of the triangle in such a 
+	// way that this provides uniform sampling.
+	// Source: http://www.cs.princeton.edu/~funk/tog02.pdf section 4.2
+	Vec3Df point =
+		(1.0f - sqrtU) * this->getVertex0() +
+		(sqrtU * (1.0f - v)) * this->getVertex1() +
+		(sqrtU * v) * this->getVertex2();
+
+	return point;
 }
