@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 
+#include "..\BTree.h"
 #include "..\TriangleGeometry.h"
 
 #include <vector>
@@ -17,7 +18,11 @@ namespace Assignment4_Testing
 	public ref class UnitTest
 	{
 	private:
-		std::vector<IGeometry>* triangles;
+		std::shared_ptr<std::vector<IGeometry*>> * triangles;
+
+		BTree* xTree;
+		BTree* yTree;
+		BTree* zTree;
 		
 
 	public:
@@ -25,53 +30,78 @@ namespace Assignment4_Testing
 		[TestInitialize()]
 		void Before()
 		{
-			this->triangles = new std::vector<IGeometry>();
+			// initialize B-Trees for all coordinations
+			this->xTree = &BTree(BTree::Coordinate::X);
+			this->yTree = &BTree(BTree::Coordinate::Y);
+			this->zTree = &BTree(BTree::Coordinate::Z);
+
+			// initialize the triangle vector as a shared pointer
+			this->triangles = &std::make_shared<std::vector<IGeometry*>>
+				(std::vector<IGeometry*>());
 
 			// add 5 different triangles
-			(*this->triangles)[0] = TriangleGeometry(
+			this->triangles->get()->push_back(&TriangleGeometry(
 				Vec3Df(0, 0, 0),
 				Vec3Df(1, 1, 1),
-				Vec3Df(2, 2, 2));
+				Vec3Df(2, 2, 2)));
 
-			(*this->triangles)[1] = TriangleGeometry(
+			this->triangles->get()->push_back(&TriangleGeometry(
 				Vec3Df(1, 1, 1),
 				Vec3Df(2, 2, 2), 
-				Vec3Df(3, 3, 3));
+				Vec3Df(3, 3, 3)));
 
-			(*this->triangles)[2] = TriangleGeometry(
-				Vec3Df(2, 2, 2), 
-				Vec3Df(3, 3, 3), 
-				Vec3Df(4, 4, 4));
+			this->triangles->get()->push_back(&TriangleGeometry(
+				Vec3Df(2, 2, 2),
+				Vec3Df(3, 3, 3),
+				Vec3Df(4, 4, 4)));
 
-			(*this->triangles)[3] = TriangleGeometry(
+			this->triangles->get()->push_back(&TriangleGeometry(
 				Vec3Df(3, 3, 3),
 				Vec3Df(4, 4, 4), 
-				Vec3Df(5, 5, 5));
+				Vec3Df(5, 5, 5)));
 
-			(*this->triangles)[4] = TriangleGeometry(
+			this->triangles->get()->push_back(&TriangleGeometry(
 				Vec3Df(4, 4, 4),
 				Vec3Df(5, 5, 5), 
-				Vec3Df(6, 6, 6));
+				Vec3Df(6, 6, 6)));
 
 		}
 
 		[TestCleanup()]
 		void After()
 		{
-
+			delete this->xTree;
+			delete this->yTree;
+			delete this->zTree;
 		}
 
 
 		[TestMethod]
 		void testBTreeEmpty()
 		{
-			Assert::Fail();
+			std::vector<std::shared_ptr<IGeometry>> xTriangles = xTree->GetTriangles(-999, 999);
+			std::vector<std::shared_ptr<IGeometry>> yTriangles = yTree->GetTriangles(-999, 999);
+			std::vector<std::shared_ptr<IGeometry>> zTriangles = zTree->GetTriangles(-999, 999);
+
+			Assert::AreEqual(0, xTriangles.size());
+			Assert::AreEqual(0, yTriangles.size());
+			Assert::AreEqual(0, zTriangles.size());
+
 		}
 
 		[TestMethod]
 		void testBTreeSingleEntry()
 		{
-			Assert::Fail();
+			/*IGeometry* test = (*this->triangles->get())[0];
+
+			TriangleGeometry* myTest;
+			myTest = (TriangleGeometry*)test;*/
+
+			//const Vec3Df vec1 = myTest->getVertex1();
+
+			//Vec3Df*  vec0 = &myTest->getVertex0();
+			//Vec3Df vec1 = myTest->getVertex1();
+			//Vec3Df vec2 = myTest->getVertex2();
 		}
 
 		[TestMethod]
