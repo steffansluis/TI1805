@@ -11,8 +11,8 @@ class SurfacePoint;
 class Triangle;
 
 /**
-* Represents a triangle inside a mesh.
-*/
+ * Represents a triangle inside a mesh.
+ */
 class MeshTriangleGeometry : public BaseTriangleGeometry {
 public:
 	/**
@@ -27,17 +27,17 @@ public:
 	Vec3Df getVertex2() const;
 
 	/**
-	* Gets the surface point on this triangle at the given intersection point.
-	* @param[in] intersection An intersection point between a ray and this object.
-	* @return The surface point on this triangle at the given intersection point.
-	*/
+	 * Gets the surface point on this triangle at the given intersection point.
+	 * @param[in] intersection An intersection point between a ray and this object.
+	 * @return The surface point on this triangle at the given intersection point.
+	 */
 	void getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const;
 
 	/**
-	* Gets a random surface point on this triangle.
-	* @return A random surface point on this triangle.
-	* @remarks This will be needed when implementing area lights, so that we can sample the light volume.
-	*/
+	 * Gets a random surface point on this triangle.
+	 * @return A random surface point on this triangle.
+	 * @remarks This will be needed when implementing area lights, so that we can sample the light volume.
+	 */
 	void getRandomSurfacePoint(SurfacePoint &surface) const;
 
 private:

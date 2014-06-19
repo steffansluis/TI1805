@@ -99,6 +99,9 @@
       <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="Testing.cpp" />
+    <ClCompile Include="PlaneGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -206,6 +209,9 @@
       <Filter>Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Testing.h" />
+    <ClInclude Include="PlaneGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Acceleration Structures">
@@ -234,9 +240,6 @@
     </Filter>
     <Filter Include="Materials\BRDF">
       <UniqueIdentifier>{a005a956-ed3b-4ed5-8d20-99e8750f3c5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Testing">
-      <UniqueIdentifier>{da648214-ecd4-410b-a764-86224e650426}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -54,8 +54,8 @@ template <class T> bool operator>= (const Vec2D<T> & a, const Vec2D<T> & b) {
 
 
 /**
-* Vector in 3 dimensions, with basics operators overloaded.
-*/
+ * Vector in 3 dimensions, with basics operators overloaded.
+ */
 template <typename T>
 class Vec2D {
 public:

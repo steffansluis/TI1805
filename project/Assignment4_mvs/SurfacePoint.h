@@ -31,12 +31,12 @@ public:
 	Vec3Df emittedLight(const Vec3Df &reflectedVector) const;
 
 	/**
-	* Calculates the light reflected from the incoming vector towards the outgoing vector.
-	* @param[in] incommingVector The vector from which the light is comming.
-	* @param[in] reflectedVector The vector that the light is reflected towards.
-	* @param[in] lightColor The color of the light.
-	* @return The light reflected from the incomming towards the outgoing vector.
-	*/
+	 * Calculates the light reflected from the incoming vector towards the outgoing vector.
+	 * @param[in] incommingVector The vector from which the light is comming.
+	 * @param[in] reflectedVector The vector that the light is reflected towards.
+	 * @param[in] lightColor The color of the light.
+	 * @return The light reflected from the incomming towards the outgoing vector.
+	 */
 	Vec3Df reflectedLight(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const;
 
 	/**
@@ -54,18 +54,18 @@ public:
 	Vec3Df point;
 
 	/**
-	* The normal of the surface.
-	*/
+	 * The normal of the surface.
+	 */
 	Vec3Df normal;
 
 	/**
-	* The texture coordinates of the surface.
-	*/
+	 * The texture coordinates of the surface.
+	 */
 	Vec2Df texCoords;
 
 	/**
-	* The geometry which this surface belongs to.
-	*/
+	 * The geometry which this surface belongs to.
+	 */
 	std::shared_ptr<const IGeometry> geometry;
 };
 

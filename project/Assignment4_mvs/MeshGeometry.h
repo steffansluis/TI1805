@@ -21,56 +21,56 @@ public:
 	~MeshGeometry();
 
 	/**
-	* Gets the acceleration structure that is used to find speed up
-	* the intersection calculations.
-	* @return Pointer to an acceleration structure.
-	*/
+	 * Gets the acceleration structure that is used to find speed up
+	 * the intersection calculations.
+	 * @return Pointer to an acceleration structure.
+	 */
 	std::shared_ptr<IAccelerationStructure> getAccelerationStructure() const;
 
 	/**
-	* Sets the acceleration structure that is used to find speed up
-	* the intersection calculations.
-	* @param[in] accelerator Pointer to an acceleration structure.
-	*/
+	 * Sets the acceleration structure that is used to find speed up
+	 * the intersection calculations.
+	 * @param[in] accelerator Pointer to an acceleration structure.
+	 */
 	void setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator);
 
 	/**
-	* Perform any necessary preprocessing.
-	*/
+	 * Perform any necessary preprocessing.
+	 */
 	void preprocess();
 
 	/*
-	* Calculates whether the mesh is hit by the given ray and sets the intersection parameter
-	* to the RayIntersection representing the closest point of intersection.
-	* @param[in] origin The origin of the ray.
-	* @param[in] dir The direction of the ray.
-	* @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
-	* @return True if the ray intersected an object; otherwise false.
-	*/
+	 * Calculates whether the mesh is hit by the given ray and sets the intersection parameter
+	 * to the RayIntersection representing the closest point of intersection.
+	 * @param[in] origin The origin of the ray.
+	 * @param[in] dir The direction of the ray.
+	 * @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	 * @return True if the ray intersected an object; otherwise false.
+	 */
 	bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const;
 
 	/*
-	* Returns whether the mesh is hit by the given ray and sets the intersection parameter
-	* to the RayIntersection representing the point of intersection.
-	* @param[in] origin The origin of the ray.
-	* @param[in] dir The direction of the ray.
-	* @param maxDistance The maximum distance at which the intersection may occur.
-	* @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
-	* @return True if the ray intersected an object; otherwise false.
-	*/
+	 * Returns whether the mesh is hit by the given ray and sets the intersection parameter
+	 * to the RayIntersection representing the point of intersection.
+	 * @param[in] origin The origin of the ray.
+	 * @param[in] dir The direction of the ray.
+	 * @param maxDistance The maximum distance at which the intersection may occur.
+	 * @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
+	 * @return True if the ray intersected an object; otherwise false.
+	 */
 	bool calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const;
 
 	/**
-	* Gets the surface point on this mesh at the given intersection point.
-	* @param[in] intersection An intersection point between a ray and this object.
-	* @return The surface point on this mesh at the given intersection point.
-	*/
+	 * Gets the surface point on this mesh at the given intersection point.
+	 * @param[in] intersection An intersection point between a ray and this object.
+	 * @return The surface point on this mesh at the given intersection point.
+	 */
 	void getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const;
 
 	/**
-	* Gets a random surface point on this mesh.
-	* @return A random surface point on this mesh.
-	*/
+	 * Gets a random surface point on this mesh.
+	 * @return A random surface point on this mesh.
+	 */
 	void getRandomSurfacePoint(SurfacePoint &surface) const;
 
 	BoundingBox getBoundingBox() const;
