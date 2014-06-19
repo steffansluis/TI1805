@@ -4,6 +4,7 @@
 #include "IGeometry.h"
 
 class SphereGeometry : public IGeometry {
+public:
 	/**
 	 * Initializes a new sphere with the given position and radius.
 	 */

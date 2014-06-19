@@ -33,17 +33,17 @@ public:
 	/**
 	 * Returns a random point on the unit sphere.
 	 * The range is [-1, 1] x [-1, 1] x [-1, 1], x^2 + y^2 + z^2 = 1.
-	 * @param[out] point A point on the unit sphere.
+	 * @return A point on the unit sphere.
 	 */
-	static void sampleUnitSphere(Vec3Df &point);
+	static Vec3Df sampleUnitSphere();
 
 	/**
 	 * Returns a random point on the unit sphere.
 	 * The range is [-1, 1] x [-1, 1] x [-1, 1], x^2 + y^2 + z^2 = 1.
 	 * @param[in] normal The normal defining the hemisphere to be sampled.
-	 * @param[out] point A point on the given hemisphere.
+	 * @return A point on the given hemisphere.
 	 */
-	static void sampleHemisphere(const Vec3Df &normal, Vec3Df &point);
+	static Vec3Df sampleHemisphere(const Vec3Df &normal);
 };
 
 #endif

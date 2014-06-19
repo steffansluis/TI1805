@@ -102,7 +102,7 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 }
 
 void BaseTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const {
-	surface.geometry = this->shared_from_this();
+	surface.geometry = intersection.geometry;
 	surface.point = intersection.hitPoint;
 	surface.normal = this->normal;
 	surface.texCoords = this->calculateBarycentricCoordinates(intersection.hitPoint);
