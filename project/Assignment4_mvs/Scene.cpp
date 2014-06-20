@@ -130,9 +130,6 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 }
 
 void Scene::preprocess() {
-	// Preprocess the acceleration structure
-	this->accelerator->preprocess();
-
 	// Preprocess all geometry
 	for (std::vector<std::shared_ptr<IGeometry>>::iterator it = this->geometry->begin(); it != this->geometry->end(); ++it) {
 		(*it)->preprocess();
@@ -142,4 +139,7 @@ void Scene::preprocess() {
 	for (std::vector<std::shared_ptr<ILight>>::iterator it = this->lights->begin(); it != this->lights->end(); ++it) {
 		(*it)->preprocess();
 	}
+
+	// Preprocess the acceleration structure
+	this->accelerator->preprocess();
 }

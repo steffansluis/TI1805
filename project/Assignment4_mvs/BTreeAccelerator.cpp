@@ -1,16 +1,14 @@
+#include "BoundingBox.h"
 #include "BTreeAccelerator.h"
 #include "IGeometry.h"
 #include "NoAccelerationStructure.h"
 #include "RayIntersection.h"
 
-#include "TriangleGeometry.h"
-
 #include <algorithm>
+#include <limits>
 
-
+// A custom deleter for shared_ptr which does not delete anything.
 void null_deleter(std::vector<std::shared_ptr<IGeometry>> *) { }
-
-
 
 BTreeAccelerator::BTreeAccelerator()
 {
@@ -29,14 +27,15 @@ void BTreeAccelerator::preprocess()
 	// the geometry
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> geometry = this->getGeometry();
 
-	// initialize the minimum and maximum values for the coordinates x, y, z
-	this->xBounds[0] = INFINITY; // minimum
-	this->xBounds[1] = -INFINITY; // maximum
-	this->yBounds[0] = INFINITY; // minimum
-	this->yBounds[1] = -INFINITY; // maximum
-	this->zBounds[0] = INFINITY; // minimum
-	this->zBounds[1] = -INFINITY; // maximum
+	float infinity = std::numeric_limits<float>::infinity();
 
+	// initialize the minimum and maximum values for the coordinates x, y, z
+	this->xBounds[0] = infinity;	// minimum
+	this->xBounds[1] = -infinity;	// maximum
+	this->yBounds[0] = infinity;	// minimum
+	this->yBounds[1] = -infinity;	// maximum
+	this->zBounds[0] = infinity;	// minimum
+	this->zBounds[1] = -infinity;	// maximum
 
 	// Iterate through all geometry in the scene
 	for (unsigned int i = 0; i < geometry->size(); i++)
@@ -46,29 +45,25 @@ void BTreeAccelerator::preprocess()
 		// If this fails, throw a custom exception
 		try
 		{
-			TriangleGeometry* myTriangle;
-			myTriangle = (TriangleGeometry*)geometry->at(i).get();
+			std::shared_ptr<IGeometry> object = geometry->at(i);
 
 			// add the triangle to the btrees
-			this->xTree->AddNode(geometry->at(i));
-			this->yTree->AddNode(geometry->at(i));
-			this->zTree->AddNode(geometry->at(i));
+			this->xTree->AddNode(object);
+			this->yTree->AddNode(object);
+			this->zTree->AddNode(object);
 
-			// if the minimum/maximum-values for the x, y or z coordinate are smaller/larger
-			// than those known, store them.
-			Vec3Df vec0 = myTriangle->getVertex0();
-			Vec3Df vec1 = myTriangle->getVertex1();
-			Vec3Df vec2 = myTriangle->getVertex2();
+			// get the bounds of the object
+			BoundingBox bounds = object->getBoundingBox();
 
 			//take the smallest x, y and z as minimum bounds
-			this->xBounds[0] = std::min(this->xBounds[0], std::min(vec0[0], std::min(vec1[0], vec2[0])));
-			this->yBounds[0] = std::min(this->yBounds[0], std::min(vec0[1], std::min(vec1[1], vec2[1])));
-			this->zBounds[0] = std::min(this->zBounds[0], std::min(vec0[2], std::min(vec1[2], vec2[2])));
+			this->xBounds[0] = std::min(this->xBounds[0], bounds.min[0]);
+			this->yBounds[0] = std::min(this->yBounds[0], bounds.min[1]);
+			this->zBounds[0] = std::min(this->zBounds[0], bounds.min[2]);
 
 			// take the largest x, y and z as maximum bounds
-			this->xBounds[1] = std::max(this->xBounds[1], std::max(vec0[0], std::max(vec1[0], vec2[0])));
-			this->yBounds[1] = std::max(this->yBounds[1], std::max(vec0[1], std::max(vec1[1], vec2[1])));
-			this->zBounds[1] = std::max(this->zBounds[1], std::max(vec0[2], std::max(vec1[2], vec2[2])));
+			this->xBounds[1] = std::max(this->xBounds[1], bounds.max[0]);
+			this->yBounds[1] = std::max(this->yBounds[1], bounds.max[1]);
+			this->zBounds[1] = std::max(this->zBounds[1], bounds.max[2]);
 		}
 		catch (std::exception e)
 		{
@@ -125,7 +120,6 @@ bool BTreeAccelerator::calculateClosestIntersection(const Vec3Df &origin, const 
 	// Use the simple intersection algorithm to find the closest intersections
 	return simpleIntersectionAlgorithm.calculateClosestIntersection(origin, dir, intersection);
 }
-
 
 float BTreeAccelerator::calculateCoordinateScalar(const Vec3Df& origin, const Vec3Df & destination, BTree::Coordinate coordinate) const
 {
@@ -214,11 +208,12 @@ float BTreeAccelerator::GetCoordinateExtreme(const Vec3Df& origin, const Vec3Df 
 			// return the minimum instead.
 			return this->zBounds[0];
 		}
+
+	default:
+		// perhaps raise an excepion here
+		return 0.0f;
 	}
 }
-
-
-
 
 bool BTreeAccelerator::calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const {
 	Vec3Df dest = dir * maxDistance;
@@ -279,14 +274,6 @@ std::vector<std::shared_ptr<IGeometry>> BTreeAccelerator::retrieveTriangles(cons
 
 	return myTriangles;
 }
-
-
-
-
-
-
-
-
 
 
 ///////////////// BTreeAcceleratorException //////////////////////

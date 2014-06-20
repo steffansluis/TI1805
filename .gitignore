@@ -15,8 +15,9 @@ project/Assignment4_mvs/Release/*
 !project/Assignment4_mvs/Release/models/
 !project/Assignment4_mvs/Release/glut32.dll
 
-project/Assignment4_mvs/Test/*
-!project/Assignment4_mvs/Test/Assignment4_mvs.lib
+project/Assignment4_mvs/Test/
+#project/Assignment4_mvs/Test/*
+#!project/Assignment4_mvs/Test/Assignment4_mvs.lib
 
 project/Assignment4_mvs/Assignment4_Testing/Debug/
 project/Assignment4_mvs/Assignment4_Testing/Release/
