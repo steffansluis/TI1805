@@ -17,7 +17,7 @@ using namespace Microsoft::VisualStudio::TestTools::UnitTesting;
 namespace Assignment4_Testing
 {
 	[TestClass]
-	public ref class UnitTest
+	public ref class BTreeTest
 	{
 	private:
 		std::vector<std::shared_ptr<IGeometry>> *triangles;

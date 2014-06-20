@@ -15,6 +15,14 @@ SphereGeometry::SphereGeometry(const Vec3Df &position, float radius)
 }
 
 
+float SphereGeometry::getArea() const
+{
+	// DUMMY VALUE
+	return 0;
+}
+
+
+
 bool SphereGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
 	// TODO: Calculate whether the ray intersects the sphere and fill in the members of the intersection parameter
 	return false;

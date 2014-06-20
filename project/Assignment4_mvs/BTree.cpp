@@ -32,13 +32,31 @@ void BTree::AddNode(std::shared_ptr<IGeometry> data)
 // @Author: Bas Boellaard
 // Returns the triangles that are within bounds of the arguments. 
 // These bounds are applied to the coordinate that this B-Tree sorts on. 
-std::vector<std::shared_ptr<IGeometry>> BTree::GetTriangles(const float lowerLimit, const float upperLimit) const
+// It does not matter in which order the limits are inserted, the algorithm 
+// will seek for items in between the limits.
+std::vector<std::shared_ptr<IGeometry>> BTree::GetTriangles(const float limit1, const float limit2) const
 {
+	float myLowerLimit;
+	float myUpperLimit;
+	//
+	// automatically invert the limits if they are in the wrong order
+	if (limit2 < limit1)
+	{
+		myLowerLimit = limit2;
+		myUpperLimit = limit1;
+	}
+	else
+	{
+		myLowerLimit = limit1;
+		myUpperLimit = limit2;
+	}
+	
+
 	auto output = std::vector<std::shared_ptr<IGeometry>>();
 
 	if (this->head != NULL)
 	{
-		this->head->GetTriangles(output, lowerLimit, upperLimit);
+		this->head->GetTriangles(output, myLowerLimit, myUpperLimit);
 	}
 
 	return output;

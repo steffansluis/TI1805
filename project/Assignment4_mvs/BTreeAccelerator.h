@@ -4,10 +4,13 @@
 #include "BTree.h"
 #include "IAccelerationStructure.h"
 
+#include <exception>
+
 class RayIntersection;
 
 class BTreeAccelerator : public IAccelerationStructure {
 public:
+
 	BTreeAccelerator();
 
 	/**
@@ -25,6 +28,10 @@ public:
 	 */
 	bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const;
 
+	float calculateCoordinateScalar(const Vec3Df& origin, const Vec3Df & destination, BTree::Coordinate coordinate) const;
+
+	float GetCoordinateExtreme(const Vec3Df& origin, const Vec3Df & destination, BTree::Coordinate coordinate) const;
+
 	/*
 	 * Returns whether any object is hit by the given ray and sets the intersection parameter
 	 * to the RayIntersection representing the point of intersection.
@@ -39,9 +46,29 @@ public:
 private:
 	std::vector<std::shared_ptr<IGeometry>> BTreeAccelerator::retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest) const;
 
-	BTree xTree;
-	BTree yTree;
-	BTree zTree;
+	BTree* xTree;
+	BTree* yTree;
+	BTree* zTree;
+
+	float xBounds[2];
+	float yBounds[2];
+	float zBounds[2];
+
+};
+
+
+
+class BTreeAcceleratorException : public std::exception
+{
+private:
+
+	const char* _message;
+
+public:
+
+	BTreeAcceleratorException(const char* message);
+
+	virtual const char* what() const throw();
 };
 
 #endif
