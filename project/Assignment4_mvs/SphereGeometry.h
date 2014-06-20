@@ -10,6 +10,12 @@ public:
 	 */
 	SphereGeometry(const Vec3Df &position, float radius);
 
+	/**
+	* Gets the surface area of the geometry.
+	* @return The surface area of the geometry.
+	*/
+	float getArea() const;
+
 	/*
 	 * Calculates whether the sphere is hit by the given ray and sets the intersection parameter
 	 * to the RayIntersection representing the closest point of intersection.

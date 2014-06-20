@@ -16,6 +16,12 @@ public:
 	 */
 	void preprocess();
 
+	/**
+	* Gets the surface area of the geometry.
+	* @return The surface area of the geometry.
+	*/
+	float getArea() const;
+
 	/*
 	 * Returns whether any object is hit by the given ray and sets the intersection parameter
 	 * to the RayIntersection representing the closest point of intersection.
@@ -71,6 +77,7 @@ private:
 	 */
 	Vec3Df calculateRandomPoint() const;
 
+	float area;
 	Vec3Df tangent;
 	Vec3Df bitangent;
 	Vec3Df normal;

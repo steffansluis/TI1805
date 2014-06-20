@@ -14,6 +14,12 @@ public:
 	PlaneGeometry(const Vec3Df &normal, float distance);
 
 	/**
+	* Gets the surface area of the geometry.
+	* @return The surface area of the geometry.
+	*/
+	float getArea() const;
+
+	/**
 	 * Returns whether the object is hit by the given ray and sets the intersection parameter
 	 * to the RayIntersection representing the point of intersection.
 	 *

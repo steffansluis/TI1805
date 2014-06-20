@@ -5,6 +5,8 @@
 
 #include "Vec3D.h"
 
+class IGeometry;
+
 /**
  * Represents a light source.
  */
@@ -12,6 +14,18 @@ class ILight : public std::enable_shared_from_this<ILight> {
 public:
 	ILight();
 	virtual ~ILight();
+
+	/**
+	* Gets the surface area of the light.
+	* @return The surface area of the light.
+	*/
+	float getArea() const;
+	
+	/**
+	 * Gets the geometry associated with this light, this can be null.
+	 * @return The geometry associated with this light, this can be null.
+	 */
+	std::shared_ptr<IGeometry> getGeometry() const;
 
 	/**
 	 * Gets the falloff factor which determines how much the light dimishes over distance.
@@ -30,6 +44,12 @@ public:
 	 * @return The intensity of the light.
 	 */
 	float getIntensity() const;
+
+	/**
+	 * Sets the geometry associated with this light, this can be null.
+	 * @param[in] geometry The geometry associated with this light, this can be null.
+	 */
+	void setGeometry(std::shared_ptr<IGeometry> geometry);
 
 	/**
 	 * Sets the falloff factor which determines how much the light dimishes over distance.
@@ -69,9 +89,20 @@ protected:
 	 */
 	float calculateAttenuation(float distance) const;
 
+	/**
+	 * Calculates the intensity of the light at the given distance with attenuation taken into account.
+	 */
+	float calculateIntensity(float distance) const;
+
+	/**
+	 * Calculates the amount of light 
+	 */
+	Vec3Df calculateLight(const Vec3Df &lightPoint, const Vec3Df &point);
+
 private:
 	float intensity;
 	float falloff;
+	std::shared_ptr<IGeometry> geometry;
 };
 
 #endif

@@ -7,11 +7,6 @@
 class Constants {
 public:
 	/**
-	 * Whether or not to perform backface culling.
-	 */
-	const static bool ENABLE_CULLING = false;
-
-	/**
 	 * The value of pi.
 	 */
 	const static float Pi;

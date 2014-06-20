@@ -1,15 +1,19 @@
+#include <cassert>
+
 #include "ConstantTexture.h"
 #include "IMaterial.h"
 #include "ITexture.h"
 #include "SurfacePoint.h"
 
-static auto black = std::make_shared<ConstantTexture>(Vec3Df(0, 0, 0));
-
 IMaterial::IMaterial() {
+	static auto black = std::make_shared<ConstantTexture>(Vec3Df(0, 0, 0));
+
 	this->setAmbientColor(black);
 	this->setDiffuseColor(black);
 	this->setEmissiveColor(black);
 	this->setSpecularColor(black);
+	this->setRoughness(black);
+	this->setShininess(black);
 }
 IMaterial::~IMaterial() {
 }
@@ -34,40 +38,34 @@ std::shared_ptr<const ITexture> IMaterial::getShininess() const {
 }
 
 void IMaterial::setAmbientColor(std::shared_ptr<const ITexture> texture) {
-	if (texture)
-		this->ambientTexture = texture;
-	else
-		this->ambientTexture = black;
+	assert(texture);
+
+	this->ambientTexture = texture;
 }
 void IMaterial::setDiffuseColor(std::shared_ptr<const ITexture> texture) {
-	if (texture)
-		this->diffuseTexture = texture;
-	else
-		this->diffuseTexture = black;
+	assert(texture);
+
+	this->diffuseTexture = texture;
 }
 void IMaterial::setEmissiveColor(std::shared_ptr<const ITexture> texture) {
-	if (texture)
-		this->emissiveTexture = texture;
-	else
-		this->emissiveTexture = black;
+	assert(texture);
+
+	this->emissiveTexture = texture;
 }
 void IMaterial::setSpecularColor(std::shared_ptr<const ITexture> texture) {
-	if (texture)
-		this->specularTexture = texture;
-	else
-		this->specularTexture = black;
+	assert(texture);
+
+	this->specularTexture = texture;
 }
 void IMaterial::setRoughness(std::shared_ptr<const ITexture> texture) {
-	if (texture)
-		this->roughness = roughness;
-	else
-		this->roughness = black;
+	assert(texture);
+
+	this->roughness = texture;
 }
 void IMaterial::setShininess(std::shared_ptr<const ITexture> texture) {
-	if (texture)
-		this->roughness = roughness;
-	else
-		this->roughness = black;
+	assert(texture);
+
+	this->roughness = texture;
 }
 
 Vec3Df IMaterial::sampleAmbientColor(const Vec2Df &texCoords) const {
@@ -95,6 +93,8 @@ Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) 
 }
 
 Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const {
+	return this->emissiveTexture->sample(surface.texCoords);
+
 	// TODO: Implement emitted light
 	return Vec3Df();
 }

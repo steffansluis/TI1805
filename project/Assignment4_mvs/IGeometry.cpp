@@ -6,10 +6,8 @@
 #include "RayIntersection.h"
 #include "SurfacePoint.h"
 
-static auto diffuseMaterial = std::make_shared<const DiffuseMaterial>();
-
 IGeometry::IGeometry()
-: IGeometry(diffuseMaterial) {
+: IGeometry(std::make_shared<const DiffuseMaterial>()) {
 }
 
 IGeometry::IGeometry(std::shared_ptr<const IMaterial> material) {
@@ -24,10 +22,9 @@ std::shared_ptr<const IMaterial> IGeometry::getMaterial() const {
 }
 
 void IGeometry::setMaterial(std::shared_ptr<const IMaterial> material) {
-	if (material)
-		this->material = material;
-	else
-		this->material = diffuseMaterial;
+	assert(material);
+
+	this->material = material;
 }
 
 void IGeometry::preprocess() {

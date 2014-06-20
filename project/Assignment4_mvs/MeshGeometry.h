@@ -39,6 +39,12 @@ public:
 	 */
 	void preprocess();
 
+	/**
+	* Gets the surface area of the geometry.
+	* @return The surface area of the geometry.
+	*/
+	float getArea() const;
+
 	/*
 	 * Calculates whether the mesh is hit by the given ray and sets the intersection parameter
 	 * to the RayIntersection representing the closest point of intersection.
@@ -80,8 +86,10 @@ private:
 
 	static BoundingBox createBoundingBox(const Mesh *mesh);
 
-	BoundingBox boundingBox;
 	const Mesh *mesh;
+	float totalArea;
+	float maxTriangleArea;
+	BoundingBox boundingBox;
 	std::shared_ptr<IAccelerationStructure> accelerator;
 	std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>> triangles;
 };

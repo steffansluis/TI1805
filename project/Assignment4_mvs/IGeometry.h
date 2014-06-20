@@ -36,6 +36,12 @@ public:
 	 */
 	virtual void preprocess();
 
+	/**
+	 * Gets the surface area of the geometry.
+	 * @return The surface area of the geometry.
+	 */
+	virtual float getArea() const = 0;
+
 	/*
 	 * Calculates whether the object is hit by the given ray and sets the intersection parameter
 	 * to the RayIntersection representing the closest point of intersection.

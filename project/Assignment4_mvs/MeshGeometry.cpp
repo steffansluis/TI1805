@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <math.h>
 
@@ -7,10 +8,16 @@
 #include "MeshGeometry.h"
 #include "MeshTriangleGeometry.h"
 #include "NoAccelerationStructure.h"
+#include "Random.h"
 #include "SurfacePoint.h"
 
-MeshGeometry::MeshGeometry(const Mesh *mesh)
-: mesh(mesh), triangles(MeshGeometry::generateTriangles(mesh)) {
+MeshGeometry::MeshGeometry(const Mesh *mesh) : 
+accelerator(nullptr),
+boundingBox(BoundingBox()),
+maxTriangleArea(0),
+mesh(mesh),
+totalArea(0),
+triangles(MeshGeometry::generateTriangles(mesh)){
 	assert(mesh);
 
 	this->setAccelerationStructure(std::make_shared<NoAccelerationStructure>());
@@ -33,16 +40,32 @@ void MeshGeometry::setAccelerationStructure(std::shared_ptr<IAccelerationStructu
 }
 
 void MeshGeometry::preprocess() {
-	// Preprocess all triangles
+	float totalArea = 0.0f;
+	float maxTriangleArea = 0.0f;
+
+	// Preprocess all triangles and calculate the total surface area and
+	// the surface area of the biggest triangle
 	for (std::vector<std::shared_ptr<IGeometry>>::const_iterator it = this->triangles->begin(); it != this->triangles->end(); ++it) {
 		(*it)->preprocess();
+
+		float area = (*it)->getArea();
+		totalArea += area;
+		maxTriangleArea = std::max<float>(area, maxTriangleArea);
 	}
+
+	// Set the total surface area and maximum surface area of a triangle
+	this->totalArea = totalArea;
+	this->maxTriangleArea = maxTriangleArea;
 
 	// Compute the bounding box
 	this->boundingBox = MeshGeometry::createBoundingBox(this->mesh);
 
 	// Preprocess the acceleration structure
 	this->accelerator->preprocess();
+}
+
+float MeshGeometry::getArea() const {
+	return this->totalArea;
 }
 
 bool MeshGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
@@ -72,14 +95,26 @@ void MeshGeometry::getSurfacePoint(const RayIntersection &intersection, SurfaceP
 }
 
 void MeshGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
-	// BUG: Sampling is not uniform, needs to be weighted by triangle's surface area / total surface area.
+	// Get the number of triangles
+	int numTriangles = this->mesh->triangles.size();
 
-	// Pick a random triangle
-	int size = this->mesh->triangles.size();
-	int index = rand() % size;
+	// Get the maxium surface area of a triangle and
+	// gerate a random surface area in the range [0, maxArea]
+	float maxArea = this->maxTriangleArea;
+	float randomArea = Random::sampleUnit() * totalArea;
 
-	// Return a random point on this triangle
-	this->triangles->at(index)->getRandomSurfacePoint(surface);
+	std::shared_ptr<IGeometry> triangle;
+
+	// Use rejection sampling on the triangle's area
+	// to pick a uniformly distributed random triangle
+	do{
+		// Get a random triangle
+		int index = rand() % numTriangles;
+		triangle = this->triangles->at(index);
+	} while (triangle->getArea() < randomArea);
+
+	// Return a uniformly distributed random within the triangle
+	return triangle->getRandomSurfacePoint(surface);
 }
 
 BoundingBox MeshGeometry::getBoundingBox() const {
