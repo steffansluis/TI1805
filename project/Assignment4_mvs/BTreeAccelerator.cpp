@@ -97,10 +97,12 @@ bool BTreeAccelerator::calculateClosestIntersection(const Vec3Df &origin, const 
 	std::vector<std::shared_ptr<IGeometry>> zTriangles = this->zTree->GetTriangles(xLimit1, xLimit2);
 
 	// calculate the intersection of these three collections
-	std::vector<std::shared_ptr<IGeometry>> intersec1;
+	int intersec1Size = std::min(xTriangles.size(), yTriangles.size());
+	std::vector<std::shared_ptr<IGeometry>> intersec1 = std::vector<std::shared_ptr<IGeometry>>(intersec1Size);
 	std::set_intersection(xTriangles.begin(), xTriangles.end(), yTriangles.begin(), yTriangles.end(), intersec1.begin());
 	//
-	std::vector<std::shared_ptr<IGeometry>> myIntersection;
+	int myIntersectionSize = std::min(intersec1.size(), zTriangles.size());
+	std::vector<std::shared_ptr<IGeometry>> myIntersection = std::vector<std::shared_ptr<IGeometry>>(myIntersectionSize);
 	std::set_intersection(intersec1.begin(), intersec1.end(), zTriangles.begin(), zTriangles.end(), myIntersection.begin());
 
 	// feed the triangles to the ray-intersection algorithm
@@ -112,9 +114,9 @@ bool BTreeAccelerator::calculateClosestIntersection(const Vec3Df &origin, const 
 	// Use the retrieveTriangles to find a list of potential intersecting objects
 	std::vector<std::shared_ptr<IGeometry>> candidateSet = this->retrieveTriangles(origin, dest);
 
-	// Constructor a NoAccelerationStructure to perform a simple intersection test
+	// Construct a NoAccelerationStructure to perform a simple intersection test
 	NoAccelerationStructure simpleIntersectionAlgorithm;
-	simpleIntersectionAlgorithm.setGeometry(std::make_shared<const std::vector<std::shared_ptr<IGeometry>>>(myIntersection));
+	simpleIntersectionAlgorithm.setGeometry(std::shared_ptr<const std::vector<std::shared_ptr<IGeometry>>>(&myIntersection, null_deleter));
 	simpleIntersectionAlgorithm.preprocess();
 
 	// Use the simple intersection algorithm to find the closest intersections
@@ -132,27 +134,27 @@ float BTreeAccelerator::calculateCoordinateScalar(const Vec3Df& origin, const Ve
 	switch (coordinate)
 	{
 	case BTree::Coordinate::X:
-		coord2Value = destination[2];
+		coord2Value = destination[1];
 		coord2Extreme = this->GetCoordinateExtreme(origin, destination, BTree::Coordinate::Y);
 
-		coord3Value = destination[3];
+		coord3Value = destination[2];
 		coord3Extreme = this->GetCoordinateExtreme(origin, destination, BTree::Coordinate::Z);
 
 		break;
 	case BTree::Coordinate::Y:
-		coord2Value = destination[1];
+		coord2Value = destination[0];
 		coord2Extreme = this->GetCoordinateExtreme(origin, destination, BTree::Coordinate::X);
 
-		coord3Value = destination[3];
+		coord3Value = destination[2];
 		coord3Extreme = this->GetCoordinateExtreme(origin, destination, BTree::Coordinate::Z);
 
 
 		break;
 	case BTree::Coordinate::Z:
-		coord2Value = destination[1];
+		coord2Value = destination[0];
 		coord2Extreme = this->GetCoordinateExtreme(origin, destination, BTree::Coordinate::X);
 
-		coord3Value = destination[2];
+		coord3Value = destination[1];
 		coord3Extreme = this->GetCoordinateExtreme(origin, destination, BTree::Coordinate::Y);
 
 		break;

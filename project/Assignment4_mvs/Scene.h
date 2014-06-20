@@ -76,6 +76,12 @@ public:
 	std::shared_ptr<const IAccelerationStructure> getAccelerationStructure() const;
 
 	/**
+	 * Gets the number of light samples to be taken per square unit of surface area.
+	 * @return The number of light samples to be taken per square unit of surface area.
+	 */
+	float getLightSampleDensity() const;
+
+	/**
 	 * Sets the acceleration structure that is used to find speed up
 	 * the intersection calculations.
 	 * @param[in] accelerator Pointer to an acceleration structure.
@@ -96,6 +102,12 @@ public:
 	void setRayTracer(std::shared_ptr<IRayTracer> rayTracer);
 
 	/**
+	* Sets the number of light samples to be taken per square unit of surface area.
+	* @param density The number of light samples to be taken per square unit of surface area.
+	*/
+	void setLightSampleDensity(float density);
+
+	/**
 	 * Renders the scene as seen from the given camera.
 	 * @param[in] camera Pointer to the camera that observes the scene.
 	 * @param width The width of the render.
@@ -110,6 +122,7 @@ private:
 	 */
 	void preprocess();
 
+	float lightSampleDensity;
 	std::shared_ptr<IAccelerationStructure> accelerator;
 	std::shared_ptr<IRayTracer> rayTracer;
 	std::shared_ptr<std::vector<std::shared_ptr<IGeometry>>> geometry;

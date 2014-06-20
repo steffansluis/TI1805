@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
@@ -91,30 +92,52 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
 		// Get the light color and the light vector
+		std::shared_ptr<ILight> light = (*it);
 		Vec3Df lightPoint;
 		Vec3Df lightColor;
 		Vec3Df lightVector;
-		
-		// Sample the light for a position and color
-		(*it)->sampleLight(surface.point, lightPoint, lightColor);
+		Vec3Df lightContribution = Vec3Df();
 
-		// Compute the vector from the intersection towards the light
-		lightVector = (lightPoint - surface.point);
-		float lightDistance = lightVector.normalize();
+		// Calculate the number of light sampels to be taken based of the light's area
+		int lightSamples = (int)std::max(1.0f, light->getArea() * scene->getLightSampleDensity());
 
-		// For the shadow ray we use a small offset from the surface
-		// so that a surface will not accidently shadow itsself.
-		// Similiarly we make the shadow segment sligthly shorter so
-		// that the light does not shadow itsself either in case of a geometric light.
-		const float smallNumber = 1e-6f;
-
-		// If the segment between the light and intersection intersects any geometry
-		// then the intersection is in shadow, continue to the next light.
-		if (scene->calculateAnyIntersection(surface.point + lightVector * smallNumber, lightVector, lightDistance - 2.0f * smallNumber, shadowIntersection))
+		// If the light is associated with the geometry we are trying to 
+		if (light->getGeometry() == intersection.geometry)
 			continue;
 
-		// Evaluate the BRDF, essentially
-		lighting += surface.reflectedLight(lightVector, viewVector, lightColor);
+		for (int i = 0; i < lightSamples; i++) {
+			// Sample the light for a position and color
+			light->sampleLight(surface.point, lightPoint, lightColor);
+
+			// Compute the vector from the intersection towards the light
+			lightVector = (lightPoint - surface.point);
+			float lightDistance = lightVector.normalize();
+
+			// For the shadow ray we use a small offset from the surface
+			// so that a surface will not accidently shadow itsself.
+			// Similiarly we make the shadow segment sligthly shorter so
+			// that the light does not shadow itsself either in case of a geometric light.
+			const float smallNumber = 1e-4f;
+
+			// The length of the shadow ray segment, this is sligthly smaller
+			// than the actual distance between the object and light to
+			// prevent intersecting the object and lightsource themselves.
+			float segmentLength = lightDistance - 2.0f * smallNumber;
+
+			// If the light and object are extremely close then the segment length may become negative,
+			// only check shadows if there is enough room between the object and light.
+			if (segmentLength > 0.0f) {
+				// If the segment between the light and intersection intersects any geometry
+				// then the intersection is in shadow, continue to the next light.
+				if (scene->calculateAnyIntersection(surface.point + lightVector * smallNumber, lightVector, segmentLength, shadowIntersection))
+					continue;
+			}
+
+			// Evaluate the BRDF, essentially
+			lightContribution += surface.reflectedLight(lightVector, viewVector, lightColor);
+		}
+
+		lighting += lightContribution / (float)lightSamples;
 	}
 	
 	// Return the accumulated lighting

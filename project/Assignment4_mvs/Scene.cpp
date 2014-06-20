@@ -13,11 +13,10 @@
 #include "Scene.h"
 #include "Vec3D.h"
 
-Scene::Scene() {
-	// Initialize the geometry and light vectors
-	this->geometry = std::make_shared<std::vector<std::shared_ptr<IGeometry>>>();
-	this->lights = std::make_shared<std::vector<std::shared_ptr<ILight>>>();
-
+Scene::Scene() :
+geometry(std::make_shared<std::vector<std::shared_ptr<IGeometry>>>()),
+lights(std::make_shared<std::vector<std::shared_ptr<ILight>>>()),
+lightSampleDensity(100.0f) {
 	// Set the acceleration structure
 	this->setAccelerationStructure(std::make_shared<BTreeAccelerator>());
 
@@ -67,6 +66,10 @@ std::shared_ptr<const IAccelerationStructure> Scene::getAccelerationStructure() 
 	return this->accelerator;
 }
 
+float Scene::getLightSampleDensity() const {
+	return this->lightSampleDensity;
+}
+
 void Scene::setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator) {
 	assert(accelerator);
 	
@@ -89,6 +92,12 @@ void Scene::setRayTracer(std::shared_ptr<IRayTracer> rayTracer) {
 	// Set the ray tracer and set its scene pointer to the current scene
 	this->rayTracer = rayTracer;
 	this->rayTracer->setScene(this);
+}
+
+void Scene::setLightSampleDensity(float density) {
+	assert(density > 0.0f);
+
+	this->lightSampleDensity = density;
 }
 
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {
