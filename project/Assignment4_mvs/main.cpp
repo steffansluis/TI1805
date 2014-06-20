@@ -17,6 +17,7 @@
 
 Vec3Df MyCameraPosition;
 Vec3Df MyCameraTarget;
+Vec3Df MyCameraUp;
 std::vector<Vec3Df> MyLightPositions;
 Mesh MyMesh; //Main mesh
 
@@ -88,7 +89,8 @@ void dessiner( )
 void animate()
 {
 	MyCameraPosition = getCameraPosition();
-	MyCameraTarget = getLookAtPosition();
+	MyCameraTarget = getCameraForward();
+	MyCameraUp = getCameraUp();
 
 	glutPostRedisplay();
 }

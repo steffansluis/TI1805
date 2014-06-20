@@ -19,6 +19,14 @@ public:
 	 * @param[in] lookAt Point which the camera is looking at. 
 	 */
 	ICamera(const Vec3Df &position, const Vec3Df &lookAt);
+
+	/**
+	* Initializes a camera with the given position and target.
+	* @param[in] position Position of the camera.
+	* @param[in] lookAt Point which the camera is looking at.
+	* @param[in] up The up vector of the camera.
+	*/
+	ICamera(const Vec3Df &position, const Vec3Df &lookAt, const Vec3Df &up);
 	
 	virtual ~ICamera();
 
@@ -41,30 +49,30 @@ public:
 	void getRay(int x, int y, Vec3Df &origin, Vec3Df &dir) const;
 
 	/**
-	* Gets a ray through the given pixel.
-	* @param x The x-coordinate of the pixel.
-	* @param y The y-coordinate of the pixel.
-	* @param subPixelX X-offset within the pixel itself, range [0, 1].
-	* @param subPixelY Y-offset within the pixel itself, range [0, 1].
-	* @param[out] origin The origin of the ray.
-	* @param[out] dir The direction of the ray.
-	* @remarks The sub-pixel offset is for multisampling.
-	*/
+	 * Gets a ray through the given pixel.
+	 * @param x The x-coordinate of the pixel.
+	 * @param y The y-coordinate of the pixel.
+	 * @param subPixelX X-offset within the pixel itself, range [0, 1].
+	 * @param subPixelY Y-offset within the pixel itself, range [0, 1].
+	 * @param[out] origin The origin of the ray.
+	 * @param[out] dir The direction of the ray.
+	 * @remarks The sub-pixel offset is for multisampling.
+	 */
 	void getRay(int x, int y, float subPixelX, float subPixelY, Vec3Df &origin, Vec3Df &dir) const;
 
 	/**
-	* Perform any necessary preprocessing.
-	*/
+	 * Perform any necessary preprocessing.
+	 */
 	virtual void preprocess(int width, int height);
 
 protected:
 	/**
-	* Gets a ray through the coordinates of the image plane.
-	* @param y The u-coordinate of the image plane, range [-0.5, 0.5].
-	* @param v The v-coordinate of the image plane, range [-0.5, 0.5].
-	* @param[out] origin The origin of the ray.
-	* @param[out] dir The direction of the ray.
-	*/
+	 * Gets a ray through the coordinates of the image plane.
+	 * @param y The u-coordinate of the image plane, range [-0.5, 0.5].
+	 * @param v The v-coordinate of the image plane, range [-0.5, 0.5].
+	 * @param[out] origin The origin of the ray.
+	 * @param[out] dir The direction of the ray.
+	 */
 	virtual void getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) const = 0;
 
 private:

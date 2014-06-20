@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include "IGeometry.h"
 #include "ILight.h"
 
 ILight::ILight()
@@ -9,12 +10,27 @@ ILight::ILight()
 ILight::~ILight() {
 }
 
+float ILight::getArea() const {
+	if (this->geometry)
+		return this->geometry->getArea();
+	else
+		return 1.0f;
+}
+
+std::shared_ptr<IGeometry> ILight::getGeometry() const {
+	return this->geometry;
+}
+
 float ILight::getFalloff() const {
 	return this->falloff;
 }
 
 float ILight::getIntensity() const {
 	return this->intensity;
+}
+
+void ILight::setGeometry(std::shared_ptr<IGeometry> geometry) {
+	this->geometry = geometry;
 }
 
 void ILight::setFalloff(float falloff) {
@@ -34,4 +50,8 @@ float ILight::calculateAttenuation(float distance) const {
 
 	// Make sure it does not go negative
 	return std::max<float>(0.0f, attenuation);
+}
+
+float ILight::calculateIntensity(float distance) const {
+	return this->getArea() * this->intensity * this->calculateAttenuation(distance);
 }

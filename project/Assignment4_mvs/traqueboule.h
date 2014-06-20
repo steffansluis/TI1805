@@ -221,9 +221,20 @@ Vec3Df getCameraPosition()
 	LightPos[2]=LightP[2];
 	return LightPos;
 }
-Vec3Df getLookAtPosition()
+Vec3Df getCameraForward()
 {
 	const GLdouble p[] = { 0, 0, -1, 1 };
+	GLdouble LightP[4];
+	tbProject(p, LightP);
+	Vec3Df LightPos;
+	LightPos[0] = LightP[0];
+	LightPos[1] = LightP[1];
+	LightPos[2] = LightP[2];
+	return LightPos;
+}
+Vec3Df getCameraUp()
+{
+	const GLdouble p[] = { 0, 1, 0, 1 };
 	GLdouble LightP[4];
 	tbProject(p, LightP);
 	Vec3Df LightPos;

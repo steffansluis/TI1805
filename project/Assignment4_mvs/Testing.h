@@ -11,8 +11,8 @@ private:
 public:
 	
 	/**
-	* Constructor
-	*/
+	 * Constructor
+	 */
 	TestException(const char* message);
 
 	virtual const char* what() const throw();

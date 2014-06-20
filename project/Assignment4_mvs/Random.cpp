@@ -27,7 +27,7 @@ void Random::sampleUnitSquare(float &u, float &v) {
 	v = rand() / static_cast<float>(RAND_MAX);
 }
 
-void Random::sampleUnitSphere(Vec3Df &point) {
+Vec3Df Random::sampleUnitSphere() {
 	float phi;
 	float cosTheta;
 	float sinTheta;
@@ -42,15 +42,17 @@ void Random::sampleUnitSphere(Vec3Df &point) {
 	cosTheta = sqrtf(1.0f - sinTheta * sinTheta);
 
 	// Convert the polar coordinates to cartesian
-	point = Vec3Df(cosTheta * cosf(phi), cosTheta * sinf(phi), sinTheta);
+	return Vec3Df(cosTheta * cosf(phi), cosTheta * sinf(phi), sinTheta);
 }
 
-void Random::sampleHemisphere(const Vec3Df &normal, Vec3Df &point) {
+Vec3Df Random::sampleHemisphere(const Vec3Df &normal) {
 	// Get a random point on the unit sphere.
-	Random::sampleUnitSphere(point);
+	Vec3Df point = Random::sampleUnitSphere();
 
 	// If the point is on the opposite side of the hemisphere,
 	// mirror the point.
 	if (Vec3Df::dotProduct(normal, point) < 0.0f)
 		point = -point;
+
+	return point;
 }

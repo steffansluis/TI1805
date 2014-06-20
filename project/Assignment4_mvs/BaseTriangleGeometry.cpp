@@ -18,11 +18,15 @@ void BaseTriangleGeometry::preprocess() {
 	// This can be calculated by taking the cross product of two aribtrary vectors that
 	// lie on the plane defined by the triangle.
 	this->tangent = vertex1 - vertex0;
-	this->tangent.normalize();
 	this->bitangent = vertex2 - vertex0;
-	this->bitangent.normalize();
 	this->normal = Vec3Df::crossProduct(this->tangent, this->bitangent);
-	this->normal.normalize();
+	this->area = this->normal.normalize();
+	this->tangent.normalize();
+	this->bitangent.normalize();
+}
+
+float BaseTriangleGeometry::getArea() const {
+	return this->area;
 }
 
 // @Author Bas Boellaard
@@ -42,16 +46,9 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 	// If this angle between the ray and surface normal is positive, then this is the wrong side of the triangle 
 	// (i.e. this side is supposed to be the 'inside' of something. It can either be ignored (culling) or negated.
 	// ??: Would dot_dir_normal need to be negated if we do not cull it? 
-	if (dot_dir_normal >= 0.0f)
+	if (dot_dir_normal == 0.0f)
 	{
-		if (Constants::ENABLE_CULLING)
-		{
-			return false;
-		}
-		else if (dot_dir_normal >= -1e-6f)
-		{
-			return false;
-		}
+		return false;
 	}
 
 	// to calculate the length of the ray that goes towards the triangle, we can calculate 
@@ -102,7 +99,7 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 }
 
 void BaseTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const {
-	surface.geometry = this->shared_from_this();
+	surface.geometry = intersection.geometry;
 	surface.point = intersection.hitPoint;
 	surface.normal = this->normal;
 	surface.texCoords = this->calculateBarycentricCoordinates(intersection.hitPoint);
@@ -193,8 +190,7 @@ Vec2Df BaseTriangleGeometry::calculateBarycentricCoordinates(const Vec3Df &point
 	float w = (d00 * d21 - d01 * d20) / denom;
 	float u = 1.0f - v - w;
 
-	// return dummy value
-	return Vec2Df(0, 0);
+	return Vec2Df(u, v);
 }
 
 Vec3Df BaseTriangleGeometry::calculateRandomPoint() const {

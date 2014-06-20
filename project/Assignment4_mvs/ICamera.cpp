@@ -5,8 +5,11 @@
 ICamera::ICamera() 
 : position(0, 0, 0), lookAt(0, 0, 1), up(0, 1, 0) {
 }
-ICamera::ICamera(const Vec3Df &position, const Vec3Df &lookAt) 
+ICamera::ICamera(const Vec3Df &position, const Vec3Df &lookAt)
 : position(position), lookAt(lookAt), up(0, 1, 0) {
+}
+ICamera::ICamera(const Vec3Df &position, const Vec3Df &lookAt, const Vec3Df &up)
+: position(position), lookAt(lookAt), up(up) {
 }
 ICamera::~ICamera() {
 }

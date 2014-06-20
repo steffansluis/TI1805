@@ -109,6 +109,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AreaLight.h" />
     <ClInclude Include="BaseTriangleGeometry.h" />
     <ClInclude Include="BlinnPhongBRDF.h" />
     <ClInclude Include="BoundingBox.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="OrenNayarBRDF.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PhongBRDF.h" />
+    <ClInclude Include="PlaneGeometry.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RayIntersection.h" />
@@ -154,6 +156,7 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AreaLight.cpp" />
     <ClCompile Include="BaseTriangleGeometry.cpp" />
     <ClCompile Include="BlinnPhongBRDF.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
@@ -181,6 +184,7 @@
     <ClCompile Include="OrenNayarBRDF.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PhongBRDF.cpp" />
+    <ClCompile Include="PlaneGeometry.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="RayIntersection.cpp" />

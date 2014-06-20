@@ -93,7 +93,7 @@ void rayTrace() {
 	Scene scene = Scene();
 
 	// Create a perspective camera
-	auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget);
+	auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget, MyCameraUp);
 
 	// Create a mesh and add it to the scene
 	auto mesh = std::make_shared<MeshGeometry>(&MyMesh);

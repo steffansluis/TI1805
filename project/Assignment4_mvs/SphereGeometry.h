@@ -4,10 +4,17 @@
 #include "IGeometry.h"
 
 class SphereGeometry : public IGeometry {
+public:
 	/**
 	 * Initializes a new sphere with the given position and radius.
 	 */
 	SphereGeometry(const Vec3Df &position, float radius);
+
+	/**
+	* Gets the surface area of the geometry.
+	* @return The surface area of the geometry.
+	*/
+	float getArea() const;
 
 	/*
 	 * Calculates whether the sphere is hit by the given ray and sets the intersection parameter

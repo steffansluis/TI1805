@@ -18,11 +18,11 @@ public:
 	BoundingBox(const Vec3Df &min, const Vec3Df &max);
 
 	/**
-	* Tests whether the given ray intersects the bounding box.
-	* @param[in] origin The origin of the vector
-	* @param[in] dir The direction of the vector
-	* @return Returns true if the ray intersects the bounding box; otherwise false.
-	*/
+	 * Tests whether the given ray intersects the bounding box.
+	 * @param[in] origin The origin of the vector
+	 * @param[in] dir The direction of the vector
+	 * @return Returns true if the ray intersects the bounding box; otherwise false.
+	 */
 	bool intersects(const Vec3Df &origin, const Vec3Df &dir) const;
 
 	/**
@@ -53,8 +53,8 @@ public:
 	Vec3Df min;
 
 	/**
-	* The maximum point contained by the bounding box.
-	*/
+	 * The maximum point contained by the bounding box.
+	 */
 	Vec3Df max;
 };
 

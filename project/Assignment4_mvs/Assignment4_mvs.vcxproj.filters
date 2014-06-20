@@ -99,6 +99,12 @@
       <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="Testing.cpp" />
+    <ClCompile Include="PlaneGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="AreaLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -206,6 +212,12 @@
       <Filter>Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Testing.h" />
+    <ClInclude Include="PlaneGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="AreaLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Acceleration Structures">
@@ -213,9 +225,6 @@
     </Filter>
     <Filter Include="Ray Tracers">
       <UniqueIdentifier>{edef72d9-5146-4b91-95fe-c2233047f2ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Cameras">
-      <UniqueIdentifier>{274b87e5-c40d-4138-836a-1f94a77541e7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Geometry">
       <UniqueIdentifier>{2225b482-66bf-4432-b1c8-4f58af704144}</UniqueIdentifier>
@@ -235,8 +244,8 @@
     <Filter Include="Materials\BRDF">
       <UniqueIdentifier>{a005a956-ed3b-4ed5-8d20-99e8750f3c5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Testing">
-      <UniqueIdentifier>{da648214-ecd4-410b-a764-86224e650426}</UniqueIdentifier>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{274b87e5-c40d-4138-836a-1f94a77541e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
