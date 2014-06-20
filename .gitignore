@@ -5,6 +5,7 @@ project/Assignment4_mvs/Assignment4_mvs.sdf
 project/Assignment4_mvs/Assignment4_mvs.vcxproj.user
 project/Assignment4_mvs/Assignment4_mvs/Assignment4_Testing/.vcxproj.user
 project/Assignment4_mvs/ipch/
+project/Assignment4_mvs/build/
 
 # Ignore the output files
 project/Assignment4_mvs/Debug/*

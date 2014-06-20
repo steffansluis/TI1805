@@ -1,15 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#ifdef WIN32
- #include <Windows.h>
-#endif
+#include <cstdio>
 
 #include "Image.h"
 
 bool Image::writeImage(const char * filename)
 {
 	FILE* file;
-	fopen_s(&file, filename, "wb");
+	file = fopen(filename, "wb");
 	if (!file)
 	{
 		printf("dump file problem... file\n");

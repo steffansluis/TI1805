@@ -44,7 +44,7 @@ public:
 	bool calculateAnyIntersection(const Vec3Df &origin, const Vec3Df &dir, float maxDistance, RayIntersection &intersection) const;
 
 private:
-	std::vector<std::shared_ptr<IGeometry>> BTreeAccelerator::retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest) const;
+	std::vector<std::shared_ptr<IGeometry>> retrieveTriangles(const Vec3Df & origin, const Vec3Df & dest) const;
 
 	BTree* xTree;
 	BTree* yTree;

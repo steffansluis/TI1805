@@ -5,6 +5,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "Constants.h"
+
 template<typename T> class Vec3D;
 
 template <class T> bool operator!= (const Vec3D<T> & p1, const Vec3D<T> & p2) {
@@ -217,17 +219,17 @@ public:
         if (v[2] > 0.0f)
             polar[1] = (T) atan (sqrt (v[0] * v[0] + v[1] * v[1]) / v[2]);
         else if (v[2] < 0.0f)
-            polar[1] = (T) atan (sqrt (v[0] * v[0] + v[1] * v[1]) / v[2]) + M_PI;
+            polar[1] = (T) atan (sqrt (v[0] * v[0] + v[1] * v[1]) / v[2]) + Constants::Pi;
         else
-            polar[1] = M_PI * 0.5f;
+            polar[1] = Constants::Pi * 0.5f;
         if (v[0] > 0.0f)
             polar[2] = (T) atan (v[1] / v[0]);
         else if (v[0] < 0.0f)
-            polar[2] = (T) atan (v[1] / v[0]) + M_PI;
+            polar[2] = (T) atan (v[1] / v[0]) + Constants::Pi;
         else if (v[1] > 0)
-            polar[2] = M_PI * 0.5f;
+            polar[2] = Constants::Pi * 0.5f;
         else
-            polar[2] = -M_PI * 0.5;
+            polar[2] = -Constants::Pi * 0.5;
         return polar;
     }
 
