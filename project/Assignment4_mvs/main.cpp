@@ -4,8 +4,8 @@
 #include <windows.h>
 #endif
 
-//#include <GL/glut.h>
-#include "glut\glut.h"
+#include <GL/glut.h>
+//#include "glut\glut.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -21,8 +21,8 @@ Vec3Df MyCameraUp;
 std::vector<Vec3Df> MyLightPositions;
 Mesh MyMesh; //Main mesh
 
-// Utilisé pour essayer différents types de rendu
-// Utilisé via le paramètre "-t" en ligne de commande
+// Utilisï¿½ pour essayer diffï¿½rents types de rendu
+// Utilisï¿½ via le paramï¿½tre "-t" en ligne de commande
 enum { TRIANGLE=0, MODEL=1, };
 unsigned int type = MODEL;
 
@@ -54,7 +54,7 @@ void dessinerRepere(float length)
 }
 
 /**
- * Appel des différentes fonctions de dessin
+ * Appel des diffï¿½rentes fonctions de dessin
  */
 void dessiner( )
 {
@@ -79,7 +79,7 @@ void dessiner( )
 			//glEnd();
 		}
 	default:
-		dessinerRepere(1); // Par défaut
+		dessinerRepere(1); // Par dï¿½faut
 		break;
 	}
 	
@@ -122,7 +122,7 @@ int main(int argc, char** argv)
     tbHelp();                      // affiche l'aide sur la traqueboule
 	MyCameraPosition=getCameraPosition();
     //
-    // Active la lumière
+    // Active la lumiï¿½re
     // Pour la partie
     // ECLAIRAGE
          
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 	glEnable(GL_NORMALIZE);
     glClearColor (0.0, 0.0, 0.0, 0.0);
 
-	// Details sur le mode de tracé
+	// Details sur le mode de tracï¿½
     glEnable( GL_DEPTH_TEST );            // effectuer le test de profondeur
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
@@ -159,11 +159,11 @@ int main(int argc, char** argv)
     // lancement de la boucle principale
     glutMainLoop();
         
-    return 0;  // instruction jamais exécutée
+    return 0;  // instruction jamais exï¿½cutï¿½e
 }
 
 /**
- * Fonctions de gestion opengl à ne pas toucher
+ * Fonctions de gestion opengl ï¿½ ne pas toucher
  */
 // Actions d'affichage
 // Ne pas changer
