@@ -9,6 +9,9 @@ PerspectiveCamera::PerspectiveCamera()
 PerspectiveCamera::PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt)
 : ICamera(position, lookAt), fieldOfView(Constants::PiOver4) {
 }
+PerspectiveCamera::PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt, const Vec3Df &up)
+: ICamera(position, lookAt, up), fieldOfView(Constants::PiOver4) {
+}
 
 float PerspectiveCamera::getFieldOfView() const {
 	return this->fieldOfView;

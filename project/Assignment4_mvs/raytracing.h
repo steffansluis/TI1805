@@ -12,6 +12,7 @@ extern Mesh MyMesh; //Main mesh
 extern std::vector<Vec3Df> MyLightPositions; // A vector of point-light positions
 extern Vec3Df MyCameraPosition;	// The position of the camera
 extern Vec3Df MyCameraTarget;	// The position that the camera is looking at
+extern Vec3Df MyCameraUp;		// The up vector of the camera
 extern unsigned int WindowSize_X;//window resolution width
 extern unsigned int WindowSize_Y;//window resolution height
 extern unsigned int RayTracingResolutionX;  // largeur fenetre

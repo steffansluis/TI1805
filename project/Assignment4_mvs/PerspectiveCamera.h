@@ -14,11 +14,19 @@ public:
 	PerspectiveCamera();
 
 	/**
-	 * Initializes a camera with the given position and target.
-	 * @param[in] position Position of the camera.
-	 * @param[in] lookAt Point which the camera is looking at.
-	 */
+	* Initializes a camera with the given position and target.
+	* @param[in] position Position of the camera.
+	* @param[in] lookAt Point which the camera is looking at.
+	*/
 	PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt);
+
+	/**
+	* Initializes a camera with the given position and target.
+	* @param[in] position Position of the camera.
+	* @param[in] lookAt Point which the camera is looking at.
+	* @param[in] up The up vector of the camera.
+	*/
+	PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt, const Vec3Df &up);
 
 	float getFieldOfView() const;
 	void setFieldOfView(float fov);
