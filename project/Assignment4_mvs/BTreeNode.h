@@ -11,19 +11,25 @@ class BTreeNode
 {
 private:
 
+	BTree* myMaster;
+
 	std::shared_ptr<IGeometry> data;
 	int depth;
 
 	BTree::Coordinate _coordinate;
 
-	BTreeNode* parent;
-	BTreeNode* leftChild;
-	BTreeNode* rightChild;
+	std::shared_ptr<BTreeNode> parent;
+	std::shared_ptr<BTreeNode> leftChild;
+	std::shared_ptr<BTreeNode> rightChild;
+
+	std::shared_ptr<BTreeNode> _myself;
 
 	float GetAverageTriangleValue(std::shared_ptr<IGeometry> triangle) const;
 
 public:
-	BTreeNode(BTreeNode* parent, std::shared_ptr<IGeometry> tData, BTree::Coordinate coordinate);
+	BTreeNode(BTree* master, std::shared_ptr<BTreeNode> parent, std::shared_ptr<IGeometry> tData, BTree::Coordinate coordinate);
+
+	void SetMyself(std::shared_ptr<BTreeNode> myself);
 
 	void AddNode(std::shared_ptr<IGeometry> data);
 
@@ -33,7 +39,27 @@ public:
 
 	void GetTriangles(std::vector<std::shared_ptr<IGeometry>> &collection, float lowerLimit, float upperLimit) const;
 
+
+	// Balancing methods
 	void Balance();
+	void DetermineDepth();
+
+
+	// Data methods
+	void SetParent(std::shared_ptr<BTreeNode> newParent);
+	std::shared_ptr<BTreeNode> GetParent() const;
+
+	void SetLeftChild(std::shared_ptr<BTreeNode> newLeftChild);
+	std::shared_ptr<BTreeNode> GetLeftChild() const;
+
+	void SetRightChild(std::shared_ptr<BTreeNode> newRightChild);
+	std::shared_ptr<BTreeNode> GetRightChild() const;
+
+	void SetDepth(int newDepth);
+	int GetDepth() const;
+
+
+
 };
 
 

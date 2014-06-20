@@ -13,7 +13,7 @@ public:
 	enum class Coordinate { X, Y, Z };
 
 private:
-	BTreeNode* head;
+	std::shared_ptr<BTreeNode> head;
 
 	Coordinate _coordinate;
 
@@ -23,7 +23,12 @@ public:
 
 	void AddNode(std::shared_ptr<IGeometry> data);
 
-	std::vector<std::shared_ptr<IGeometry>> GetTriangles(float lowerLimit, float upperLimit) const;
+	std::vector<std::shared_ptr<IGeometry>> GetTriangles(const float lowerLimit, const float upperLimit) const;
+
+	void SetHeadNode(std::shared_ptr<BTreeNode> headNode);
+
+	std::shared_ptr<BTreeNode> GetHeadNode() const;
+
 };
 
 #endif

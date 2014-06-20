@@ -37,8 +37,11 @@ float BTreeNode::GetAverageTriangleValue(std::shared_ptr<IGeometry> triangle) co
 
 // @Author: Bas Boellaard
 // Create a new Node for the BTree. 
-BTreeNode::BTreeNode(BTreeNode* tParent, std::shared_ptr<IGeometry> tData, BTree::Coordinate coordinate)
+BTreeNode::BTreeNode(BTree* master, std::shared_ptr<BTreeNode> tParent, std::shared_ptr<IGeometry> tData, BTree::Coordinate coordinate)
 {
+	// set the BTree owner
+	this->myMaster = master;
+
 	// set depth to '0' (no children)
 	BTreeNode::depth = 0;
 	this->_coordinate = coordinate;
@@ -46,9 +49,16 @@ BTreeNode::BTreeNode(BTreeNode* tParent, std::shared_ptr<IGeometry> tData, BTree
 
 	this->parent = tParent;
 
-	this->leftChild = NULL;
-	this->rightChild = NULL;
+	//this->leftChild = std::shared_ptr<BTreeNode>();
+	//this->rightChild = NULL;
 }
+
+
+void BTreeNode::SetMyself(std::shared_ptr<BTreeNode> myself)
+{
+	this->_myself = myself;
+}
+
 
 
 // @Author: Bas Boellaard
@@ -70,7 +80,8 @@ void BTreeNode::AddNode(std::shared_ptr<IGeometry> data)
 		else
 		{
 			// since the left child does not exist, add this as the left child. 
-			this->leftChild = new BTreeNode(this, data, this->_coordinate);
+			this->leftChild = std::make_shared<BTreeNode>(this->myMaster, this->_myself, data, this->_coordinate);
+			this->leftChild->SetMyself(this->leftChild);
 
 			// Balance ourselves out, if necessary
 			this->Balance();
@@ -86,7 +97,8 @@ void BTreeNode::AddNode(std::shared_ptr<IGeometry> data)
 		else
 		{
 			// since the right child does not exist, add this as the right child
-			this->rightChild = new BTreeNode(this, data, this->_coordinate);
+			this->rightChild = std::make_shared<BTreeNode>(this->myMaster, this->_myself, data, this->_coordinate);
+			this->rightChild->SetMyself(this->rightChild);
 
 			// balance ourselves out, if necessary
 			this->Balance();
@@ -184,17 +196,17 @@ void BTreeNode::GetTriangles(std::vector<std::shared_ptr<IGeometry>> &collection
 		this->leftChild->GetTriangles(collection, lowerLimit, upperLimit);
 	}
 
+	// if withinLimits equals 0, that means the current triangle was within bounds
+	if (withinLimits == 0)
+	{
+		collection.push_back(this->data);
+	}
+
 	// if the limit is les than (or equal to) 0, we can check the right childs.
 	// this means that the triangles we need have a coordinate larger than this current coordinate.
 	if (withinLimits <= 0 && this->rightChild != NULL)
 	{
 		this->rightChild->GetTriangles(collection, lowerLimit, upperLimit);
-	}
-
-	// if however withinLimits equals 0, that means the current triangle was within bounds
-	if (withinLimits == 0)
-	{
-		collection.push_back(this->data);
 	}
 }
 
@@ -205,25 +217,24 @@ void BTreeNode::GetTriangles(std::vector<std::shared_ptr<IGeometry>> &collection
 // If not, call the parent node to balance.
 void BTreeNode::Balance()
 {
+	this->DetermineDepth();
+
 	int leftDepth = -1;
 	int rightDepth = -1;
 
 	if (this->leftChild != NULL)
 	{
-		leftDepth = BTreeNode::leftChild->depth;
+		leftDepth = this->leftChild->GetDepth();
 	}
 
 	if (this->rightChild != NULL)
 	{
-		rightDepth = BTreeNode::rightChild->depth;
+		rightDepth = this->rightChild->GetDepth();
 	}
-
-	// first, set our own depth properly
-	this->depth = std::max<int>(leftDepth + 1, rightDepth + 1);
 
 
 	// if the difference in depth is more than 3, it requires balancing.
-	if (rightDepth - leftDepth >= 3)
+	if (this->depth - leftDepth >= 3)
 	{
 		// The right part of the node is too large.
 		// assume L = left child ; T = current node (top) ; R = right child
@@ -236,30 +247,37 @@ void BTreeNode::Balance()
 		// - the depth of T becomes the depth of L + 1
 		//
 		// store R in advance
-		BTreeNode* R = this->rightChild;
+		std::shared_ptr<BTreeNode> R = this->rightChild;
+		
+		R->SetParent(this->parent);
 
-		R->parent = this->parent;
-
-		if (R->parent->leftChild == this)
+		// if this is the headnode, assign R as the new head
+		if (this->parent == NULL)
 		{
-			R->parent->leftChild = R;
-		}
-		else if (R->parent->rightChild == this)
-		{
-			R->parent->rightChild = R;
+			this->myMaster->SetHeadNode(R);
 		}
 		else
 		{
-			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
-			throw BTreeException("This node is an orphan!!");
+			if (R->GetParent()->GetLeftChild().get() == this)
+			{
+				R->GetParent()->SetLeftChild(R);
+			}
+			else if (R->GetParent()->GetRightChild().get() == this)
+			{
+				R->GetParent()->SetRightChild(R);
+			}
+			else
+			{
+				throw BTreeException("This node is an orphan!!");
+			}
 		}
 
 		this->parent = R;
-		this->rightChild = R->leftChild;
-		R->leftChild = this;
-		this->depth = this->leftChild->depth + 1;
+		this->rightChild = R->GetLeftChild();
+		R->SetLeftChild(this->_myself);
+		this->DetermineDepth();
 	}
-	else if (leftDepth - rightDepth >= 3)
+	else if (this->depth - rightDepth >= 3)
 	{
 		// The left part of the node is too large.
 		// assume L = left child ; T = current node (top) ; R = right child
@@ -272,28 +290,35 @@ void BTreeNode::Balance()
 		// the depth of T becomes the depth of R + 1
 		//
 		// store L in advance
-		BTreeNode* L = this->leftChild;
+		std::shared_ptr<BTreeNode> L = this->leftChild;
 
-		L->parent = this->parent;
+		L->SetParent(this->parent);
 
-		if (L->parent->leftChild == this)
+		// if this is the headnode, assign L as the new head
+		if (this->parent == NULL)
 		{
-			L->parent->leftChild = L;
-		}
-		else if (L->parent->rightChild == this)
-		{
-			L->parent->rightChild = L;
+			this->myMaster->SetHeadNode(L);
 		}
 		else
 		{
-			std::cout << "something went seriously wrong!!! BTreeNode::Balance()";
-			throw BTreeException("This node is an orphan!!");
+			if (L->GetParent()->GetLeftChild().get() == this)
+			{
+				L->GetParent()->SetLeftChild(L);
+			}
+			else if (L->GetParent()->GetRightChild().get() == this)
+			{
+				L->GetParent()->SetRightChild(L);
+			}
+			else
+			{
+				throw BTreeException("This node is an orphan!!");
+			}
 		}
 
 		this->parent = L;
-		this->leftChild = L->rightChild;
-		L->rightChild = this;
-		this->depth = this->rightChild->depth + 1;
+		this->leftChild = L->GetRightChild();
+		L->SetRightChild(this->_myself);
+		this->DetermineDepth();
 	}
 
 	// if the tree was balanced, there is no need to set any other depths. 
@@ -305,6 +330,80 @@ void BTreeNode::Balance()
 		this->parent->Balance();
 	}
 }
+
+
+void BTreeNode::DetermineDepth()
+{
+	int leftDepth = -1;
+	int rightDepth = -1;
+
+	if (this->leftChild != NULL)
+	{
+		leftDepth = this->leftChild->GetDepth();
+	}
+
+	if (this->rightChild != NULL)
+	{
+		rightDepth = this->rightChild->GetDepth();
+	}
+
+	// set our own depth properly
+	this->depth = std::max<int>(leftDepth + 1, rightDepth + 1);
+}
+
+
+
+
+
+
+////////////////////// Data Methods /////////////////////
+
+void BTreeNode::SetParent(std::shared_ptr<BTreeNode> newParent)
+{
+	this->parent = newParent;
+}
+
+std::shared_ptr<BTreeNode> BTreeNode::GetParent() const
+{
+	return this->parent;
+}
+
+
+void BTreeNode::SetLeftChild(std::shared_ptr<BTreeNode> newLeftChild)
+{
+	this->leftChild = newLeftChild;
+}
+
+std::shared_ptr<BTreeNode> BTreeNode::GetLeftChild() const
+{
+	return this->leftChild;
+}
+
+
+void BTreeNode::SetRightChild(std::shared_ptr<BTreeNode> newRightChild)
+{
+	this->rightChild = newRightChild;
+}
+
+std::shared_ptr<BTreeNode> BTreeNode::GetRightChild() const
+{
+	return this->rightChild;
+}
+
+
+
+void BTreeNode::SetDepth(int newDepth)
+{
+	this->depth = newDepth;
+}
+
+int BTreeNode::GetDepth() const
+{
+	return this->depth;
+}
+
+
+
 
 
 
