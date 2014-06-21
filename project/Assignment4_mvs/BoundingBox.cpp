@@ -21,7 +21,27 @@ bool BoundingBox::intersects(const Vec3Df &origin, const Vec3Df &dir) const {
 }
 
 bool BoundingBox::intersects(const Vec3Df &origin, const Vec3Df &dir, float &distance) const {
-	// TODO: Implement the intersection function
+	float Tx_min = (this->min[0] - origin[0]) / dir[0];
+	float Ty_min = (this->min[1] - origin[1]) / dir[1];
+	float Tz_min = (this->min[2] - origin[2]) / dir[2];
+	float Tx_max = (this->max[0] - origin[0]) / dir[0];
+	float Ty_max = (this->max[1] - origin[1]) / dir[1];
+	float Tz_max = (this->max[2] - origin[2]) / dir[2];
+	
+	float Tin_x = std::min<float>(Tx_min, Tx_max);
+	float Tout_x = std::max<float>(Tx_min, Tx_max);
+	float Tin_y = std::min<float>(Ty_min, Ty_max);
+	float Tout_y = std::max<float>(Ty_min, Ty_max);
+	float Tin_z = std::min<float>(Tz_min, Tz_max);
+	float Tout_z = std::max<float>(Tz_min, Tz_max);
+	
+	float Tin = std::max<float>(Tin_x, std::max<float>(Tin_y, Tin_z));
+	float Tout = std::min<float>(Tout_x, std::min<float>(Tout_y, Tout_z));
+	
+	if(Tin > Tout || Tout < 0){
+		return false;
+	}
+	
 	return true;
 }
 

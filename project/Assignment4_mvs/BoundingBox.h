@@ -11,7 +11,7 @@ public:
 	BoundingBox();
 
 	/**
-	 * Initializes a bounding box defined by the givin minimum and maximum.
+	 * Initializes a bounding box defined by the given minimum and maximum.
 	 * @param[in] min The minimum point contained by the bounding box.
 	 * @param[in] max The maximum point contained by the bounding box.
 	 */
@@ -27,10 +27,10 @@ public:
 
 	/**
 	 * Tests whether the given ray intersects the bounding box and calculates
-	 * the distance at which the intersection occured.
+	 * the distance at which the intersection occurred.
 	 * @param[in] origin The origin of the vector
 	 * @param[in] dir The direction of the vector
-	 * @param[out] distance The distance at which the intersection occured, if any.
+	 * @param[out] distance The distance at which the intersection occurred, if any.
 	 * @return Returns true if the ray intersects the bounding box; otherwise false.
 	 */
 	bool intersects(const Vec3Df &origin, const Vec3Df &dir, float &distance) const;
