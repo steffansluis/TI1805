@@ -49,7 +49,6 @@ public:
 	 */
 	void addGeometry(std::shared_ptr<IGeometry> geometry);
 
-
 	/*
 	 * Adds a light to the scene.
 	 * @param[in] geometry Pointer to an ILight.
@@ -82,6 +81,11 @@ public:
 	float getLightSampleDensity() const;
 
 	/**
+	 * Gets the ambient light color.
+	 */
+	Vec3Df getAmbientLight() const;
+
+	/**
 	 * Sets the acceleration structure that is used to find speed up
 	 * the intersection calculations.
 	 * @param[in] accelerator Pointer to an acceleration structure.
@@ -108,6 +112,11 @@ public:
 	void setLightSampleDensity(float density);
 
 	/**
+	 * Sets the ambient light color.
+	 */
+	void setAmbientLight(const Vec3Df &ambientLight);
+
+	/**
 	 * Renders the scene as seen from the given camera.
 	 * @param[in] camera Pointer to the camera that observes the scene.
 	 * @param width The width of the render.
@@ -123,6 +132,7 @@ private:
 	void preprocess();
 
 	float lightSampleDensity;
+	Vec3Df ambientLight;
 	std::shared_ptr<IAccelerationStructure> accelerator;
 	std::shared_ptr<IRayTracer> rayTracer;
 	std::shared_ptr<std::vector<std::shared_ptr<IGeometry>>> geometry;

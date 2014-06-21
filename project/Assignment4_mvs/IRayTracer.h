@@ -36,7 +36,27 @@ public:
 	 * @param[in] dir		The direction of the ray.
 	 * @return The light towards the given ray.
 	 */
-	virtual Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir) = 0;
+	Vec3Df performRayTracing(const Vec3Df &origin, const Vec3Df &dir) const;
+
+	/**
+	* Performs a ray tracing iteration.
+	*
+	* Traces the given ray through the scene and returns the light reflected backwards the ray.
+	* Stops recursion when iteration reaches the max iterations limit.
+	*
+	* @param[in] origin	The origin of the ray.
+	* @param[in] dir		The direction of the ray.
+	* @param[in] iteration	The current iteration.
+	* @param[in] refractiveIndex The refractive index of the current medium.
+	* @param[out] distance	The distance to the closest surface hit by the ray.
+	* @return The light towards the given ray.
+	*/
+	virtual Vec3Df performRayTracingIteration(
+		const Vec3Df &origin, 
+		const Vec3Df &dir, 
+		int iteration, 
+		float refractiveIndex, 
+		float &distance) const = 0;
 
 private:
 	const Scene *scene;

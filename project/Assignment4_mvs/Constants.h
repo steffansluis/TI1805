@@ -7,6 +7,16 @@
 class Constants {
 public:
 	/**
+	 * The refractive index of air.
+	 */
+	const static float AirRefractiveIndex;
+
+	/**
+	 * An arbitrary small value.
+	 */
+	const static float Epsilon;
+
+	/**
 	 * The value of pi.
 	 */
 	const static float Pi;

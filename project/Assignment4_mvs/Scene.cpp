@@ -70,6 +70,10 @@ float Scene::getLightSampleDensity() const {
 	return this->lightSampleDensity;
 }
 
+Vec3Df Scene::getAmbientLight() const {
+	return this->ambientLight;
+}
+
 void Scene::setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator) {
 	assert(accelerator);
 	
@@ -100,6 +104,10 @@ void Scene::setLightSampleDensity(float density) {
 	this->lightSampleDensity = density;
 }
 
+void Scene::setAmbientLight(const Vec3Df& ambientLight) {
+	this->ambientLight = ambientLight;
+}
+
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {
 	assert(camera);
 	assert(width > 0);
@@ -114,11 +122,22 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	// Create an image
 	auto result = std::make_shared<Image>(width, height);
 
+	// A counter for the iteration of the ray-tracing algorithm. 
+	int iterationCounter = 0;
+
 	// Iterate through each pixel
 	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
+		for (int x = 0; x < width; x++, iterationCounter++) {
 			Vec3Df origin;
 			Vec3Df dir;
+
+#if _DEBUG	// _DEBUG is probably not defined in GCC
+			// print the iteration
+			if (iterationCounter % 100 == 0)
+			{
+				std::cout << "iteration: " << iterationCounter << "\n";
+			}
+#endif
 
 			// Get the ray from the camera through the current pixel
 			camera->getRay(x, y, origin, dir);

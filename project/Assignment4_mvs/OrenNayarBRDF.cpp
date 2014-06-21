@@ -30,5 +30,5 @@ OrenNayarBRDF::OrenNayarBRDF(const IMaterial *material)
 
 Vec3Df OrenNayarBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
 	// TODO: oren-nayar brdf
-	return this->material->sampleDiffuseColor(texCoords);
+	return this->material->sampleColor(texCoords) * this->material->getDiffuseCoefficient();
 }

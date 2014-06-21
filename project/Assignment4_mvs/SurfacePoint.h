@@ -44,9 +44,11 @@ public:
 	 * This is not physically correct.
 	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] scene The scene.
+	 * @param[in] iteration	The current iteration.
+	 * @param[in] refractiveIndex The refractive index of the current medium.
 	 * @return The light specularly reflected towards the outgoing vector.
 	 */
-	Vec3Df specularLight(const Vec3Df &reflectedVector, const Scene *scene) const;
+	Vec3Df specularLight(const Vec3Df &reflectedVector, const Scene *scene, int iteration, float refractiveIndex) const;
 
 	/**
 	 * The point on the surface.

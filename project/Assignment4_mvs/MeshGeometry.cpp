@@ -3,7 +3,6 @@
 #include <math.h>
 
 #include "IAccelerationStructure.h"
-#include "DiffuseMaterial.h"
 #include "mesh.h"
 #include "MeshGeometry.h"
 #include "MeshTriangleGeometry.h"

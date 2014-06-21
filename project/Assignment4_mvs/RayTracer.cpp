@@ -2,6 +2,7 @@
 #include <cassert>
 #include <vector>
 
+#include "Constants.h"
 #include "ILight.h"
 #include "RayTracer.h"
 #include "RayIntersection.h"
@@ -9,39 +10,30 @@
 #include "SurfacePoint.h"
 #include "Vec3D.h"
 
-// Returns the color of your pixel.
-Vec3Df RayTracer::performRayTracing(const Vec3Df &origin, const Vec3Df &dir) {
-
-	// print the iteration
-	if (this->iterationCounter % 100 == 0)
-	{
-		std::cout << "iteration: " << this->iterationCounter << "\n";
-	}
-
-	this->iterationCounter++;
-	
-
-	// call the first iteration of the ray-tracing
-	return this->performRayTracingIteration(origin, dir, 0);
-}
-
-
-
-void RayTracer::resetCounter()
-{
-	this->iterationCounter = 0;
-}
-
-
-
-
-
-
 // @Author: Bas Boellaard
 // This performs ray-tracing and has an iteration for limited amount of iterations. 
 // If you need your method to do a color-lookup for another ray, please call this method with an 
 // incremented iteration-count.
-Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df &dir, const int iteration) const {
+/**
+* Performs a ray tracing iteration.
+*
+* Traces the given ray through the scene and returns the light reflected backwards the ray.
+* Stops recursion when iteration reaches the max iterations limit.
+*
+* @param[in] origin	The origin of the ray.
+* @param[in] dir		The direction of the ray.
+* @param[in] iteration	The current iteration.
+* @param[in] refractiveIndex The refractive index of the current medium.
+* @param[out] distance	The distance to the closest surface hit by the ray.
+* @return The light towards the given ray.
+*/
+Vec3Df RayTracer::performRayTracingIteration(
+	const Vec3Df &origin,
+	const Vec3Df &dir,
+	int iteration,
+	float refractiveIndex,
+	float &distance) const
+{
 	assert(this->getScene());
 
 	// If the maximum amount of iterations has been reached, return the zero-vector (black).
@@ -60,13 +52,15 @@ Vec3Df RayTracer::performRayTracingIteration(const Vec3Df &origin, const Vec3Df 
 		return Vec3Df(0, 0, 0);
 	}
 
+	distance = intersection.distance;
+
 	// Execute all the different graphics techniques.
-	return this->performShading(intersection, iteration);
+	return this->performShading(intersection, iteration, refractiveIndex);
 }
 
 // @Author: Martijn van Dorp
 // Performs basic whitted-style shading.
-Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int iteration) const {
+Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iteration, float refractiveIndex) const {
 	// Needed for the shadow intersection test but can be ignored.
 	RayIntersection shadowIntersection;
 
@@ -87,7 +81,7 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 	Vec3Df lighting = Vec3Df();
 	lighting += surface.ambientLight(this->getScene());
 	lighting += surface.emittedLight(viewVector);
-	lighting += surface.specularLight(viewVector, scene);
+	lighting += surface.specularLight(viewVector, scene, iteration, refractiveIndex);
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {
@@ -113,23 +107,17 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, const int 
 			lightVector = (lightPoint - surface.point);
 			float lightDistance = lightVector.normalize();
 
-			// For the shadow ray we use a small offset from the surface
-			// so that a surface will not accidently shadow itsself.
-			// Similiarly we make the shadow segment sligthly shorter so
-			// that the light does not shadow itsself either in case of a geometric light.
-			const float smallNumber = 1e-4f;
-
 			// The length of the shadow ray segment, this is sligthly smaller
 			// than the actual distance between the object and light to
 			// prevent intersecting the object and lightsource themselves.
-			float segmentLength = lightDistance - 2.0f * smallNumber;
+			float segmentLength = lightDistance - 2.0f * Constants::Epsilon;
 
 			// If the light and object are extremely close then the segment length may become negative,
 			// only check shadows if there is enough room between the object and light.
 			if (segmentLength > 0.0f) {
 				// If the segment between the light and intersection intersects any geometry
 				// then the intersection is in shadow, continue to the next light.
-				if (scene->calculateAnyIntersection(surface.point + lightVector * smallNumber, lightVector, segmentLength, shadowIntersection))
+				if (scene->calculateAnyIntersection(surface.point + lightVector * Constants::Epsilon, lightVector, segmentLength, shadowIntersection))
 					continue;
 			}
 

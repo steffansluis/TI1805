@@ -1,13 +1,12 @@
 #include <cassert>
 
-#include "DiffuseMaterial.h"
 #include "IGeometry.h"
 #include "IMaterial.h"
 #include "RayIntersection.h"
 #include "SurfacePoint.h"
 
 IGeometry::IGeometry()
-: IGeometry(std::make_shared<const DiffuseMaterial>()) {
+: IGeometry(std::make_shared<const IMaterial>()) {
 }
 
 IGeometry::IGeometry(std::shared_ptr<const IMaterial> material) {
