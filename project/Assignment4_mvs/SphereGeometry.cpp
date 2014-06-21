@@ -40,6 +40,5 @@ void SphereGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 }
 
 BoundingBox SphereGeometry::getBoundingBox() const {
-	// TODO: Return a bounding box
-	return BoundingBox();
+	return BoundingBox(this->position - this->radius, this->position + this->radius);
 }
