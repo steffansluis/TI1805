@@ -42,6 +42,8 @@ bool BoundingBox::intersects(const Vec3Df &origin, const Vec3Df &dir, float &dis
 		return false;
 	}
 	
+	distance = Tin * dir;
+	
 	return true;
 }
 
