@@ -3,8 +3,6 @@
 
 #include "BoundingBox.h"
 
-// TODO: Implement the BoundingBox::intersects functions
-
 BoundingBox::BoundingBox() :
 min(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity()),
 max(-std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity()) {
@@ -42,7 +40,7 @@ bool BoundingBox::intersects(const Vec3Df &origin, const Vec3Df &dir, float &dis
 		return false;
 	}
 	
-	distance = Tin * dir;
+	distance = Tin;
 	
 	return true;
 }
