@@ -6,8 +6,8 @@
 #include <windows.h>
 #endif
 
-//#include <GL/glut.h>
-#include "glut\glut.h"
+#include <GL/glut.h>
+//#include "glut\glut.h"
 
 #include <stdio.h>
 #include <string.h>
