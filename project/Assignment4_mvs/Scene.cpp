@@ -6,7 +6,7 @@
 #include "IGeometry.h"
 #include "ILight.h"
 #include "IRayTracer.h"
-//#include "NoAccelerationStructure.h"
+#include "NoAccelerationStructure.h"
 #include "BTreeAccelerator.h"
 #include "RayIntersection.h"
 #include "RayTracer.h"
@@ -16,9 +16,9 @@
 Scene::Scene() :
 geometry(std::make_shared<std::vector<std::shared_ptr<IGeometry>>>()),
 lights(std::make_shared<std::vector<std::shared_ptr<ILight>>>()),
-lightSampleDensity(100.0f) {
+lightSampleDensity(10.0f) {
 	// Set the acceleration structure
-	this->setAccelerationStructure(std::make_shared<BTreeAccelerator>());
+	this->setAccelerationStructure(std::make_shared<NoAccelerationStructure>());
 
 	// Set the default ray tracer
 	this->setRayTracer(std::make_shared<RayTracer>());

@@ -90,7 +90,7 @@ void animate()
 {
 	MyCameraPosition = getCameraPosition();
 	MyCameraTarget = getCameraForward();
-	MyCameraUp = getCameraUp();
+	MyCameraUp = getCameraUp() - MyCameraPosition;
 
 	glutPostRedisplay();
 }
