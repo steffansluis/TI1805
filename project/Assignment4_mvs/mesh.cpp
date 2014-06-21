@@ -3,9 +3,10 @@
 #include "mesh.h"
 
 #ifdef WIN32
- #include <glut/glut.h>
+ #include "glut/glut.h"
 #else
  #include "glut/glut.h"
+ #include <GL/glut.h>
 #endif
 
 #include <stdio.h>
