@@ -27,18 +27,15 @@ absorbance(0.0f),
 roughness(0.0f),
 shininess(45.0f),
 refractiveIndex(Constants::AirRefractiveIndex),
-brdf(NULL),
+diffuseBrdf(NULL),
+specularBrdf(NULL),
 reflection(NULL)
 {
 	static auto white = std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1));
 
-	//std::shared_ptr<const BRDF> lambertianBrdf = std::make_shared<LambertianBRDF>(this);
-	//std::shared_ptr<const BRDF> orenNayarBrdf = std::make_shared<LambertianBRDF>(this);
-	//std::shared_ptr<const BRDF> blinnPhongBrdf = std::make_shared<BlinnPhongBRDF>(this);
-	std::shared_ptr<const BRDF> phongBrdf = std::make_shared<PhongBRDF>(this);
-
 	this->setTexture(white);
-	this->setBRDF<PhongBRDF>();
+	this->setDiffuseBRDF<LambertianBRDF>();
+	this->setSpecularBRDF<BlinnPhongBRDF>();
 }
 IMaterial::~IMaterial() {
 }
@@ -122,14 +119,25 @@ Vec3Df IMaterial::sampleColor(const Vec2Df &texCoords) const {
 }
 
 template<class T>
-void  IMaterial::setBRDF() {
+void  IMaterial::setDiffuseBRDF() {
 	static_assert(std::is_base_of<BRDF, T>::value, "Type T must be subclass of BRDF");
 
-	if (this->brdf) {
-		delete this->brdf;
+	if (this->diffuseBrdf) {
+		delete this->diffuseBrdf;
 	}
 
-	this->brdf = new T(this);
+	this->diffuseBrdf = new T(this);
+}
+
+template<class T>
+void  IMaterial::setSpecularBRDF() {
+	static_assert(std::is_base_of<BRDF, T>::value, "Type T must be subclass of BRDF");
+
+	if (this->specularBrdf) {
+		delete this->specularBrdf;
+	}
+
+	this->specularBrdf = new T(this);
 }
 
 template<class T>
@@ -152,13 +160,19 @@ Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflec
 }
 
 Vec3Df IMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const {
-	if (this->brdf) {
-		// If we have a BRDF set, sample its reflectance
-		return this->brdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
+	Vec3Df result = Vec3Df();
+
+	if (this->diffuseBrdf) {
+		// If we have a diffuse BRDF set, sample its reflectance
+		result += this->diffuseReflectance * this->diffuseBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 	}
-	else {
-		return Vec3Df();
+
+	if (this->specularBrdf) {
+		// If we have a specular BRDF set, sample its reflectance
+		result += this->specularReflectance * this->specularBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 	}
+
+	return result;
 }
 
 Vec3Df IMaterial::specularLight(

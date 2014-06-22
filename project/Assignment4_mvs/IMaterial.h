@@ -127,11 +127,18 @@ public:
 	Vec3Df sampleColor(const Vec2Df &texCoords) const;
 
 	/**
-	 * Sets the BRDF of this material using its type.
+	 * Sets the diffuse BRDF of this material using its type.
 	 * Example usage: material.setBRDF<LambertianBRDF>().
 	 */
 	template<class T>
-	void setBRDF();
+	void setDiffuseBRDF();
+
+	/**
+	* Sets the specular BRDF of this material using its type.
+	* Example usage: material.setBRDF<LambertianBRDF>().
+	*/
+	template<class T>
+	void setSpecularBRDF();
 
 	/**
 	* Sets the Reflection of this material using its type.
@@ -193,7 +200,8 @@ private:
 	float roughness;
 	float shininess;
 	float refractiveIndex;
-	const BRDF *brdf;
+	const BRDF *diffuseBrdf;
+	const BRDF *specularBrdf;
 	const Reflection *reflection;
 };
 
