@@ -53,6 +53,9 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 	else if (dot_dir_normal > 0.0f) {
 		intersection.isInside = true;
 	}
+	else {
+		intersection.isInside = false;
+	}
 
 	// to calculate the length of the ray that goes towards the triangle, we can calculate 
 	// D = n * v_0
