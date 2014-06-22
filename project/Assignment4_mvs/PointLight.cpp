@@ -22,7 +22,7 @@ void PointLight::setColor(const Vec3Df &color) {
 	this->color = color;
 }
 
-void PointLight::sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lightColor) const {
+bool PointLight::sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lightColor) const {
 	// Set the light point to the position of the light
 	lightPoint = this->position;
 
@@ -31,4 +31,7 @@ void PointLight::sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &li
 
 	// Set the light's color
 	lightColor = this->getColor() * this->calculateIntensity(distance);
+
+	// Realisticly this should return false 50% of the time
+	return true;
 }

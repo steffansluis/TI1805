@@ -80,8 +80,9 @@ public:
 	 * @param[in] point A point in the scene.
 	 * @param[out] lightPoint A point on the light source.
 	 * @param[out] lightColor The light emitted along the outgoing vector.
+	 * @return Returns true if the point is visible from the light source; otherwise false.
 	 */
-	virtual void sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lightColor) const = 0;
+	virtual bool sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lightColor) const = 0;
 
 protected:
 	/**

@@ -10,15 +10,18 @@ float Random::sampleUnit() {
 }
 
 void Random::sampleUnitDisk(float &u, float &v) {
-	do {
-		// Get two random floats in the range [0, 1]
-		u = rand() / static_cast<float>(RAND_MAX);
-		v = rand() / static_cast<float>(RAND_MAX);
+	// Generate a random angle in the range [0, 2pi] 
+	float s = Constants::TwoPi * (rand() / static_cast<float>(RAND_MAX));
 
-		// Map the numbers to [-1, 1]
-		u = (u - 0.5f) * 2.0f;
-		v = (v - 0.5f) * 2.0f;
-	} while (u * u + v * v > 1.0f);
+	// Generate a random radius in the range [0, 2]
+	float t = rand() / static_cast<float>(RAND_MAX) + rand() / static_cast<float>(RAND_MAX);
+	
+	// Map the radius to [-1, 1]
+	float r = t > 1.0f ? 2.0f - t : t;
+
+	// Use the random radius and angle to generate a random point
+	u = r * cosf(s);
+	v = r * sinf(s);
 }
 
 void Random::sampleUnitSquare(float &u, float &v) {
