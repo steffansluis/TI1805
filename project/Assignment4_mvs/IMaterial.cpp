@@ -35,10 +35,10 @@ reflection(NULL)
 	//std::shared_ptr<const BRDF> lambertianBrdf = std::make_shared<LambertianBRDF>(this);
 	//std::shared_ptr<const BRDF> orenNayarBrdf = std::make_shared<LambertianBRDF>(this);
 	//std::shared_ptr<const BRDF> blinnPhongBrdf = std::make_shared<BlinnPhongBRDF>(this);
-	//std::shared_ptr<const BRDF> phongBrdf = std::make_shared<PhongBRDF>(this);
+	std::shared_ptr<const BRDF> phongBrdf = std::make_shared<PhongBRDF>(this);
 
 	this->setTexture(white);
-	this->setBRDF<LambertianBRDF>();
+	this->setBRDF<PhongBRDF>();
 }
 IMaterial::~IMaterial() {
 }
