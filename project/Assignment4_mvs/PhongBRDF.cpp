@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <math.h>
 
 #include "IMaterial.h"
 #include "ITexture.h"
@@ -23,7 +22,7 @@ PhongBRDF::PhongBRDF(const IMaterial * material)
 	@author Joren Hammudoglu
 */
 Vec3Df PhongBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
-	Vec3Df Lm = light - incommingVector;
+	Vec3Df Lm = incommingVector;
 	Lm.normalize();
 
 	Vec3Df Nm = normal;
@@ -36,5 +35,5 @@ Vec3Df PhongBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &refle
 	V.normalize();
 
 	float VdotR = std::max<float>(0, Vec3Df::dotProduct(Rm, V));
-	return this->material->sampleColor(texCoords) * pow(VdotR, this->material->getShininess());
+	return this->material->sampleColor(texCoords) * std::pow(VdotR, this->material->getShininess());
 }
