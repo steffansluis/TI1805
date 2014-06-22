@@ -99,7 +99,7 @@ void Scene::setRayTracer(std::shared_ptr<IRayTracer> rayTracer) {
 }
 
 void Scene::setLightSampleDensity(float density) {
-	assert(density > 0.0f);
+	assert(density >= 0.0f);
 
 	this->lightSampleDensity = density;
 }

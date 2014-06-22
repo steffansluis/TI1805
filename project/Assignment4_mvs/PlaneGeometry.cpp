@@ -5,8 +5,12 @@
 #include "RayIntersection.h"
 #include "SurfacePoint.h"
 
-PlaneGeometry::PlaneGeometry(const Vec3Df &normal, float distance) 
+PlaneGeometry::PlaneGeometry(const Vec3Df &normal, float distance)
 : normal(normal), distance(distance) {
+}
+
+PlaneGeometry::PlaneGeometry(const Vec3Df &normal, const Vec3Df &point)
+: normal(normal), distance(Vec3Df::dotProduct(normal, point)) {
 }
 
 float PlaneGeometry::getArea() const {
@@ -16,7 +20,7 @@ float PlaneGeometry::getArea() const {
 bool PlaneGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
 	Vec3Df p = this->normal * this->distance;
 
-	float dir_dot_normal = Vec3Df::dotProduct(dir, -this->normal);
+	float dir_dot_normal = Vec3Df::dotProduct(dir, this->normal);
 
 	if (dir_dot_normal == 0.0f) {
 		return false;
@@ -24,8 +28,11 @@ bool PlaneGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec
 	else if (dir_dot_normal > 0.0f) {
 		intersection.isInside = true;
 	}
+	else {
+		intersection.isInside = false;
+	}
 
-	float t = Vec3Df::dotProduct(p - origin, -this->normal) / dir_dot_normal;
+	float t = Vec3Df::dotProduct(p - origin, this->normal) / dir_dot_normal;
 
 	if (t < 0.0f) {
 		return false;

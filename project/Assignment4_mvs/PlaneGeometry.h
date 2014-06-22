@@ -7,17 +7,23 @@
 class PlaneGeometry : public IGeometry {
 public:
 	/**
-	 * Initializes a new plane with the given normal and distance from origin.
-	 * @param[in] normal The normal of the plane.\*$^([ \t])
-	 * @param distance The distance from the origin in the direction of the normal.
-	 */
+	* Initializes a new plane with the given normal and distance from origin.
+	* @param[in] normal The normal of the plane.
+	* @param distance The distance from the origin in the direction of the normal.
+	*/
 	PlaneGeometry(const Vec3Df &normal, float distance);
+	/**
+	* Initializes a new plane with the given normal and point.
+	* @param[in] normal The normal of the plane.
+	* @param[in] normal A point on the plane.
+	*/
+	PlaneGeometry(const Vec3Df &normal, const Vec3Df &point);
 
 	/**
 	* Gets the surface area of the geometry.
 	* @return The surface area of the geometry.
 	*/
-	float getArea() const;
+	virtual float getArea() const;
 
 	/*
 	* Calculates whether the object is hit by the given ray and sets the intersection parameter
@@ -27,7 +33,7 @@ public:
 	* @param[out] intersection Reference to a RayIntersection representing the intersection point of the ray.
 	* @return True if the ray intersected an object; otherwise false.
 	*/
-	bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const;
+	virtual bool calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const;
 
 	/**
 	 * Gets the surface point on this geometry at the given intersection point.
@@ -41,12 +47,12 @@ public:
 	 * @return A random surface point on this geometry.
 	 * @remarks This will be needed when implementing area lights, so that we can sample the light volume.
 	 */
-	void getRandomSurfacePoint(SurfacePoint &surface) const;
+	virtual void getRandomSurfacePoint(SurfacePoint &surface) const;
 
 	/**
 	 * Returns a bounding box that bounds this geometry.
 	 */
-	BoundingBox getBoundingBox() const;
+	virtual BoundingBox getBoundingBox() const;
 
 private:
 	Vec3Df normal;
