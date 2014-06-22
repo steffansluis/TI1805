@@ -53,5 +53,5 @@ float ILight::calculateAttenuation(float distance) const {
 }
 
 float ILight::calculateIntensity(float distance) const {
-	return this->getArea() * this->intensity * this->calculateAttenuation(distance);
+	return this->intensity / this->getArea() * this->calculateAttenuation(distance);
 }

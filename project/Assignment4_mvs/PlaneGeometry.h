@@ -54,7 +54,7 @@ public:
 	 */
 	virtual BoundingBox getBoundingBox() const;
 
-private:
+protected:
 	Vec3Df normal;
 	float distance;
 };

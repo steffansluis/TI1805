@@ -119,6 +119,7 @@
     <ClInclude Include="BTreeNode.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ConstantTexture.h" />
+    <ClInclude Include="DiskGeometry.h" />
     <ClInclude Include="FresnelReflection.h" />
     <ClInclude Include="GlossySpecularReflection.h" />
     <ClInclude Include="IAccelerationStructure.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="BTreeNode.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ConstantTexture.cpp" />
+    <ClCompile Include="DiskGeometry.cpp" />
     <ClCompile Include="IAccelerationStructure.cpp" />
     <ClCompile Include="ICamera.cpp" />
     <ClCompile Include="IGeometry.cpp" />

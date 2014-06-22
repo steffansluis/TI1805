@@ -105,6 +105,9 @@
     <ClCompile Include="Reflection.cpp">
       <Filter>Materials\Reflection</Filter>
     </ClCompile>
+    <ClCompile Include="DiskGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -218,14 +221,17 @@
     <ClInclude Include="Reflection.h">
       <Filter>Materials\Reflection</Filter>
     </ClInclude>
+    <ClInclude Include="FresnelReflection.h">
+      <Filter>Materials\Reflection</Filter>
+    </ClInclude>
     <ClInclude Include="SpecularReflection.h">
       <Filter>Materials\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="GlossySpecularReflection.h">
       <Filter>Materials\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="FresnelReflection.h">
-      <Filter>Materials\Reflection</Filter>
+    <ClInclude Include="DiskGeometry.h">
+      <Filter>Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

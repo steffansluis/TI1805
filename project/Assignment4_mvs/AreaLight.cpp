@@ -10,7 +10,7 @@ AreaLight::AreaLight(std::shared_ptr<IGeometry> geometry) {
 	this->setGeometry(geometry);
 }
 
-void AreaLight::sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lightColor) const {
+bool AreaLight::sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lightColor) const {
 	SurfacePoint surface;
 	Vec3Df lightVector;
 
@@ -24,6 +24,12 @@ void AreaLight::sampleLight(const Vec3Df &point, Vec3Df &lightPoint, Vec3Df &lig
 	lightVector = point - lightPoint;
 	float distance = lightVector.normalize();
 
+	// If the [point is on the wrong side of the surface return false
+	if (Vec3Df::dotProduct(surface.normal, lightVector) <= 0.0f)
+		return false;
+
 	// Set the light's color
 	lightColor = surface.emittedLight(lightVector) * this->calculateIntensity(distance);
+
+	return true;
 }

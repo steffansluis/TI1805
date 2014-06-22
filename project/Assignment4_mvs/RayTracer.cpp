@@ -99,7 +99,8 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iterat
 
 		for (int i = 0; i < lightSamples; i++) {
 			// Sample the light for a position and color
-			light->sampleLight(surface.point, lightPoint, lightColor);
+			if (!light->sampleLight(surface.point, lightPoint, lightColor))
+				continue;
 
 			// Compute the vector from the intersection towards the light
 			lightVector = (lightPoint - surface.point);
