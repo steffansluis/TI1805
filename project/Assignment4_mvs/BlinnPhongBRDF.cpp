@@ -22,5 +22,5 @@ BlinnPhongBRDF::BlinnPhongBRDF(const IMaterial *material)
 
 Vec3Df BlinnPhongBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
 	// TODO: Blinn-Phong brdf
-	return this->material->sampleColor(texCoords) * this->material->getReflectiveness();
+	return this->material->sampleColor(texCoords) * this->material->getSpecularReflectance();
 }

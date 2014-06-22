@@ -18,10 +18,10 @@
 
 IMaterial::IMaterial() :
 texture(nullptr),
-ambientCoefficient(1.0f),
-diffuseCoefficient(1.0f),
+ambientReflectance(1.0f),
+diffuseReflectance(1.0f),
+specularReflectance(1.0f),
 emissiveness(0.0f),
-reflectiveness(0.0f),
 transparency(0.0f),
 absorbance(0.0f),
 roughness(0.0f),
@@ -46,17 +46,17 @@ IMaterial::~IMaterial() {
 std::shared_ptr<const ITexture> IMaterial::getTexture() const{
 	return this->texture;
 }
-float IMaterial::getAmbientCoefficient() const {
-	return this->ambientCoefficient;
+float IMaterial::getAmbientReflectance() const {
+	return this->ambientReflectance;
 }
-float IMaterial::getDiffuseCoefficient() const {
-	return this->diffuseCoefficient;
+float IMaterial::getDiffuseReflectance() const {
+	return this->diffuseReflectance;
+}
+float IMaterial::getSpecularReflectance() const {
+	return this->specularReflectance;
 }
 float IMaterial::getEmissiveness() const {
 	return this->emissiveness;
-}
-float IMaterial::getReflectiveness() const {
-	return this->reflectiveness;
 }
 float IMaterial::getTransparency() const {
 	return this->transparency;
@@ -76,25 +76,25 @@ void IMaterial::setTexture(std::shared_ptr<const ITexture> texture) {
 	
 	this->texture = texture;
 }
-void IMaterial::setAmbientCoefficient(float ambientCoefficient) {
-	assert(ambientCoefficient >= 0.0f && ambientCoefficient <= 1.0f);
+void IMaterial::setAmbientReflectance(float ambientReflectance) {
+	assert(ambientReflectance >= 0.0f && ambientReflectance <= 1.0f);
 
-	this->ambientCoefficient = ambientCoefficient;
+	this->ambientReflectance = ambientReflectance;
 }
-void IMaterial::setDiffuseCoefficient(float diffuseCoefficient) {
-	assert(diffuseCoefficient >= 0.0f && diffuseCoefficient <= 1.0f);
+void IMaterial::setDiffuseReflectance(float diffuseReflectance) {
+	assert(diffuseReflectance >= 0.0f && diffuseReflectance <= 1.0f);
 
-	this->diffuseCoefficient = diffuseCoefficient;
+	this->diffuseReflectance = diffuseReflectance;
+}
+void IMaterial::setSpecularReflectance(float specularReflectance) {
+	assert(specularReflectance >= 0.0f && specularReflectance <= 1.0f);
+
+	this->specularReflectance = specularReflectance;
 }
 void IMaterial::setEmissiveness(float emissiveness) {
 	assert(emissiveness >= 0.0f && emissiveness <= 1.0f);
 
 	this->emissiveness = emissiveness;
-}
-void IMaterial::setReflectiveness(float reflectiveness) {
-	assert(reflectiveness >= 0.0f && reflectiveness <= 1.0f);
-
-	this->reflectiveness = reflectiveness;
 }
 void IMaterial::setTransparency(float transparency) {
 	assert(transparency >= 0.0f && transparency <= 1.0f);
@@ -144,7 +144,7 @@ void  IMaterial::setReflection() {
 }
 
 Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) const {
-	return scene->getAmbientLight() * this->ambientCoefficient;
+	return scene->getAmbientLight() * this->ambientReflectance;
 }
 
 Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const {
@@ -168,7 +168,7 @@ Vec3Df IMaterial::specularLight(
 	int iteration) const
 {
 	// If the material is reflective or transparent...
-	if (this->reflection && (this->reflectiveness || this->transparency)) {
+	if (this->reflection && (this->specularReflectance || this->transparency)) {
 		Vec3Df incommingVector = reflectedVector;
 		Vec3Df reflectedVector;
 		Vec3Df refractedVector;
@@ -199,11 +199,11 @@ Vec3Df IMaterial::specularLight(
 			refractedVector,
 			transmittance);
 
-		if (this->reflectiveness && (reflectance[0] || reflectance[1] || reflectance[2])) {
+		if (this->specularReflectance && (reflectance[0] || reflectance[1] || reflectance[2])) {
 			float distance;
 
 			// Trace the reflection ray
-			result += this->reflectiveness * reflectance * scene->getRayTracer()->performRayTracingIteration(
+			result += this->specularReflectance * reflectance * scene->getRayTracer()->performRayTracingIteration(
 				surface.point + reflectedVector * Constants::Epsilon,
 				reflectedVector,
 				iteration + 1,

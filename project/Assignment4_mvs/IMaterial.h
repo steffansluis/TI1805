@@ -1,4 +1,4 @@
-#ifndef IMATERIAL_H
+﻿#ifndef IMATERIAL_H
 #define IMATERIAL_H
 
 #include <memory>
@@ -21,33 +21,122 @@ public:
 	IMaterial();
 	virtual ~IMaterial();
 
+	/**
+	 * Gets the texture of this material.
+	 */
 	std::shared_ptr<const ITexture> getTexture() const;
-	float getAmbientCoefficient() const;
-	float getDiffuseCoefficient() const;
+	/**
+	 * Gets the amount of ambient light this material reflects.
+	 * This is a scalar in the range [0, 1].
+	 */
+	float getAmbientReflectance() const;
+	/**
+	 * Gets the amount of diffuse light this material reflects.
+	 * This is a scalar in the range [0, 1].
+	 */
+	float getDiffuseReflectance() const;
+	/**
+	 * Gets the amount of specular light this material reflects.
+	 * This is a scalar in the range [0, 1].
+	 */
+	float getSpecularReflectance() const;
+	/**
+	 * Gets the amount of light this material emits.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	float getEmissiveness() const;
-	float getReflectiveness() const;
+	/**
+	 * Gets the amount of light that can pass through this material.
+	 * This is a scalar in the range [0, 1].
+	 */
 	float getTransparency() const;
+	/**
+	 * Gets the absorbance of this material in the Beer-Lambert law.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	float getAbsorbance() const;
+	/**
+	 * Gets the roughness of this material.
+	 * This is a scalar in the range [0, 1].
+	 */
 	float getRoughness() const;
+	/**
+	 * Gets the shininess of this material.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	float getShininess() const;
+	/**
+	 * Gets the refractive index of this material.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	float getRefractiveIndex() const;
 
+	/**
+	 * Sets the texture of this material.
+	 */
 	void setTexture(std::shared_ptr<const ITexture>);
-	void setAmbientCoefficient(float ambientCoefficient);
-	void setDiffuseCoefficient(float diffuseCoefficient);
+	/**
+	 * Sets the amount of ambient light this material reflects.
+	 * This is a scalar in the range [0, 1].
+	 */
+	void setAmbientReflectance(float ambientReflectance);
+	/**
+	 * Sets the amount of diffuse light this material reflects.
+	 * This is a scalar in the range [0, 1].
+	 */
+	void setDiffuseReflectance(float diffuseReflectance);
+	/**
+	 * Sets the amount of specular light this material reflects.
+	 * This is a scalar in the range [0, 1].
+	 */
+	void setSpecularReflectance(float specularReflectance);
+	/**
+	 * Sets the amount of light this material emits.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	void setEmissiveness(float emissiveness);
-	void setReflectiveness(float reflectiveness);
+	/**
+	 * Sets the amount of light that can pass through this material.
+	 * This is a scalar in the range [0, 1].
+	 */
 	void setTransparency(float transparency);
+	/**
+	 * Sets the absorbance of this material in the Beer-Lambert law.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	void setAbsorbance(float absorbance);
+	/**
+	 * Sets the roughness of this material.
+	 * This is a scalar in the range [0, 1].
+	 */
 	void setRoughness(float roughness);
+	/**
+	 * Sets the shininess of this material.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	void setShininess(float shininess);
+	/**
+	 * Sets the refractive index of this material.
+	 * This is a scalar in the range [0, ∞).
+	 */
 	void setRefractiveIndex(float refractiveIndex);
 
+	/**
+	 * Samples the color of the material at the given texture coordinates.
+	 */
 	Vec3Df sampleColor(const Vec2Df &texCoords) const;
 
+	/**
+	 * Sets the BRDF of this material using its type.
+	 * Example usage: material.setBRDF<LambertianBRDF>().
+	 */
 	template<class T>
 	void setBRDF();
 
+	/**
+	* Sets the Reflection of this material using its type.
+	* Example usage: material.setReflection<FresnelReflection>().
+	*/
 	template<class T>
 	void setReflection();
 
@@ -95,10 +184,10 @@ public:
 
 private:
 	std::shared_ptr<const ITexture> texture;
-	float ambientCoefficient;
-	float diffuseCoefficient;
+	float ambientReflectance;
+	float diffuseReflectance;
+	float specularReflectance;
 	float emissiveness;
-	float reflectiveness;
 	float transparency;
 	float absorbance;
 	float roughness;
