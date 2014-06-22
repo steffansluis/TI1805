@@ -134,7 +134,7 @@ void  IMaterial::setBRDF() {
 
 template<class T>
 void  IMaterial::setReflection() {
-	static_assert(std::is_base_of<Reflection, T>);
+	//static_assert(std::is_base_of<Reflection, T>);
 
 	if (this->reflection) {
 		delete this->reflection;
