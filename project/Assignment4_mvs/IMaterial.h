@@ -30,6 +30,7 @@ public:
 	float getAbsorbance() const;
 	float getRoughness() const;
 	float getShininess() const;
+	float getRefractiveIndex() const;
 
 	void setTexture(std::shared_ptr<const ITexture>);
 	void setAmbientCoefficient(float ambientCoefficient);
@@ -40,6 +41,7 @@ public:
 	void setAbsorbance(float absorbance);
 	void setRoughness(float roughness);
 	void setShininess(float shininess);
+	void setRefractiveIndex(float refractiveIndex);
 
 	Vec3Df sampleColor(const Vec2Df &texCoords) const;
 
@@ -83,15 +85,13 @@ public:
 	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] scene The scene.
 	 * @param[in] iteration	The current iteration.
-	 * @param[in] refractiveIndex The refractive index of the current medium.
 	 * @return The light specularly reflected towards the outgoing vector.
 	 */
 	Vec3Df specularLight(
 		const SurfacePoint &surface,
 		const Vec3Df &reflectedVector, 
 		const Scene *scene,
-		int iteration,
-		float refractiveIndex) const;
+		int iteration) const;
 
 private:
 	std::shared_ptr<const ITexture> texture;
@@ -103,6 +103,7 @@ private:
 	float absorbance;
 	float roughness;
 	float shininess;
+	float refractiveIndex;
 	const BRDF *brdf;
 	const Reflection *reflection;
 };

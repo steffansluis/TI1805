@@ -45,10 +45,9 @@ public:
 	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] scene The scene.
 	 * @param[in] iteration	The current iteration.
-	 * @param[in] refractiveIndex The refractive index of the current medium.
 	 * @return The light specularly reflected towards the outgoing vector.
 	 */
-	Vec3Df specularLight(const Vec3Df &reflectedVector, const Scene *scene, int iteration, float refractiveIndex) const;
+	Vec3Df specularLight(const Vec3Df &reflectedVector, const Scene *scene, int iteration) const;
 
 	/**
 	 * The point on the surface.
@@ -64,6 +63,11 @@ public:
 	 * The texture coordinates of the surface.
 	 */
 	Vec2Df texCoords;
+
+	/**
+	* Determines whether the intersection occured on the inside or outside of the object.
+	*/
+	bool isInside;
 
 	/**
 	 * The geometry which this surface belongs to.

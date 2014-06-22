@@ -53,9 +53,9 @@ private:
 	 * Calculates the texture coordinates at the given barycentric coordinates
 	 * by interpolating the triangle's texture coordinates.
 	 * @param[in] uv The barycentric coordinates.
-	 * @param[out] tUv The uv texture coordinate.
+	 * @return The uv texture coordinate.
 	 */
-	void getTextureCoordinates(const Vec2Df &uv, Vec2Df &tUV) const;
+	Vec2Df getTextureCoordinates(const Vec2Df &uv) const;
 
 	const Mesh *mesh;
 	const Triangle *triangle;

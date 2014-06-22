@@ -26,6 +26,7 @@ transparency(0.0f),
 absorbance(0.0f),
 roughness(0.0f),
 shininess(45.0f),
+refractiveIndex(Constants::AirRefractiveIndex),
 brdf(NULL),
 reflection(NULL)
 {
@@ -164,9 +165,9 @@ Vec3Df IMaterial::specularLight(
 	const SurfacePoint &surface, 
 	const Vec3Df &reflectedVector,
 	const Scene *scene,
-	int iteration,
-	float refractiveIndex) const
+	int iteration) const
 {
+	// If the material is reflective or transparent...
 	if (this->reflection && (this->reflectiveness || this->transparency)) {
 		Vec3Df incommingVector = reflectedVector;
 		Vec3Df reflectedVector;
@@ -174,11 +175,25 @@ Vec3Df IMaterial::specularLight(
 		Vec3Df reflectance;
 		Vec3Df transmittance;
 		Vec3Df result = Vec3Df();
+		float n1, n2;
 
+		// Get the refractive indices	
+		if (surface.isInside) {
+			n1 = this->refractiveIndex;
+			n2 = Constants::AirRefractiveIndex;
+		}
+		else {
+			n1 = Constants::AirRefractiveIndex;
+			n2 = this->refractiveIndex;
+		}
+
+		// Sample the relfected vector, reflectance, refracted vector and tranmittance
 		this->reflection->sample(
 			incommingVector, 
 			surface.normal, 
 			surface.texCoords,
+			n1,
+			n2,
 			reflectedVector,
 			reflectance, 
 			refractedVector,
@@ -192,7 +207,6 @@ Vec3Df IMaterial::specularLight(
 				surface.point + reflectedVector * Constants::Epsilon,
 				reflectedVector,
 				iteration + 1,
-				refractiveIndex,
 				distance);
 		}
 
@@ -204,7 +218,6 @@ Vec3Df IMaterial::specularLight(
 				surface.point + refractedVector * Constants::Epsilon,
 				refractedVector,
 				iteration + 1,
-				0.0f,
 				distance);
 
 			// Absorbance using beer's law

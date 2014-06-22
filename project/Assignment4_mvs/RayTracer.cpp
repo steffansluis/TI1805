@@ -23,7 +23,6 @@
 * @param[in] origin	The origin of the ray.
 * @param[in] dir		The direction of the ray.
 * @param[in] iteration	The current iteration.
-* @param[in] refractiveIndex The refractive index of the current medium.
 * @param[out] distance	The distance to the closest surface hit by the ray.
 * @return The light towards the given ray.
 */
@@ -31,7 +30,6 @@ Vec3Df RayTracer::performRayTracingIteration(
 	const Vec3Df &origin,
 	const Vec3Df &dir,
 	int iteration,
-	float refractiveIndex,
 	float &distance) const
 {
 	assert(this->getScene());
@@ -55,12 +53,12 @@ Vec3Df RayTracer::performRayTracingIteration(
 	distance = intersection.distance;
 
 	// Execute all the different graphics techniques.
-	return this->performShading(intersection, iteration, refractiveIndex);
+	return this->performShading(intersection, iteration);
 }
 
 // @Author: Martijn van Dorp
 // Performs basic whitted-style shading.
-Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iteration, float refractiveIndex) const {
+Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iteration) const {
 	// Needed for the shadow intersection test but can be ignored.
 	RayIntersection shadowIntersection;
 
@@ -81,7 +79,7 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iterat
 	Vec3Df lighting = Vec3Df();
 	lighting += surface.ambientLight(this->getScene());
 	lighting += surface.emittedLight(viewVector);
-	lighting += surface.specularLight(viewVector, scene, iteration, refractiveIndex);
+	lighting += surface.specularLight(viewVector, scene, iteration);
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {

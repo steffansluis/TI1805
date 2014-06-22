@@ -47,7 +47,6 @@ public:
 	* @param[in] origin	The origin of the ray.
 	* @param[in] dir		The direction of the ray.
 	* @param[in] iteration	The current iteration.
-	* @param[in] refractiveIndex The refractive index of the current medium.
 	* @param[out] distance	The distance to the closest surface hit by the ray.
 	* @return The light towards the given ray.
 	*/
@@ -55,7 +54,6 @@ public:
 		const Vec3Df &origin, 
 		const Vec3Df &dir, 
 		int iteration, 
-		float refractiveIndex, 
 		float &distance) const = 0;
 
 private:

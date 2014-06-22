@@ -16,7 +16,16 @@ float PlaneGeometry::getArea() const {
 bool PlaneGeometry::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df &dir, RayIntersection &intersection) const {
 	Vec3Df p = this->normal * this->distance;
 
-	float t = Vec3Df::dotProduct(p - origin, -this->normal) / Vec3Df::dotProduct(dir, -this->normal);
+	float dir_dot_normal = Vec3Df::dotProduct(dir, -this->normal);
+
+	if (dir_dot_normal == 0.0f) {
+		return false;
+	}
+	else if (dir_dot_normal > 0.0f) {
+		intersection.isInside = true;
+	}
+
+	float t = Vec3Df::dotProduct(p - origin, -this->normal) / dir_dot_normal;
 
 	if (t < 0.0f) {
 		return false;
@@ -37,18 +46,34 @@ void PlaneGeometry::getSurfacePoint(const RayIntersection &intersection, Surface
 	surface.normal = this->normal;
 	surface.point = intersection.hitPoint;
 	surface.texCoords = Vec2Df();
+	surface.isInside = intersection.isInside;
+
+	// Flip the normal if the intersection occured on the inside of the primitive
+	if (intersection.isInside) {
+		surface.normal = -surface.normal;
+	}
 }
 
 void PlaneGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
-	float u, v;
-	Vec3Df uv, vv;
-	Random::sampleUnitSquare(u, v);
-	this->normal.getTwoOrthogonals(uv, vv);
+	// Get two vectors orthogonal to the normal
+	Vec3Df u, v;
+	this->normal.getTwoOrthogonals(u, v);
+
+	// Generate two random numbers
+	float x, y;
+	Random::sampleUnitSquare(x, y);
+
+	// Find a point on the plane
+	Vec3Df point = this->normal * distance;
+
+	// Offset the point with the two orthogonal vectors scaled by the random numbers
+	point += x * v + y * v;
 
 	surface.geometry = this->shared_from_this();
 	surface.normal = this->normal;
-	surface.point = this->normal * this->distance + u * uv + v * vv;
-	surface.texCoords = Vec2Df(u, v);
+	surface.point = point;
+	surface.texCoords = Vec2Df(x, y);
+	surface.isInside = false;
 }
 
 BoundingBox PlaneGeometry::getBoundingBox() const {

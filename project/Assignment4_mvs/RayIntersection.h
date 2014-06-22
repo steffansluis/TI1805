@@ -25,7 +25,6 @@ public:
 	 */
 	Vec3Df hitPoint;
 
-
 	/**
 	 * The origin of the intersecting ray.
 	 *
@@ -52,6 +51,11 @@ public:
 	 * R(t) = origin + distance * direction;
 	 */
 	float distance;
+
+	/**
+	 * Determines whether the intersection occured on the inside or outside of the object.
+	 */
+	bool isInside;
 
 	/**
 	 * The geometry that the ray intersects with.

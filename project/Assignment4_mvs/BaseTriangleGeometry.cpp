@@ -50,6 +50,9 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 	{
 		return false;
 	}
+	else if (dot_dir_normal > 0.0f) {
+		intersection.isInside = true;
+	}
 
 	// to calculate the length of the ray that goes towards the triangle, we can calculate 
 	// D = n * v_0
@@ -101,8 +104,14 @@ bool BaseTriangleGeometry::calculateClosestIntersection(const Vec3Df &origin, co
 void BaseTriangleGeometry::getSurfacePoint(const RayIntersection &intersection, SurfacePoint &surface) const {
 	surface.geometry = intersection.geometry;
 	surface.point = intersection.hitPoint;
-	surface.normal = this->normal;
+	surface.normal = surface.normal;
 	surface.texCoords = this->calculateBarycentricCoordinates(intersection.hitPoint);
+	surface.isInside = intersection.isInside;
+
+	// Flip the normal if the intersection occured on the inside of the primitive
+	if (intersection.isInside) {
+		surface.normal = -surface.normal;
+	}
 }
 
 void BaseTriangleGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
@@ -110,6 +119,7 @@ void BaseTriangleGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	surface.point = this->calculateRandomPoint();
 	surface.normal = this->normal;
 	surface.texCoords = this->calculateBarycentricCoordinates(surface.point);
+	surface.isInside = false;
 }
 
 BoundingBox BaseTriangleGeometry::getBoundingBox() const {

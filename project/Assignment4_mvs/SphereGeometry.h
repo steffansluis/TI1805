@@ -2,6 +2,7 @@
 #define SPHEREGEOMETRY_H
 
 #include "IGeometry.h"
+#include "Vec2D.h"
 
 class SphereGeometry : public IGeometry {
 public:
@@ -46,6 +47,13 @@ public:
 	BoundingBox getBoundingBox() const;
 
 private:
+	/**
+	* Calculates the texture coordinates at the given poit.
+	* @param[in] point A point on the sphere.
+	* @return The uv texture coordinate.
+	*/
+	Vec2Df getTextureCoordinates(const Vec3Df &point) const;
+
 	Vec3Df position;
 	float radius;
 };

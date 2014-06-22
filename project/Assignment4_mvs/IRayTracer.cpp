@@ -17,5 +17,5 @@ void IRayTracer::setScene(const Scene *scene) {
 Vec3Df IRayTracer::performRayTracing(const Vec3Df &origin, const Vec3Df &dir) const {
 	float distance;
 
-	return this->performRayTracingIteration(origin, dir, 0, Constants::AirRefractiveIndex, distance);
+	return this->performRayTracingIteration(origin, dir, 0, distance);
 }
