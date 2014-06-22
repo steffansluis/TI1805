@@ -24,6 +24,9 @@ Vec3Df BlinnPhongBRDF::reflectance(const Vec3Df &incomingVector, const Vec3Df &r
 	Vec3Df H = incomingVector + reflectedVector;
 	H.normalize();
 
+	Vec3Df N = normal;
+	N.normalize();
+
 	float NdotH = std::max<float>(0, Vec3Df::dotProduct(N, H));
-	return light * this->material->sampleSpecularColor(texCoords) * std::pow(NdotH, this->material->sampleShininess(texCoords));
+	return light * this->material->sampleColor(texCoords) * std::pow(NdotH, this->material->getShininess());
 }
