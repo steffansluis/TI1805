@@ -36,14 +36,6 @@ private:
 	 * @return The light reflected towards the ray from the point of intersection.
 	 */
 	Vec3Df performShading(const RayIntersection &intersection, int iteration) const;
-
-	/**
-	 * The maximum number of iterations.
-	 *
-	 * Indicates the maximum amount of iterations that are permitted.
-	 * This prevent the algorithm from looping back and forth between objects infinitely.
-	 */
-	const int maxIterations = 16;
 };
 
 #endif
