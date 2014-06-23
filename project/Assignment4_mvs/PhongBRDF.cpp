@@ -13,11 +13,7 @@ PhongBRDF::PhongBRDF(const IMaterial * material)
 
 /**
 	The Phong BRDF.
-	Implemented suing the formulaes described in http://en.wikipedia.org/wiki/Phong_reflection_model
-
-	For now every object's material defaults to DiffuseMaterial, the DiffuseMaterial uses the LambertianBRDF by default.
-    If you want to test a different brdf, modifiy the DiffuseMaterial(color, roughness) constructor to set diffuseBrdf to whichever one you need to test.
-    DiffuseMaterial.cpp also contains the default color and roughness, change these as you wish.
+	Implemented using the formulaes described in http://en.wikipedia.org/wiki/Phong_reflection_model
 
 	@author Joren Hammudoglu
 */
