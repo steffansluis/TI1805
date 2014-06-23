@@ -19,7 +19,8 @@ geometry(std::make_shared<std::vector<std::shared_ptr<IGeometry>>>()),
 lights(std::make_shared<std::vector<std::shared_ptr<ILight>>>()),
 lightSampleDensity(1.0f),
 samplesPerPixel(1),
-ambientOcclusionSamples(0)
+ambientOcclusionSamples(0),
+pathTracingEnabled(false)
 {
 	// Set the acceleration structure
 	this->setAccelerationStructure(std::make_shared<NoAccelerationStructure>());
@@ -78,12 +79,20 @@ Vec3Df Scene::getAmbientLight() const {
 	return this->ambientLight;
 }
 
+bool Scene::getPathTracingEnabled() const {
+	return this->pathTracingEnabled;
+}
+
 int Scene::getAmbientOcclusionSamples() const {
 	return this->ambientOcclusionSamples;
 }
 
 int Scene::getSamplesPerPixel() const {
 	return this->samplesPerPixel;
+}
+
+int Scene::getMaxTraceDepth() const {
+	return this->maxTraceDepth;
 }
 
 void Scene::setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator) {
@@ -116,6 +125,10 @@ void Scene::setLightSampleDensity(float density) {
 	this->lightSampleDensity = density;
 }
 
+void Scene::setPathTracingEnabled(bool enabled) {
+	this->pathTracingEnabled = enabled;
+}
+
 void Scene::setAmbientLight(const Vec3Df& ambientLight) {
 	this->ambientLight = ambientLight;
 }
@@ -130,6 +143,12 @@ void Scene::setSamplesPerPixel(int numSamples) {
 	assert(numSamples >= 1);
 
 	this->samplesPerPixel = numSamples;
+}
+
+void Scene::setMaxTraceDepth(int maxDepth) {
+	assert(maxDepth >= 1);
+
+	this->maxTraceDepth = maxTraceDepth;
 }
 
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {

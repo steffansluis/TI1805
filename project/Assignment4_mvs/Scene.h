@@ -75,6 +75,12 @@ public:
 	std::shared_ptr<const IAccelerationStructure> getAccelerationStructure() const;
 
 	/**
+	 * Gets whether or not path tracing is enabled.
+	 * @return Whether or not path tracing is enabled.
+	 */
+	bool getPathTracingEnabled() const;
+
+	/**
 	 * Gets the number of light samples to be taken per square unit of surface area.
 	 * @return The number of light samples to be taken per square unit of surface area.
 	 */
@@ -96,6 +102,12 @@ public:
 	* @return The square root of the number of samples taken per pixel.
 	*/
 	int getSamplesPerPixel() const;
+
+	/**
+	* Gets the maximum ray tracing recursion depth.
+	* @return The maximum ray tracing recursion depth.
+	*/
+	int getMaxTraceDepth() const;
 
 	/**
 	 * Sets the acceleration structure that is used to find speed up
@@ -141,6 +153,18 @@ public:
 	void setSamplesPerPixel(int numSamples);
 
 	/**
+	* Sets the maximum ray tracing recursion depth.
+	* @param maxDepth The maximum ray tracing recursion depth.
+	*/
+	void setMaxTraceDepth(int maxDepth);
+
+	/**
+	* Sets whether or not path tracing is enabled.
+	* @param enabled Whether or not path tracing is enabled.
+	*/
+	void setPathTracingEnabled(bool enabled);
+
+	/**
 	 * Renders the scene as seen from the given camera.
 	 * @param[in] camera Pointer to the camera that observes the scene.
 	 * @param width The width of the render.
@@ -157,8 +181,10 @@ private:
 
 	Vec3Df renderPixel(std::shared_ptr<ICamera> camera, int x, int y);
 
+	bool pathTracingEnabled;
 	int ambientOcclusionSamples;
 	int samplesPerPixel;
+	int maxTraceDepth;
 	float lightSampleDensity;
 	Vec3Df ambientLight;
 	std::shared_ptr<IAccelerationStructure> accelerator;

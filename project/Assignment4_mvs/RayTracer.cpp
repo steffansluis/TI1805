@@ -4,6 +4,7 @@
 
 #include "Constants.h"
 #include "ILight.h"
+#include "Random.h"
 #include "RayTracer.h"
 #include "RayIntersection.h"
 #include "Scene.h"
@@ -32,17 +33,20 @@ Vec3Df RayTracer::performRayTracingIteration(
 	int iteration,
 	float &distance) const
 {
-	assert(this->getScene());
+	// Get a pointer to the scene.
+	const Scene *scene = this->getScene();
+
+	assert(scene);
 
 	// If the maximum amount of iterations has been reached, return the zero-vector (black).
-	if (iteration >= RayTracer::maxIterations)
+	if (iteration >= scene->getMaxTraceDepth())
 	{
 		return Vec3Df(0, 0, 0);
 	}
 
 	// Calculate the intersection that will occur with these parameters
 	RayIntersection intersection;
-	bool intersects = this->getScene()->calculateClosestIntersection(origin, dir, intersection);
+	bool intersects = scene->calculateClosestIntersection(origin, dir, intersection);
 
 	// If there was no intersection, return black
 	if (!intersects)
@@ -59,11 +63,11 @@ Vec3Df RayTracer::performRayTracingIteration(
 // @Author: Martijn van Dorp
 // Performs basic whitted-style shading.
 Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iteration) const {
-	// Needed for the shadow intersection test but can be ignored.
-	RayIntersection shadowIntersection;
-
 	// Get a pointer to the scene.
 	const Scene *scene = this->getScene();
+
+	// Needed for the shadow intersection test but can be ignored.
+	RayIntersection shadowIntersection;
 
 	// Get the surface point at the intersection point, this contains surface parameters useful for shading.
 	SurfacePoint surface;
@@ -77,8 +81,29 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iterat
 
 	// Calculate ambient, emitted and specularly reflected light.
 	Vec3Df lighting = Vec3Df();
-	lighting += surface.ambientLight(this->getScene());
 	lighting += surface.emittedLight(viewVector);
+
+	// Perform path tracing only if it's enabled and the object hit is not a light source
+	if (scene->getPathTracingEnabled() && lighting[0] == 0.0f && lighting[1] == 0.0f && lighting[2] == 0.0f) {
+		float distance;
+
+		// Sample a random direction in the hemisphere defined by the surface normal
+		Vec3Df diffuseReflection = Random::sampleHemisphere(surface.normal);
+
+		// Trace a ray in this direction to get the incoming radiance
+		Vec3Df diffuseReflected = this->performRayTracingIteration(
+			surface.point + diffuseReflection * Constants::Epsilon,
+			diffuseReflection,
+			iteration + 1,
+			distance);
+
+		// If there is incoming radiance, evaluate the BRDFs and add the reflected light to the result.
+		if (diffuseReflected[0] != 0.0f || diffuseReflected[1] != 0.0f || diffuseReflected[2] != 0.0f) {
+			lighting += surface.reflectedLight(diffuseReflection, viewVector, diffuseReflected);
+		}
+	}
+
+	lighting += surface.ambientLight(this->getScene());
 	lighting += surface.specularLight(viewVector, scene, iteration);
 	lighting += surface.transmittedLight(viewVector, scene, iteration);
 
