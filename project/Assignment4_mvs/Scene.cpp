@@ -168,9 +168,10 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	// A counter for the iteration of the ray-tracing algorithm. 
 	int iterationCounter = 0;
 
-	// Iterate through each pixel
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++, iterationCounter++) {
+	// Iterate through each pixel, collapse the calculation into separate threads
+	#pragma omp parallel for reduction(+:iterationCounter) private(origin,dir) shared(camera, result, rt) collapse(2) schedule(dynamic)
+	for (int y = 0; y < height; y+=2) {
+		for (int x = 0; x < width; x+=2) {
 			Vec3Df color = this->renderPixel(camera, x, y);
 
 #if _DEBUG
@@ -183,9 +184,8 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 
 			// Set the resulting color in the image
 			result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
+			std::cout << "Pixel: " << iterationCounter++ << std::endl;
 		}
-
-		std::cout << "Row " << y << std::endl;
 	}
 
 	std::cout << "Done!" << std::endl;
