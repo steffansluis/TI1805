@@ -139,7 +139,7 @@ void  IMaterial::setSpecularBRDF() {
 }
 
 Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) const {
-	return scene->getAmbientLight() * this->ambientReflectance;
+	return this->sampleColor(surface.texCoords) * this->ambientReflectance * scene->getAmbientLight();
 }
 
 Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const {
