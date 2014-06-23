@@ -67,6 +67,9 @@ float IMaterial::getRoughness() const {
 float IMaterial::getShininess() const {
 	return this->shininess;
 }
+float IMaterial::getRefractiveIndex() const {
+	return this->refractiveIndex;
+}
 
 void IMaterial::setTexture(std::shared_ptr<const ITexture> texture) {
 	assert(texture);
@@ -112,6 +115,11 @@ void IMaterial::setShininess(float shininess) {
 	assert(shininess >= 0.0f);
 
 	this->shininess = shininess;
+}
+void IMaterial::setRefractiveIndex(float refractiveIndex) {
+	// assert(refractiveIndex > 0.0f);
+
+	this->refractiveIndex = refractiveIndex;
 }
 
 Vec3Df IMaterial::sampleColor(const Vec2Df &texCoords) const {
@@ -234,10 +242,10 @@ Vec3Df IMaterial::transmittedLight(
 			distance);
 
 		// Absorbance using beer's law
-		Vec3Df absorbance = this->sampleColor(surface.texCoords) * -distance;
+		Vec3Df absorbance = this->sampleColor(surface.texCoords) * this->absorbance * -distance;
 		absorbance[0] = expf(absorbance[0]);
-		absorbance[1] = expf(absorbance[2]);
-		absorbance[2] = expf(absorbance[1]);
+		absorbance[1] = expf(absorbance[1]);
+		absorbance[2] = expf(absorbance[2]);
 
 		return this->transparency * transmitted * absorbance;
 	}
