@@ -13,7 +13,7 @@ class SurfacePoint;
 
 /**
  * Represents a material.
- * @remarks Needs work to make this class pratical, generate from .mtl material.
+ * @remarks Needs work to make this class practical, generate from .mtl material.
  */
 class IMaterial : public std::enable_shared_from_this<IMaterial> {
 public:
@@ -159,12 +159,12 @@ public:
 	/**
 	 * Calculates the light reflected from the incoming vector towards the outgoing vector.
 	 * @param[in] surface The surface for which to perform the calculations.
-	 * @param[in] incommingVector The vector from which the light is comming.
+	 * @param[in] incomingVector The vector from which the light is comming.
 	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] lightColor The color of the light.
-	 * @return The light reflected from the incomming towards the outgoing vector.
+	 * @return The light reflected from the incoming towards the outgoing vector.
 	 */
-	Vec3Df reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const;
+	Vec3Df reflectedLight(const SurfacePoint &surface, const Vec3Df &incomingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const;
 
 	/**
 	 * Calculates the specularly reflected light towards the given vector.
@@ -197,22 +197,22 @@ public:
 private:
 	/**
 	* Calculates the reflection vector.
-	* @param[in] incommingVector The vector in the direction that the light is coming from.
+	* @param[in] incomingVector The vector in the direction that the light is coming from.
 	* @param[in] normal The surface normal.
 	*/
 	static Vec3Df calculateReflectionVector(
-		const Vec3Df &incommingVector,
+		const Vec3Df &incomingVector,
 		const Vec3Df &normal);
 
 	/**
 	* Calculates the refracted vector.
-	* @param[in] incommingVector The vector in the direction that the light is coming from.
+	* @param[in] incomingVector The vector in the direction that the light is coming from.
 	* @param[in] normal The surface normal.
-	* @param[in] n1 Refractive index of the medium the incommingVector is coming from.
+	* @param[in] n1 Refractive index of the medium the incomingVector is coming from.
 	* @param[in] n2 Refractive index of the surface.
 	*/
 	static Vec3Df calculateRefractedVector(
-		const Vec3Df &incommingVector,
+		const Vec3Df &incomingVector,
 		const Vec3Df &normal,
 		float n1,
 		float n2);

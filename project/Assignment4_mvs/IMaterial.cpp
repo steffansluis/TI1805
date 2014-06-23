@@ -146,17 +146,17 @@ Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflec
 	return this->sampleColor(surface.texCoords) * this->emissiveness;
 }
 
-Vec3Df IMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const {
+Vec3Df IMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incomingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const {
 	Vec3Df result = Vec3Df();
 
 	if (this->diffuseBrdf) {
 		// If we have a diffuse BRDF set, sample its reflectance
-		result += this->diffuseReflectance * this->diffuseBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
+		result += this->diffuseReflectance * this->diffuseBrdf->reflectance(incomingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 	}
 
 	if (this->specularBrdf) {
 		// If we have a specular BRDF set, sample its reflectance
-		result += this->specularReflectance * this->specularBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
+		result += this->specularReflectance * this->specularBrdf->reflectance(incomingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 	}
 
 	return result;
@@ -170,10 +170,10 @@ Vec3Df IMaterial::specularLight(
 {
 	// If the material is transparent...
 	if (this->specularReflectance > 0.0f) {
-		Vec3Df incommingVector = reflectedVector;
+		Vec3Df incomingVector = reflectedVector;
 
 		// Calculate the reflected vector
-		Vec3Df reflectedVector = IMaterial::calculateReflectionVector(incommingVector, surface.normal);
+		Vec3Df reflectedVector = IMaterial::calculateReflectionVector(incomingVector, surface.normal);
 
 		// Trace the reflection ray
 		float distance;
@@ -201,7 +201,7 @@ Vec3Df IMaterial::transmittedLight(
 {
 	// If the material is transparent...
 	if (this->transparency > 0.0f) {
-		Vec3Df incommingVector = reflectedVector;
+		Vec3Df incomingVector = reflectedVector;
 		float n1, n2;
 
 		// Get the refractive indices	
@@ -214,8 +214,8 @@ Vec3Df IMaterial::transmittedLight(
 			n2 = this->refractiveIndex;
 		}
 
-		// Sample the relfected vector, reflectance, refracted vector and tranmittance
-		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incommingVector, surface.normal, n1, n2);
+		// Sample the relfected vector, reflectance, refracted vector and transmittance
+		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incomingVector, surface.normal, n1, n2);
 
 		float distance;
 
@@ -240,13 +240,20 @@ Vec3Df IMaterial::transmittedLight(
 }
 
 Vec3Df IMaterial::calculateReflectionVector(
-	const Vec3Df &incommingVector,
+	const Vec3Df &incomingVector,
 	const Vec3Df &normal) {
-	return Vec3Df();
+	
+	Vec3Df IdotN = Vec3Df::dotProduct(incomingVector, normal);
+	
+	/* It doesn't work if incomingVector and normal are orthogonal to each other
+	if(IdotN < 0)) {
+		return NULL;
+	}*/
+	return incomingVector - (2 * IdotN * normal);
 }
 
 Vec3Df IMaterial::calculateRefractedVector(
-	const Vec3Df &incommingVector,
+	const Vec3Df &incomingVector,
 	const Vec3Df &normal,
 	float n1,
 	float n2) {
