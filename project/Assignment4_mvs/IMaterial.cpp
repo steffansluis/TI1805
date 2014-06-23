@@ -286,7 +286,28 @@ Vec3Df IMaterial::calculateRefractedVector(
 	const Vec3Df &normal,
 	float n1,
 	float n2) {
+	float angle1 = std::acos(Vec3Df::dotProduct(incomingVector, normal));
+	float angle2 = std::asin(n1 * std::sin(angle1) / n2);
 	
+	Vec3Df iRay = -1 * incomingVector;
 	
-	return Vec3Df();
+	// Take the cross product of iRay and normal and use this as the axis to rotate iRay towards the normal. (the rotation is counter-clockwise)
+	float cx = (normal[1]*iRay[2]) - (normal[2]*iRay[1]);
+	float cy = (normal[2]*iRay[0]) - (normal[0]*iRay[2]);
+	float cz = (normal[0]*iRay[1]) - (normal[1]*iRay[0]);
+	Vec3Df axis = Vec3Df(cx, cy, cz);
+	
+	float c = std::cos(angle1-angle2);
+	float s = std::sin(angle1-angle2);
+	float Kx = axis[0];
+	float Ky = axis[1];
+	float Kz = axis[2];
+	Vec3Df xMultiplier = Vec3Df(Kx*Kx*(1-c) + c, Kx*Ky*(1-c) - Kz*s, Kx*Kz*(1-c) + Ky*s);
+	float x = Vec3Df::dotProduct(xMultiplier, iRay);
+	Vec3Df yMultiplier = Vec3Df(Ky*Kx*(1-c) + Kz*s, Ky*Ky*(1-c) + c, Ky*Kz*(1-c) - Kx*s);
+	float y = Vec3Df::dotProduct(yMultiplier, iRay);
+	Vec3Df zMultiplier = Vec3Df(Kz*Kx*(1-c) - Ky*s, Kz*Ky*(1-c) + Kx*s, Kz*Kz*(1-c) + c);
+	float z = Vec3Df::dotProduct(zMultiplier, iRay);
+	
+	return Vec3Df(x,y,z);
 }
