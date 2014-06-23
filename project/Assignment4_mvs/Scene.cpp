@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "BTreeAccelerator.h"
 #include "Image.h"
 #include "IAccelerationStructure.h"
 #include "ICamera.h"
@@ -7,7 +8,7 @@
 #include "ILight.h"
 #include "IRayTracer.h"
 #include "NoAccelerationStructure.h"
-#include "BTreeAccelerator.h"
+#include "Random.h"
 #include "RayIntersection.h"
 #include "RayTracer.h"
 #include "Scene.h"
@@ -16,7 +17,11 @@
 Scene::Scene() :
 geometry(std::make_shared<std::vector<std::shared_ptr<IGeometry>>>()),
 lights(std::make_shared<std::vector<std::shared_ptr<ILight>>>()),
-lightSampleDensity(10.0f) {
+lightSampleDensity(1.0f),
+samplesPerPixel(1),
+ambientOcclusionSamples(0),
+pathTracingEnabled(false)
+{
 	// Set the acceleration structure
 	this->setAccelerationStructure(std::make_shared<NoAccelerationStructure>());
 
@@ -74,6 +79,22 @@ Vec3Df Scene::getAmbientLight() const {
 	return this->ambientLight;
 }
 
+bool Scene::getPathTracingEnabled() const {
+	return this->pathTracingEnabled;
+}
+
+int Scene::getAmbientOcclusionSamples() const {
+	return this->ambientOcclusionSamples;
+}
+
+int Scene::getSamplesPerPixel() const {
+	return this->samplesPerPixel;
+}
+
+int Scene::getMaxTraceDepth() const {
+	return this->maxTraceDepth;
+}
+
 void Scene::setAccelerationStructure(std::shared_ptr<IAccelerationStructure> accelerator) {
 	assert(accelerator);
 	
@@ -104,8 +125,30 @@ void Scene::setLightSampleDensity(float density) {
 	this->lightSampleDensity = density;
 }
 
+void Scene::setPathTracingEnabled(bool enabled) {
+	this->pathTracingEnabled = enabled;
+}
+
 void Scene::setAmbientLight(const Vec3Df& ambientLight) {
 	this->ambientLight = ambientLight;
+}
+
+void Scene::setAmbientOcclusionSamples(int numSamples) {
+	assert(numSamples >= 0);
+
+	this->ambientOcclusionSamples = numSamples;
+}
+
+void Scene::setSamplesPerPixel(int numSamples) {
+	assert(numSamples >= 1);
+
+	this->samplesPerPixel = numSamples;
+}
+
+void Scene::setMaxTraceDepth(int maxDepth) {
+	assert(maxDepth >= 1);
+
+	this->maxTraceDepth = maxDepth;
 }
 
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {
@@ -128,22 +171,15 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	// Iterate through each pixel
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++, iterationCounter++) {
-			Vec3Df origin;
-			Vec3Df dir;
+			Vec3Df color = this->renderPixel(camera, x, y);
 
-#if _DEBUG	// _DEBUG is probably not defined in GCC
+#if _DEBUG
 			// print the iteration
 			if (iterationCounter % 100 == 0)
 			{
 				std::cout << "iteration: " << iterationCounter << "\n";
 			}
 #endif
-
-			// Get the ray from the camera through the current pixel
-			camera->getRay(x, y, origin, dir);
-
-			// Trace the ray through the scene
-			Vec3Df color = this->rayTracer->performRayTracing(origin, dir);
 
 			// Set the resulting color in the image
 			result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
@@ -170,4 +206,28 @@ void Scene::preprocess() {
 
 	// Preprocess the acceleration structure
 	this->accelerator->preprocess();
+}
+
+Vec3Df Scene::renderPixel(std::shared_ptr<ICamera> camera, int x, int y) {
+	Vec3Df result = Vec3Df();
+
+	int samples = this->samplesPerPixel;
+
+	// Stratisifed sampling
+	for (int i = 0; i < samples; i++){
+		for (int j = 0; j < samples; j++) {
+			float u, v;
+			Random::sampleUnitSquare(u, v);
+			Vec3Df origin;
+			Vec3Df dir;
+
+			// Get the ray from the camera through the current pixel
+			camera->getRay(x, y, (i + u) / (float)samples, (j + v) / (float)samples, origin, dir);
+
+			// Trace the ray through the scene
+			result += this->rayTracer->performRayTracing(origin, dir);
+		}
+	}
+
+	return result / (float)(samples * samples);
 }

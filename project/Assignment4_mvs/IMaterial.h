@@ -130,14 +130,30 @@ public:
 	 * Example usage: material.setBRDF<LambertianBRDF>().
 	 */
 	template<class T>
-	void setDiffuseBRDF();
+	void setDiffuseBRDF() {
+		static_assert(std::is_base_of<BRDF, T>::value, "Type T must be subclass of BRDF");
+
+		if (this->diffuseBrdf) {
+			delete this->diffuseBrdf;
+		}
+
+		this->diffuseBrdf = new T(this);
+	}
 
 	/**
 	* Sets the specular BRDF of this material using its type.
 	* Example usage: material.setBRDF<LambertianBRDF>().
 	*/
 	template<class T>
-	void setSpecularBRDF();
+	void setSpecularBRDF(){
+		static_assert(std::is_base_of<BRDF, T>::value, "Type T must be subclass of BRDF");
+
+		if (this->specularBrdf) {
+			delete this->specularBrdf;
+		}
+
+		this->specularBrdf = new T(this);
+	}
 
 	/**
 	 * Calculates the amount of ambient light hitting the surface.
@@ -199,6 +215,7 @@ private:
 	* Calculates the reflection vector.
 	* @param[in] incomingVector The vector in the direction that the light is coming from.
 	* @param[in] normal The surface normal.
+	* @return The reflected vector, or an empty vector in case the incoming vector is coming from the wrong side of the normal.
 	*/
 	static Vec3Df calculateReflectionVector(
 		const Vec3Df &incomingVector,
@@ -210,6 +227,7 @@ private:
 	* @param[in] normal The surface normal.
 	* @param[in] n1 Refractive index of the medium the incomingVector is coming from.
 	* @param[in] n2 Refractive index of the surface.
+	* @return The refracted vector.
 	*/
 	static Vec3Df calculateRefractedVector(
 		const Vec3Df &incomingVector,
