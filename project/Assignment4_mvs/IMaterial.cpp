@@ -172,21 +172,15 @@ Vec3Df IMaterial::specularLight(
 	int iteration) const
 {
 	// If the material is transparent...
-	if (this->specularReflectance > 0.0f) {
-=======
 	if (this->specularBrdf == nullptr && this->specularReflectance > 0.0f) {
->>>>>>> branch 'master' of https://github.com/steffansluis/TI1805
 		Vec3Df incomingVector = reflectedVector;
 
 		// Calculate the reflected vector
 		Vec3Df reflectedVector = IMaterial::calculateReflectionVector(incomingVector, surface.normal);
-<<<<<<< HEAD
-=======
 
 		if (reflectedVector.getSquaredLength() == 0.0f) {
 			return Vec3Df();
 		}
->>>>>>> branch 'master' of https://github.com/steffansluis/TI1805
 
 		// Trace the reflection ray
 		float distance;
@@ -227,11 +221,7 @@ Vec3Df IMaterial::transmittedLight(
 			n2 = this->refractiveIndex;
 		}
 
-<<<<<<< HEAD
-		// Sample the relfected vector, reflectance, refracted vector and transmittance
-=======
-		// Sample the relfected vector, reflectance, refracted vector and tranmittance
->>>>>>> branch 'master' of https://github.com/steffansluis/TI1805
+		// Sample the reflected vector, reflectance, refracted vector and transmittance
 		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incomingVector, surface.normal, n1, n2);
 
 		float distance;
@@ -258,18 +248,8 @@ Vec3Df IMaterial::transmittedLight(
 
 Vec3Df IMaterial::calculateReflectionVector(
 	const Vec3Df &incomingVector,
-<<<<<<< HEAD
 	const Vec3Df &normal) {
-	
-	float IdotN = Vec3Df::dotProduct(incomingVector, normal);
-	
-	/* It doesn't work if incomingVector and normal are orthogonal to each other
-	if(IdotN < 0)) {
-		return NULL;
-	}*/
-=======
-	const Vec3Df &normal)
-{
+
 	float IdotN = Vec3Df::dotProduct(incomingVector, normal);
 
 	// It doesn't work if incomingVector and normal are orthogonal to each other
@@ -277,7 +257,6 @@ Vec3Df IMaterial::calculateReflectionVector(
 		return Vec3Df();
 	}
 
->>>>>>> branch 'master' of https://github.com/steffansluis/TI1805
 	return (2 * IdotN * normal) - incomingVector;
 }
 
