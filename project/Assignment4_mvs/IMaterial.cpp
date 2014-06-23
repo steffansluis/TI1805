@@ -1,5 +1,6 @@
 #include <cassert>
 #include <type_traits>
+#include <limits>
 
 #include "BRDF.h"
 #include "Constants.h"
