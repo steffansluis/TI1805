@@ -55,11 +55,11 @@ bool SphereGeometry::calculateClosestIntersection(const Vec3Df &origin, const Ve
 	// outside of the sphere and set the parameters accordingly
 	if (tmin <= 0.0f || tmax < tmin) {
 		intersection.distance = tmax;
-		intersection.isInside = true;
+		intersection.isInside = false;
 	}
 	else {
 		intersection.distance = tmin;
-		intersection.isInside = false;
+		intersection.isInside = true;
 	}
 
 	// If the distance is negative the intersection occured behind the ray

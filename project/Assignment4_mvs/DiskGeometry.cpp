@@ -36,7 +36,7 @@ void DiskGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	Random::sampleUnitDisk(x, y);
 
 	// Offset the center with the two orthogonal vectors scaled by the random numbers
-	Vec3Df point = this->center + x * v + y * v;
+	Vec3Df point = this->center + x * u + y * v;
 
 	surface.geometry = this->shared_from_this();
 	surface.normal = this->normal;
