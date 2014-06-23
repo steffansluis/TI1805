@@ -249,7 +249,7 @@ Vec3Df IMaterial::calculateReflectionVector(
 	if(IdotN < 0)) {
 		return NULL;
 	}*/
-	return incomingVector - (2 * IdotN * normal);
+	return (2 * IdotN * normal) - incomingVector;
 }
 
 Vec3Df IMaterial::calculateRefractedVector(
@@ -257,5 +257,7 @@ Vec3Df IMaterial::calculateRefractedVector(
 	const Vec3Df &normal,
 	float n1,
 	float n2) {
+	
+	
 	return Vec3Df();
 }
