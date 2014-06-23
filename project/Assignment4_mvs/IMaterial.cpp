@@ -265,7 +265,13 @@ Vec3Df IMaterial::calculateRefractedVector(
 	const Vec3Df &normal,
 	float n1,
 	float n2) {
-	float angle1 = std::acos(Vec3Df::dotProduct(incomingVector, normal));
+	
+	float IdotN = Vec3Df::dotProduct(incomingVector, normal);
+	if (IdotN < 0) {
+		return Vec3Df();
+	}
+	
+	float angle1 = std::acos(IdotN);
 	float angle2 = std::asin(n1 * std::sin(angle1) / n2);
 	
 	Vec3Df iRay = -1 * incomingVector;
