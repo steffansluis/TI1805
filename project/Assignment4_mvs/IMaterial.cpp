@@ -7,6 +7,8 @@
 #include "IMaterial.h"
 #include "IRayTracer.h"
 #include "ITexture.h"
+#include "Random.h"
+#include "RayIntersection.h"
 #include "Scene.h"
 #include "SurfacePoint.h"
 
@@ -32,8 +34,8 @@ specularBrdf(NULL)
 	static auto white = std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1));
 
 	this->setTexture(white);
-	this->setDiffuseBRDF<OrenNayarBRDF>();
-	this->setSpecularBRDF<BlinnPhongBRDF>();
+	this->setDiffuseBRDF<LambertianBRDF>();
+	//this->setSpecularBRDF<BlinnPhongBRDF>();
 }
 IMaterial::~IMaterial() {
 }
@@ -116,47 +118,48 @@ Vec3Df IMaterial::sampleColor(const Vec2Df &texCoords) const {
 	return this->texture->sample(texCoords);
 }
 
-template<class T>
-void  IMaterial::setDiffuseBRDF() {
-	static_assert(std::is_base_of<BRDF, T>::value, "Type T must be subclass of BRDF");
-
-	if (this->diffuseBrdf) {
-		delete this->diffuseBrdf;
-	}
-
-	this->diffuseBrdf = new T(this);
-}
-
-template<class T>
-void  IMaterial::setSpecularBRDF() {
-	static_assert(std::is_base_of<BRDF, T>::value, "Type T must be subclass of BRDF");
-
-	if (this->specularBrdf) {
-		delete this->specularBrdf;
-	}
-
-	this->specularBrdf = new T(this);
-}
-
 Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) const {
-	return this->sampleColor(surface.texCoords) * this->ambientReflectance * scene->getAmbientLight();
+	// Early out in case we do not reflect ambient light or if the scene has no ambient lighting
+	if (this->ambientReflectance <= 0.0f || scene->getAmbientLight().getSquaredLength() == 0.0f) {
+		return Vec3Df();
+	}
+
+	// Start with no ambient occlusion
+	float occlusionFactor = 1.0f;
+
+	// Get the number of occlusion samples to be taken
+	int samples = scene->getAmbientOcclusionSamples();
+
+	// For each sample...
+	for (int i = 0; i < samples; i++) {
+		// Get a random vector in the hemisphere defined by the surface normal
+		Vec3Df dir = Random::sampleHemisphere(surface.normal);
+		RayIntersection intersection;
+
+		// If there is any geometry in this direction, occlude it
+		if (scene->calculateAnyIntersection(surface.point + dir * Constants::Epsilon, dir, std::numeric_limits<float>::infinity(), intersection)) {
+			occlusionFactor -= 1.0f / samples;
+		}
+	}
+
+	return this->sampleColor(surface.texCoords) * this->ambientReflectance * scene->getAmbientLight() * occlusionFactor;
 }
 
 Vec3Df IMaterial::emittedLight(const SurfacePoint &surface, const Vec3Df &reflectedVector) const {
 	return this->sampleColor(surface.texCoords) * this->emissiveness;
 }
 
-Vec3Df IMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const {
+Vec3Df IMaterial::reflectedLight(const SurfacePoint &surface, const Vec3Df &incomingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const {
 	Vec3Df result = Vec3Df();
 
 	if (this->diffuseBrdf) {
 		// If we have a diffuse BRDF set, sample its reflectance
-		result += this->diffuseReflectance * this->diffuseBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
+		result += this->diffuseReflectance * this->diffuseBrdf->reflectance(incomingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 	}
 
 	if (this->specularBrdf) {
 		// If we have a specular BRDF set, sample its reflectance
-		result += this->specularReflectance * this->specularBrdf->reflectance(incommingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
+		result += this->specularReflectance * this->specularBrdf->reflectance(incomingVector, reflectedVector, surface.normal, surface.texCoords, lightColor);
 	}
 
 	return result;
@@ -169,11 +172,15 @@ Vec3Df IMaterial::specularLight(
 	int iteration) const
 {
 	// If the material is transparent...
-	if (this->specularReflectance > 0.0f) {
-		Vec3Df incommingVector = reflectedVector;
+	if (this->specularBrdf == nullptr && this->specularReflectance > 0.0f) {
+		Vec3Df incomingVector = reflectedVector;
 
 		// Calculate the reflected vector
-		Vec3Df reflectedVector = IMaterial::calculateReflectionVector(incommingVector, surface.normal);
+		Vec3Df reflectedVector = IMaterial::calculateReflectionVector(incomingVector, surface.normal);
+
+		if (reflectedVector.getSquaredLength() == 0.0f) {
+			return Vec3Df();
+		}
 
 		// Trace the reflection ray
 		float distance;
@@ -201,7 +208,7 @@ Vec3Df IMaterial::transmittedLight(
 {
 	// If the material is transparent...
 	if (this->transparency > 0.0f) {
-		Vec3Df incommingVector = reflectedVector;
+		Vec3Df incomingVector = reflectedVector;
 		float n1, n2;
 
 		// Get the refractive indices	
@@ -215,7 +222,7 @@ Vec3Df IMaterial::transmittedLight(
 		}
 
 		// Sample the relfected vector, reflectance, refracted vector and tranmittance
-		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incommingVector, surface.normal, n1, n2);
+		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incomingVector, surface.normal, n1, n2);
 
 		float distance;
 
@@ -240,13 +247,21 @@ Vec3Df IMaterial::transmittedLight(
 }
 
 Vec3Df IMaterial::calculateReflectionVector(
-	const Vec3Df &incommingVector,
-	const Vec3Df &normal) {
-	return Vec3Df();
+	const Vec3Df &incomingVector,
+	const Vec3Df &normal)
+{
+	float IdotN = Vec3Df::dotProduct(incomingVector, normal);
+
+	// It doesn't work if incomingVector and normal are orthogonal to each other
+	if (IdotN < 0) {
+		return Vec3Df();
+	}
+
+	return (2 * IdotN * normal) - incomingVector;
 }
 
 Vec3Df IMaterial::calculateRefractedVector(
-	const Vec3Df &incommingVector,
+	const Vec3Df &incomingVector,
 	const Vec3Df &normal,
 	float n1,
 	float n2) {

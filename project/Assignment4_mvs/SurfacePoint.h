@@ -32,12 +32,12 @@ public:
 
 	/**
 	 * Calculates the light reflected from the incoming vector towards the outgoing vector.
-	 * @param[in] incommingVector The vector from which the light is comming.
+	 * @param[in] incomingVector The vector from which the light is comming.
 	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] lightColor The color of the light.
-	 * @return The light reflected from the incomming towards the outgoing vector.
+	 * @return The light reflected from the incoming towards the outgoing vector.
 	 */
-	Vec3Df reflectedLight(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const;
+	Vec3Df reflectedLight(const Vec3Df &incomingVector, const Vec3Df &reflectedVector, const Vec3Df &lightColor) const;
 
 	/**
 	 * Calculates the specularly reflected light towards the given vector.

@@ -17,8 +17,8 @@ PhongBRDF::PhongBRDF(const IMaterial * material)
 
 	@author Joren Hammudoglu
 */
-Vec3Df PhongBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
-	Vec3Df Lm = incommingVector;
+Vec3Df PhongBRDF::reflectance(const Vec3Df &incomingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
+	Vec3Df Lm = incomingVector;
 	Vec3Df Nm = normal;
 	Vec3Df V = reflectedVector;
 

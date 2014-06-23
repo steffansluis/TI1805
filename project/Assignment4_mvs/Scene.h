@@ -86,6 +86,18 @@ public:
 	Vec3Df getAmbientLight() const;
 
 	/**
+	* Gets the number of ambient occlusion samples to be taken.
+	* @return The number of ambient occlusion samples to be taken.
+	*/
+	int getAmbientOcclusionSamples() const;
+
+	/**
+	* Gets the square root of the number of samples taken per pixel.
+	* @return The square root of the number of samples taken per pixel.
+	*/
+	int getSamplesPerPixel() const;
+
+	/**
 	 * Sets the acceleration structure that is used to find speed up
 	 * the intersection calculations.
 	 * @param[in] accelerator Pointer to an acceleration structure.
@@ -117,6 +129,18 @@ public:
 	void setAmbientLight(const Vec3Df &ambientLight);
 
 	/**
+	* Sets the number of ambient occlusion samples to be taken.
+	* @param numSamples The number of ambient occlusion samples to be taken.
+	*/
+	void setAmbientOcclusionSamples(int numSamples);
+
+	/**
+	* Sets the square root of the number of samples taken per pixel.
+	* @param numSamples The square root of the number of samples taken per pixel.
+	*/
+	void setSamplesPerPixel(int numSamples);
+
+	/**
 	 * Renders the scene as seen from the given camera.
 	 * @param[in] camera Pointer to the camera that observes the scene.
 	 * @param width The width of the render.
@@ -131,6 +155,10 @@ private:
 	 */
 	void preprocess();
 
+	Vec3Df renderPixel(std::shared_ptr<ICamera> camera, int x, int y);
+
+	int ambientOcclusionSamples;
+	int samplesPerPixel;
 	float lightSampleDensity;
 	Vec3Df ambientLight;
 	std::shared_ptr<IAccelerationStructure> accelerator;

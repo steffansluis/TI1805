@@ -11,7 +11,7 @@ BlinnPhongBRDF::BlinnPhongBRDF(const IMaterial *material)
 	// Nothing to do here
 }
 
-// The incommingVector, reflectedVector and normal correspond to Li, Lr and n respectivly in this image
+// The incomingVector, reflectedVector and normal correspond to Li, Lr and n respectivly in this image
 // http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#mediaviewer/File:Oren-nayar-reflection.png
 
 Vec3Df BlinnPhongBRDF::reflectance(const Vec3Df &incomingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
