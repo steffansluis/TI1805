@@ -148,7 +148,7 @@ void Scene::setSamplesPerPixel(int numSamples) {
 void Scene::setMaxTraceDepth(int maxDepth) {
 	assert(maxDepth >= 1);
 
-	this->maxTraceDepth = maxTraceDepth;
+	this->maxTraceDepth = maxDepth;
 }
 
 std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width, int height) {
