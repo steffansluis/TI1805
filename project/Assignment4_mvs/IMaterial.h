@@ -8,7 +8,6 @@
 
 class BRDF;
 class ITexture;
-class Reflection;
 class Scene;
 class SurfacePoint;
 
@@ -141,13 +140,6 @@ public:
 	void setSpecularBRDF();
 
 	/**
-	* Sets the Reflection of this material using its type.
-	* Example usage: material.setReflection<FresnelReflection>().
-	*/
-	template<class T>
-	void setReflection();
-
-	/**
 	 * Calculates the amount of ambient light hitting the surface.
 	 * This is not physically correct.
 	 * @param[in] surface The surface for which to perform the calculations.
@@ -176,7 +168,6 @@ public:
 
 	/**
 	 * Calculates the specularly reflected light towards the given vector.
-	 * This is not physically correct.
 	 * @param[in] surface The surface for which to perform the calculations.
 	 * @param[in] reflectedVector The vector that the light is reflected towards.
 	 * @param[in] scene The scene.
@@ -189,7 +180,43 @@ public:
 		const Scene *scene,
 		int iteration) const;
 
+	/**
+	* Calculates the transmitted light towards the given vector.
+	* @param[in] surface The surface for which to perform the calculations.
+	* @param[in] reflectedVector The vector that the light is reflected towards.
+	* @param[in] scene The scene.
+	* @param[in] iteration	The current iteration.
+	* @return The light specularly reflected towards the outgoing vector.
+	*/
+	Vec3Df transmittedLight(
+		const SurfacePoint &surface,
+		const Vec3Df &reflectedVector,
+		const Scene *scene,
+		int iteration) const;
+
 private:
+	/**
+	* Calculates the reflection vector.
+	* @param[in] incommingVector The vector in the direction that the light is coming from.
+	* @param[in] normal The surface normal.
+	*/
+	static Vec3Df calculateReflectionVector(
+		const Vec3Df &incommingVector,
+		const Vec3Df &normal);
+
+	/**
+	* Calculates the refracted vector.
+	* @param[in] incommingVector The vector in the direction that the light is coming from.
+	* @param[in] normal The surface normal.
+	* @param[in] n1 Refractive index of the medium the incommingVector is coming from.
+	* @param[in] n2 Refractive index of the surface.
+	*/
+	static Vec3Df calculateRefractedVector(
+		const Vec3Df &incommingVector,
+		const Vec3Df &normal,
+		float n1,
+		float n2);
+
 	std::shared_ptr<const ITexture> texture;
 	float ambientReflectance;
 	float diffuseReflectance;
@@ -202,7 +229,6 @@ private:
 	float refractiveIndex;
 	const BRDF *diffuseBrdf;
 	const BRDF *specularBrdf;
-	const Reflection *reflection;
 };
 
 #endif

@@ -80,6 +80,7 @@ Vec3Df RayTracer::performShading(const RayIntersection &intersection, int iterat
 	lighting += surface.ambientLight(this->getScene());
 	lighting += surface.emittedLight(viewVector);
 	lighting += surface.specularLight(viewVector, scene, iteration);
+	lighting += surface.transmittedLight(viewVector, scene, iteration);
 
 	// Iterate through all lights and sum the reflected light
 	for (std::vector<std::shared_ptr<ILight>>::const_iterator it = lights->begin(); it != lights->end(); ++it) {

@@ -7,7 +7,6 @@
 #include "IMaterial.h"
 #include "IRayTracer.h"
 #include "ITexture.h"
-#include "Reflection.h"
 #include "Scene.h"
 #include "SurfacePoint.h"
 
@@ -28,8 +27,7 @@ roughness(0.0f),
 shininess(45.0f),
 refractiveIndex(Constants::AirRefractiveIndex),
 diffuseBrdf(NULL),
-specularBrdf(NULL),
-reflection(NULL)
+specularBrdf(NULL)
 {
 	static auto white = std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1));
 
@@ -140,17 +138,6 @@ void  IMaterial::setSpecularBRDF() {
 	this->specularBrdf = new T(this);
 }
 
-template<class T>
-void  IMaterial::setReflection() {
-	static_assert(std::is_base_of<Reflection, T>::value, "Type T must be subclass of Reflection");
-
-	if (this->reflection) {
-		delete this->reflection;
-	}
-
-	this->reflection = new T(this);
-}
-
 Vec3Df IMaterial::ambientLight(const SurfacePoint &surface, const Scene *scene) const {
 	return scene->getAmbientLight() * this->ambientReflectance;
 }
@@ -181,14 +168,40 @@ Vec3Df IMaterial::specularLight(
 	const Scene *scene,
 	int iteration) const
 {
-	// If the material is reflective or transparent...
-	if (this->reflection && (this->specularReflectance || this->transparency)) {
+	// If the material is transparent...
+	if (this->specularReflectance > 0.0f) {
 		Vec3Df incommingVector = reflectedVector;
-		Vec3Df reflectedVector;
-		Vec3Df refractedVector;
-		Vec3Df reflectance;
-		Vec3Df transmittance;
-		Vec3Df result = Vec3Df();
+
+		// Calculate the reflected vector
+		Vec3Df reflectedVector = IMaterial::calculateReflectionVector(incommingVector, surface.normal);
+
+		// Trace the reflection ray
+		float distance;
+		Vec3Df reflected = scene->getRayTracer()->performRayTracingIteration(
+			surface.point + reflectedVector * Constants::Epsilon,
+			reflectedVector,
+			iteration + 1,
+			distance);
+
+		// Calculate the reflectance
+		Vec3Df reflectance = this->sampleColor(surface.texCoords);
+
+		return this->specularReflectance * reflected * reflectance;
+	}
+	else {
+		return Vec3Df();
+	}
+}
+
+Vec3Df IMaterial::transmittedLight(
+	const SurfacePoint &surface,
+	const Vec3Df &reflectedVector,
+	const Scene *scene,
+	int iteration) const
+{
+	// If the material is transparent...
+	if (this->transparency > 0.0f) {
+		Vec3Df incommingVector = reflectedVector;
 		float n1, n2;
 
 		// Get the refractive indices	
@@ -202,50 +215,40 @@ Vec3Df IMaterial::specularLight(
 		}
 
 		// Sample the relfected vector, reflectance, refracted vector and tranmittance
-		this->reflection->sample(
-			incommingVector, 
-			surface.normal, 
-			surface.texCoords,
-			n1,
-			n2,
-			reflectedVector,
-			reflectance, 
+		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incommingVector, surface.normal, n1, n2);
+
+		float distance;
+
+		// Trace the refraction ray
+		Vec3Df transmitted = scene->getRayTracer()->performRayTracingIteration(
+			surface.point + refractedVector * Constants::Epsilon,
 			refractedVector,
-			transmittance);
+			iteration + 1,
+			distance);
 
-		if (this->specularReflectance && (reflectance[0] || reflectance[1] || reflectance[2])) {
-			float distance;
+		// Absorbance using beer's law
+		Vec3Df absorbance = this->sampleColor(surface.texCoords) * -distance;
+		absorbance[0] = expf(absorbance[0]);
+		absorbance[1] = expf(absorbance[2]);
+		absorbance[2] = expf(absorbance[1]);
 
-			// Trace the reflection ray
-			result += this->specularReflectance * reflectance * scene->getRayTracer()->performRayTracingIteration(
-				surface.point + reflectedVector * Constants::Epsilon,
-				reflectedVector,
-				iteration + 1,
-				distance);
-		}
-
-		if (this->transparency && (transmittance[0] || transmittance[1] || transmittance[2])) {
-			float distance;
-
-			// Trace the refraction ray
-			Vec3Df tranmitted = transmittance * scene->getRayTracer()->performRayTracingIteration(
-				surface.point + refractedVector * Constants::Epsilon,
-				refractedVector,
-				iteration + 1,
-				distance);
-
-			// Absorbance using beer's law
-			Vec3Df absorbance = this->sampleColor(surface.texCoords) * -distance;
-			absorbance[0] = expf(absorbance[0]);
-			absorbance[1] = expf(absorbance[2]);
-			absorbance[2] = expf(absorbance[1]);
-
-			result += this->transparency * tranmitted * absorbance;
-		}
-
-		return result;
+		return this->transparency * transmitted * absorbance;
 	}
 	else {
 		return Vec3Df();
 	}
+}
+
+Vec3Df IMaterial::calculateReflectionVector(
+	const Vec3Df &incommingVector,
+	const Vec3Df &normal) {
+	return Vec3Df();
+}
+
+Vec3Df IMaterial::calculateRefractedVector(
+	const Vec3Df &incommingVector,
+	const Vec3Df &normal,
+	float n1,
+	float n2) {
+	return Vec3Df();
 }

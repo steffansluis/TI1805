@@ -120,8 +120,6 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ConstantTexture.h" />
     <ClInclude Include="DiskGeometry.h" />
-    <ClInclude Include="FresnelReflection.h" />
-    <ClInclude Include="GlossySpecularReflection.h" />
     <ClInclude Include="IAccelerationStructure.h" />
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="IGeometry.h" />
@@ -145,10 +143,8 @@
     <ClInclude Include="RayIntersection.h" />
     <ClInclude Include="RayTracer.h" />
     <ClInclude Include="raytracing.h" />
-    <ClInclude Include="Reflection.h" />
     <ClInclude Include="RGBValue.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SpecularReflection.h" />
     <ClInclude Include="SphereGeometry.h" />
     <ClInclude Include="SurfacePoint.h" />
     <ClInclude Include="Testing.h" />
@@ -194,7 +190,6 @@
     <ClCompile Include="RayIntersection.cpp" />
     <ClCompile Include="RayTracer.cpp" />
     <ClCompile Include="raytracing.cpp" />
-    <ClCompile Include="Reflection.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SphereGeometry.cpp" />
     <ClCompile Include="SurfacePoint.cpp" />

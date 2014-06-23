@@ -102,9 +102,6 @@
     <ClCompile Include="AreaLight.cpp">
       <Filter>Lights</Filter>
     </ClCompile>
-    <ClCompile Include="Reflection.cpp">
-      <Filter>Materials\Reflection</Filter>
-    </ClCompile>
     <ClCompile Include="DiskGeometry.cpp">
       <Filter>Geometry</Filter>
     </ClCompile>
@@ -218,18 +215,6 @@
     <ClInclude Include="AreaLight.h">
       <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="Reflection.h">
-      <Filter>Materials\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="FresnelReflection.h">
-      <Filter>Materials\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecularReflection.h">
-      <Filter>Materials\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="GlossySpecularReflection.h">
-      <Filter>Materials\Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="DiskGeometry.h">
       <Filter>Geometry</Filter>
     </ClInclude>
@@ -261,9 +246,6 @@
     </Filter>
     <Filter Include="Cameras">
       <UniqueIdentifier>{274b87e5-c40d-4138-836a-1f94a77541e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Materials\Reflection">
-      <UniqueIdentifier>{05d8a0e4-f60a-45dc-9c34-0f0618a24d61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

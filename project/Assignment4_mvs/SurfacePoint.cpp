@@ -18,3 +18,7 @@ Vec3Df SurfacePoint::reflectedLight(const Vec3Df &incommingVector, const Vec3Df 
 Vec3Df SurfacePoint::specularLight(const Vec3Df &reflectedVector, const Scene *scene, int iteration) const {
 	return this->geometry->getMaterial()->specularLight(*this, reflectedVector, scene, iteration);
 }
+
+Vec3Df SurfacePoint::transmittedLight(const Vec3Df &reflectedVector, const Scene *scene, int iteration) const {
+	return this->geometry->getMaterial()->transmittedLight(*this, reflectedVector, scene, iteration);
+}
