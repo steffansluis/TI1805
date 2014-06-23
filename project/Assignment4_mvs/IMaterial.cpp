@@ -34,7 +34,7 @@ reflection(NULL)
 	static auto white = std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1));
 
 	this->setTexture(white);
-	this->setDiffuseBRDF<LambertianBRDF>();
+	this->setDiffuseBRDF<OrenNayarBRDF>();
 	this->setSpecularBRDF<BlinnPhongBRDF>();
 }
 IMaterial::~IMaterial() {

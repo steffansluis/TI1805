@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -11,24 +13,30 @@ OrenNayarBRDF::OrenNayarBRDF(const IMaterial *material)
 	// Nothing to do here
 }
 
-// TODO: Implement the Oren-Nayar BRDF.
-// http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#Formulation
-// this->material->sampleDiffuseColor(texCoords) = specular color (Rho in the equations)
-// this->material->sampleRoughness(texCoords) = roughness (Sigma in the equations)
+/**
+	The Oren Nayar BRDF.
+	Implemented using the formulaes described in http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#Formulation
 
-// Tips:
-// cos(theta_i) and cos(theta_r) can be computed using the dot product with the normal.
-// cos(phi_i - phi_r) can be computed by projecting the incoming and reflected vectors onto the normal and then taking the dot product
-// between the two projected vectors. (Vec3Df::projectOn with an empty vector for the second parameter).
-
-// The incommingVector, reflectedVector and normal correspond to Li, Lr and n respectivly in this image
-// http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model#mediaviewer/File:Oren-nayar-reflection.png
-
-// For now every object's material defaults to DiffuseMaterial, the DiffuseMaterial uses the LambertianBRDF by default.
-// If you want to test a different brdf, modifiy the DiffuseMaterial(color, roughness) constructor to set diffuseBrdf to whichever one you need to test.
-// DiffuseMaterial.cpp also contains the default color and roughness, change these as you wish.
-
+	@author Joren Hammudoglu
+*/
 Vec3Df OrenNayarBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &reflectedVector, const Vec3Df &normal, const Vec2Df &texCoords, const Vec3Df &light) const {
-	// TODO: oren-nayar brdf
-	return this->material->sampleColor(texCoords) * this->material->getDiffuseReflectance();
+	Vec3Df empty = Vec3Df(0,0,0);
+	Vec3Df rho =  this->material->sampleColor(texCoords);
+	float sigma = this->material->getRoughness();
+	float sigma2 = sigma*sigma;
+	float cosThetaI = Vec3Df::dotProduct(incommingVector,normal);
+	float cosThetaR = Vec3Df::dotProduct(reflectedVector,normal);
+	float cosPhiDiff = Vec3Df::dotProduct(
+			incommingVector.projectOn(normal,empty),
+			reflectedVector.projectOn(normal,empty)
+	);
+
+	float A = 1 - 0.5 * (sigma2 / (sigma2 + 0.33));
+	float B = 0.45 * (sigma2/ (sigma2 + 0.09));
+
+	float alhpa = std::max(cosThetaI, cosThetaR);
+	float beta = std::min(cosThetaI, cosThetaR);
+
+	Vec3Df Lr = (rho/M_PI) * cosThetaI * (A + (B * std::max(0.f, cosPhiDiff) * std::sin(alhpa) * std::tan(beta))) * light;
+	return Lr;
 }
