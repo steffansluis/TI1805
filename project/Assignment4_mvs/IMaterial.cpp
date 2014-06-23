@@ -243,7 +243,7 @@ Vec3Df IMaterial::calculateReflectionVector(
 	const Vec3Df &incomingVector,
 	const Vec3Df &normal) {
 	
-	Vec3Df IdotN = Vec3Df::dotProduct(incomingVector, normal);
+	float IdotN = Vec3Df::dotProduct(incomingVector, normal);
 	
 	/* It doesn't work if incomingVector and normal are orthogonal to each other
 	if(IdotN < 0)) {
