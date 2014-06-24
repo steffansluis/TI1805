@@ -188,6 +188,7 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 
 		// Iterate through each pixel
 		printf("beginrender");
+		std::cout << height << width << "\n";
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++, iterationCounter++) {
 				Vec3Df origin;
@@ -201,7 +202,7 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 				}
 #endif
 				// Get a number of rays per pixel for the depth of field effect.
-				float raysPerPixel = 25;
+				float raysPerPixel = 5;
 				float red = 0;
 				float green = 0;
 				float blue = 0;
@@ -213,7 +214,6 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 					red += color[0];
 					green += color[1];
 					blue += color[2];
-					printf("depthopfieldray");
 
 				}
 				red /= raysPerPixel;

@@ -155,7 +155,7 @@ int main(int argc, char** argv)
     glutIdleFunc( animate);
 
 	init();
-
+	
     // lancement de la boucle principale
     glutMainLoop();
         
