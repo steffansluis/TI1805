@@ -1,7 +1,8 @@
-#include "..\BTree.h"
-#include "..\BTreeNode.h"
-#include "..\TriangleGeometry.h"
+#include "BTree.h"
+#include "BTreeNode.h"
+#include "TriangleGeometry.h"
 
+#include <limits>
 #include <vector>
 #include <memory>
 
@@ -10,8 +11,12 @@ using namespace System::Text;
 using namespace System::Collections::Generic;
 using namespace Microsoft::VisualStudio::TestTools::UnitTesting;
 
+#undef INFINITY
+
 namespace Assignment4_Testing
 {
+	const float INFINITY = std::numeric_limits<float>::infinity();
+
 	[TestClass]
 	public ref class BTreeTest
 	{

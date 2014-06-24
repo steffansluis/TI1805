@@ -55,14 +55,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)include;$(ProjectDir)glut;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)include;$(ProjectDir)glut;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
     <IncludePath>$(ProjectDir)include;$(ProjectDir)glut;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)include;$(ProjectDir)glut;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)include;$(ProjectDir)glut;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)include;$(ProjectDir)glut;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
