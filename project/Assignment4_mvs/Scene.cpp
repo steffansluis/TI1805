@@ -1,4 +1,6 @@
 #include <cassert>
+#include <ctime>
+#include <omp.h>
 
 #include "BTreeAccelerator.h"
 #include "Image.h"
@@ -168,25 +170,35 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	// A counter for the iteration of the ray-tracing algorithm. 
 	int iterationCounter = 0;
 
-	// Iterate through each pixel, collapse the calculation into separate threads
-	#pragma omp parallel for reduction(+:iterationCounter) private(origin,dir) shared(camera, result, rt) collapse(2) schedule(dynamic)
-	for (int y = 0; y < height; y+=2) {
-		for (int x = 0; x < width; x+=2) {
-			Vec3Df color = this->renderPixel(camera, x, y);
+	clock_t start = clock();
 
-#if _DEBUG
-			// print the iteration
-			if (iterationCounter % 100 == 0)
-			{
-				std::cout << "iteration: " << iterationCounter << "\n";
-			}
+#pragma omp parallel shared(camera, result)
+	{
+		// Set the random seed for each thread
+		srand(time(NULL) ^ omp_get_thread_num());
+
+		// Iterate through each pixel, collapse the calculation into separate threads if not on windows (seems like MVC doesnt support collapse)
+#ifdef WIN32
+#pragma omp for schedule(dynamic)
+#else
+#pragma omp for reduction(+:iterationCounter) collapse(2) schedule(dynamic)
 #endif
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				// Render the pixel
+				Vec3Df color = this->renderPixel(camera, x, y);
 
-			// Set the resulting color in the image
-			result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
-			std::cout << "Pixel: " << iterationCounter++ << std::endl;
+				// Set the resulting color in the image
+				result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
+
+				// Printing is sloooow
+				//std::cout << "Pixel: " << iterationCounter++ << std::endl;
+			}
 		}
 	}
+
+	clock_t end = clock();
+	std::cout << "Time: " << (end - start) / (double)CLOCKS_PER_SEC;
 
 	std::cout << "Done!" << std::endl;
 

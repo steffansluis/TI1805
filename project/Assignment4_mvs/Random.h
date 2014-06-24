@@ -8,11 +8,17 @@
  */
 class Random {
 public:
+	/** 
+	 * Returns a random unsigned integer in the range [0, RAND_MAX].
+	 * @return A random unsigned integer in the range [0, RAND_MAX].
+	 */
+	static unsigned int rand();
+
 	/**
 	 * Returns a random float in the range [0, 1].
 	 * @return A random float in the range [0, 1].
 	 */
-	static float sampleUnit();
+	static float randUnit();
 
 	/**
 	 * Returns two floating point numbers in the unit disk.
@@ -44,6 +50,12 @@ public:
 	 * @return A point on the given hemisphere.
 	 */
 	static Vec3Df sampleHemisphere(const Vec3Df &normal);
+
+#ifndef WIN32
+private:
+	static __thread bool initialized;
+	static __thread unsigned int seed;
+#endif
 };
 
 #endif

@@ -100,7 +100,7 @@ void MeshGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	// Get the maxium surface area of a triangle and
 	// gerate a random surface area in the range [0, maxArea]
 	float maxArea = this->maxTriangleArea;
-	float randomArea = Random::sampleUnit() * totalArea;
+	float randomArea = Random::randUnit() * totalArea;
 
 	std::shared_ptr<IGeometry> triangle;
 
@@ -108,7 +108,7 @@ void MeshGeometry::getRandomSurfacePoint(SurfacePoint &surface) const {
 	// to pick a uniformly distributed random triangle
 	do{
 		// Get a random triangle
-		int index = rand() % numTriangles;
+		int index = Random::rand() % numTriangles;
 		triangle = this->triangles->at(index);
 	} while (triangle->getArea() < randomArea);
 

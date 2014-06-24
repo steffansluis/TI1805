@@ -226,17 +226,11 @@
     <Filter Include="Ray Tracers">
       <UniqueIdentifier>{edef72d9-5146-4b91-95fe-c2233047f2ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Geometry">
-      <UniqueIdentifier>{2225b482-66bf-4432-b1c8-4f58af704144}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Lights">
       <UniqueIdentifier>{71da2712-b1af-493e-9b55-3c2bbf440d52}</UniqueIdentifier>
     </Filter>
     <Filter Include="Materials">
       <UniqueIdentifier>{32734b41-d502-4dce-b563-748a3108cdfc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Textures">
-      <UniqueIdentifier>{7d3d5202-31bc-4dcb-8a53-2ffb42031773}</UniqueIdentifier>
     </Filter>
     <Filter Include="Other">
       <UniqueIdentifier>{10fe0544-8192-48af-b9a4-4080034d8e99}</UniqueIdentifier>
@@ -246,6 +240,12 @@
     </Filter>
     <Filter Include="Cameras">
       <UniqueIdentifier>{274b87e5-c40d-4138-836a-1f94a77541e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{7d3d5202-31bc-4dcb-8a53-2ffb42031773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{2225b482-66bf-4432-b1c8-4f58af704144}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,21 +1,71 @@
+#define _CRT_RAND_S
+
 #include <cstdlib>
-#include <math.h>
+#include <cmath>
+#include <ctime>
 
 #include "Constants.h"
 #include "Random.h"
 
-float Random::sampleUnit() {
+#ifndef WIN32
+static __thread bool Random::initialized;
+static __thread unsigned int Random::seed;
+#endif
+
+unsigned int Random::rand() {
+#if defined(WIN32) || !defined(_OPENMP)
+	return ::rand();
+#else
+ #ifdef WIN32
+	// rand_s is threadsafe and generates an unsigned integer in the range [0, UINT_MAX]
+	unsigned int rnd;
+	rand_s(&rnd);
+
+	// Return a random number
+	return rnd % RAND_MAX;
+ #else
+	if (!Random::initialized) {
+		Random::initialized = true;
+		Random::seed = time(NULL);
+	}
+
+	// Return a random number
+	return rand_r(&seed);
+ #endif
+#endif
+}
+
+float Random::randUnit() {
+#if defined(WIN32) || !defined(_OPENMP)
 	// Return a random float in the range [0, 1]
-	return rand() / static_cast<float>(RAND_MAX);
+	return ::rand() / static_cast<float>(RAND_MAX);
+#else
+#ifdef WIN32
+	// rand_s is threadsafe and generates an unsigned integer in the range [0, UINT_MAX]
+	unsigned int rnd;
+	rand_s(&rnd);
+
+	// Return a random float in the range [0, 1]
+	return rnd / static_cast<float>(UINT_MAX);
+ #else
+	if (!Random::initialized) {
+		Random::initialized = true;
+		Random::seed = time(NULL);
+	}
+
+	// Return a random float in the range [0, 1]
+	return rand_r(&seed) / static_cast<float>(RAND_MAX);
+ #endif
+#endif
 }
 
 void Random::sampleUnitDisk(float &u, float &v) {
 	// Generate a random angle in the range [0, 2pi] 
-	float s = Constants::TwoPi * (rand() / static_cast<float>(RAND_MAX));
+	float s = Constants::TwoPi * Random::randUnit();
 
 	// Generate a random radius in the range [0, 2]
-	float t = rand() / static_cast<float>(RAND_MAX) + rand() / static_cast<float>(RAND_MAX);
-	
+	float t = Random::randUnit() + Random::randUnit();
+
 	// Map the radius to [-1, 1]
 	float r = t > 1.0f ? 2.0f - t : t;
 
@@ -26,8 +76,8 @@ void Random::sampleUnitDisk(float &u, float &v) {
 
 void Random::sampleUnitSquare(float &u, float &v) {
 	// Get two random floats in the range [0, 1]
-	u = rand() / static_cast<float>(RAND_MAX);
-	v = rand() / static_cast<float>(RAND_MAX);
+	u = Random::randUnit();
+	v = Random::randUnit();
 }
 
 Vec3Df Random::sampleUnitSphere() {
@@ -36,10 +86,10 @@ Vec3Df Random::sampleUnitSphere() {
 	float sinTheta;
 
 	// Calculate random phi in range [0, 2pi]
-	phi = rand() / static_cast<float>(RAND_MAX) * Constants::TwoPi;
+	phi = Random::randUnit() * Constants::TwoPi;
 
 	// Calculate random sin(theta) in range [-1, 1]
-	sinTheta = ((rand() / static_cast<float>(RAND_MAX)) - 0.5f) * 2.0f;
+	sinTheta = (Random::randUnit() - 0.5f) * 2.0f;
 
 	// Calculate cos(theta)
 	cosTheta = sqrtf(1.0f - sinTheta * sinTheta);

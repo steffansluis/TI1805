@@ -1,7 +1,3 @@
-
-
-#include "stdafx.h"
-
 #include "..\BTree.h"
 #include "..\BTreeNode.h"
 #include "..\TriangleGeometry.h"
