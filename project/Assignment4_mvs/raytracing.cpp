@@ -242,7 +242,6 @@ void createScene2(Scene *scene) {
 
 void rayTrace() {
 	std::cout << "Raytracing" << std::endl;
-
 	// Create a scene
 	Scene scene;
 	createScene2(&scene);

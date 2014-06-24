@@ -61,6 +61,8 @@ private:
 	Vec3Df xApertureRadius;
 	Vec3Df yApertureRadius;
 	
+	float &r1;
+	float &r2;
 	float R1;
 	float R2;
 	Vec3Df randomisedEyePoint;
