@@ -4,24 +4,39 @@
 #include "PerspectiveCamera.h"
 #include "Random.h"
 
-
 PerspectiveCamera::PerspectiveCamera()
-: ICamera(), fieldOfView(Constants::PiOver4) {
+: ICamera(), fieldOfView(Constants::PiOver4), ApertureRadius(0.0f), focalDistance(0.0f) {
 }
 PerspectiveCamera::PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt)
-: ICamera(position, lookAt), fieldOfView(Constants::PiOver4) {
+: ICamera(position, lookAt), fieldOfView(Constants::PiOver4), ApertureRadius(0.0f), focalDistance(0.0f) {
 }
 PerspectiveCamera::PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt, const Vec3Df &up)
-: ICamera(position, lookAt, up), fieldOfView(Constants::PiOver4) {
+: ICamera(position, lookAt, up), fieldOfView(Constants::PiOver4), ApertureRadius(0.0f), focalDistance(0.0f) {
 }
 
+float PerspectiveCamera::getAperatureRadius() const {
+	return this->ApertureRadius;
+}
 float PerspectiveCamera::getFieldOfView() const {
 	return this->fieldOfView;
+}
+float PerspectiveCamera::getFocalDistance() const {
+	return this->focalDistance;
+}
+void PerspectiveCamera::setAperatureRadius(float radius) {
+	assert(radius >= 0.0f);
+
+	this->ApertureRadius = radius;
 }
 void PerspectiveCamera::setFieldOfView(float fov) {
 	assert(fov >= 0.0f && fov <= Constants::TwoPi);
 
 	this->fieldOfView = fov;
+}
+void PerspectiveCamera::setFocalDistance(float focalDistance) {
+	assert(focalDistance >= 0.0f);
+
+	this->focalDistance = focalDistance;
 }
 
 void PerspectiveCamera::preprocess(int width, int height) {
@@ -34,41 +49,40 @@ void PerspectiveCamera::preprocess(int width, int height) {
 	this->right.normalize();
 	this->up = Vec3Df::crossProduct(this->right, this->forward);
 
-	// Scale the right vector by the aspect ratio
-	this->right *= this->getAspectRatio();
-
 	// Find the distance from the eye to the virtual image plane
-	// TODO: Think and verify this, tired atm
 	float distance = 0.5f / tanf(0.5f * this->fieldOfView);
 
-	//Values needed for depth of field
+	// Distance to the focal plane
+	// If no default value is set, use the distance towards the camera target
+	if (this->focalDistance <= 0.0f)  {
+		this->focalDistance = (this->getPosition() - this->getLookAt()).getLength();
+	}
 
-	//Distance to the image the focus if on
-	float focalDistance = this->getPosition().getLength() - this->getLookAt().getLength();
-	//half width of the view plane
-	float halfWidth = distance * tanf(fieldOfView / 2);
-	//radius of the "eyeball", I will play with this a bit, i dont know what a good radius would be
-	this->ApertureRadius = 0.01f;
-	this->xApertureRadius = this->right*ApertureRadius;
-	this->yApertureRadius = this->up*ApertureRadius;
+	// Radius of the circle of confusion
+	this->xApertureRadius = this->right * this->ApertureRadius;
+	this->yApertureRadius = this->up * this->ApertureRadius;
+	
+	// Scale the right vector by the aspect ratio
+	this->right *= this->getAspectRatio();
 
 	// Offset from position to centre of the image plane
 	this->imagePlaneOffset = this->forward * distance;
 }
 
-void PerspectiveCamera::getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) const {
-	// Get the vector towards centre of the image plane and offset it 
-	// by the right and up vectors scaled by u and v respectivly.
-	dir = this->imagePlaneOffset + this->right * u - this->up * v;
-
+void PerspectiveCamera::getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) const
+{
 	// Calculate two random vectors for the offset to somewhere in our "eye"
 	float r1;
 	float r2;
 	Random::sampleUnitDisk(r1, r2);
 
-	Vec3Df randomisedEyePoint = r1 * this->xApertureRadius + r2 * this->yApertureRadius;
-	origin = randomisedEyePoint;
-	origin.normalize();
-	dir.normalize();
+	// Offset the ray origin to a point in the circle of confusion
+	origin = this->getPosition() + r1 * this->xApertureRadius + r2 * this->yApertureRadius;
 
+	// Trace a ray from the center of the lens through the image plane into the scene
+	dir = this->getPosition() + (this->imagePlaneOffset + this->right * u - this->up * v) * this->focalDistance;
+
+	// Get the direction from the point in the circle of confusion to the point in the scene
+	dir -= origin;
+	dir.normalize();
 }

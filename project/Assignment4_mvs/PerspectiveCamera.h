@@ -28,8 +28,12 @@ public:
 	*/
 	PerspectiveCamera(const Vec3Df &position, const Vec3Df &lookAt, const Vec3Df &up);
 
+	float getAperatureRadius() const;
 	float getFieldOfView() const;
+	float getFocalDistance() const;
+	void setAperatureRadius(float radius);
 	void setFieldOfView(float fov);
+	void setFocalDistance(float focalDistance);
 
 	/**
 	* Perform any necessary preprocessing.
@@ -52,6 +56,8 @@ private:
 	Vec3Df up;
 	Vec3Df forward;
 	Vec3Df imagePlaneOffset;
+
+	float focalDistance;
 	float ApertureRadius;
 	Vec3Df xApertureRadius;
 	Vec3Df yApertureRadius;

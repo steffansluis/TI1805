@@ -196,8 +196,9 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 				// Set the resulting color in the image
 				result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
 
-				if (iterationCounter++ % width == 0)
+				if (iterationCounter % width == 0) {
 					std::cout << "Pixel: " << iterationCounter << " / " << (width * height) << std::endl;
+				}
 			}
 		}
 	}
