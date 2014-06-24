@@ -13,7 +13,7 @@ __thread unsigned int Random::seed;
 #endif
 
 unsigned int Random::rand() {
-#if defined(WIN32) || !defined(_OPENMP)
+#if !defined(_OPENMP) || !defined(__GLIBC__)
 	return ::rand();
 #else
  #ifdef WIN32
@@ -36,7 +36,7 @@ unsigned int Random::rand() {
 }
 
 float Random::randUnit() {
-#if defined(WIN32) || !defined(_OPENMP)
+#if !defined(_OPENMP) || !defined(__GLIBC__)
 	// Return a random float in the range [0, 1]
 	return ::rand() / static_cast<float>(RAND_MAX);
 #else
