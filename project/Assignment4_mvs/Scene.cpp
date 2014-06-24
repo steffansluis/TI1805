@@ -189,7 +189,9 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 #pragma omp for reduction(+:iterationCounter) collapse(2) schedule(dynamic)
 #endif
 		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++, iterationCounter++) {
+			for (int x = 0; x < width; x++) {
+				iterationCounter++;
+
 				// Render the pixel
 				Vec3Df color = this->renderPixel(camera, x, y);
 

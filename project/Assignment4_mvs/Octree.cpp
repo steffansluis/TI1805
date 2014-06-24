@@ -1,3 +1,5 @@
+#include <limits>
+
 #include "Octree.h"
 #include "RayIntersection.h"
 
