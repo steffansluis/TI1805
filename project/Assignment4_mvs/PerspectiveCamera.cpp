@@ -64,10 +64,6 @@ void PerspectiveCamera::getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) co
 	dir = this->imagePlaneOffset + this->right * u - this->up * v;
 
 	// Calculate two random vectors for the offset to somewhere in our "eye"
-
-	float R1 = rand() % 2 - 1;
-	float R2 = rand() % 2 - 1;
-
 	Random::sampleUnitDisk(r1, r2);
 	float R1 = r1;
 	float R2 = r2;
