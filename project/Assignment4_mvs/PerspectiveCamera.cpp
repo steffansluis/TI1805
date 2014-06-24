@@ -51,7 +51,7 @@ void PerspectiveCamera::preprocess(int width, int height) {
 	this->ApertureRadius = 0.01f;
 	this->xApertureRadius = this->right*ApertureRadius;
 	this->yApertureRadius = this->up*ApertureRadius;
-	
+
 	// Offset from position to centre of the image plane
 	this->imagePlaneOffset = this->forward * distance;
 }
@@ -66,7 +66,7 @@ void PerspectiveCamera::getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) co
 	float r2;
 	Random::sampleUnitDisk(r1, r2);
 
-	Vec3Df randomisedEyePoint = Vec3Df::addition(r1 * this->xApertureRadius, r2 * this->yApertureRadius);
+	Vec3Df randomisedEyePoint = r1 * this->xApertureRadius + r2 * this->yApertureRadius;
 	origin = randomisedEyePoint;
 	origin.normalize();
 	dir.normalize();
