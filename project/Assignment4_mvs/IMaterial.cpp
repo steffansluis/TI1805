@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <type_traits>
 #include <limits>
@@ -8,6 +9,7 @@
 #include "IMaterial.h"
 #include "IRayTracer.h"
 #include "ITexture.h"
+#include "mesh.h"
 #include "Random.h"
 #include "RayIntersection.h"
 #include "Scene.h"
@@ -36,7 +38,41 @@ specularBrdf(NULL)
 
 	this->setTexture(white);
 	this->setDiffuseBRDF<LambertianBRDF>();
-	//this->setSpecularBRDF<BlinnPhongBRDF>();
+}
+IMaterial::IMaterial(Material *material) : IMaterial() {
+	if (material->has_illum()) {
+		if (material->illum() == 2) {
+			this->setSpecularReflectance(1.0f);
+			this->setSpecularBRDF<BlinnPhongBRDF>();
+		}
+		else if (material->illum() > 2) {
+			this->specularBrdf = NULL;
+		}
+	}
+
+	if (material->has_Ka()) {
+		Vec3Df Ka = material->Ka();
+		this->setAmbientReflectance(std::max(Ka[0], std::max(Ka[1], Ka[2])));
+	}
+
+	if (material->has_Kd()) {
+		this->setDiffuseReflectance(1.0f);
+		this->setTexture(std::make_shared<ConstantTexture>(material->Kd()));
+	}
+
+	if (material->has_Ks()) {
+		Vec3Df Ks = material->Ks();
+		this->setSpecularReflectance(std::max(Ks[0], std::max(Ks[1], Ks[2])));
+	}
+
+	if (material->has_Ni())
+		this->setRefractiveIndex(material->Ni());
+
+	if (material->has_Ns())
+		this->setShininess(material->Ns());
+
+	if (material->has_Tr())
+		this->setTransparency(material->Tr());
 }
 IMaterial::~IMaterial() {
 }

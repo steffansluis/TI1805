@@ -8,6 +8,7 @@
 
 class BRDF;
 class ITexture;
+class Material;
 class Scene;
 class SurfacePoint;
 
@@ -18,6 +19,7 @@ class SurfacePoint;
 class IMaterial : public std::enable_shared_from_this<IMaterial> {
 public:
 	IMaterial();
+	IMaterial(Material *material);
 	virtual ~IMaterial();
 
 	/**

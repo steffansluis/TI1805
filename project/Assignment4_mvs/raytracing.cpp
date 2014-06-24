@@ -98,54 +98,51 @@ void createScene1(Scene *scene) {
 	// Determines the number of light samples taken.
 	// Setting this to a low number will cause visible noise but decreases rendering time.
 	// Setting this to a high number will cause a better result at the expense of rendering time
-	scene->setLightSampleDensity(1000.0f);
+	scene->setLightSampleDensity(0.0f);
 
+	// Ambient light color
+	scene->setAmbientLight(Vec3Df(0.1f, 0.1f, 0.1f));
+
+	// Ambient occlusion samples per surface intersection (0 = no ambient occlusion)
+	scene->setAmbientOcclusionSamples(8);
+
+	// sqrt(Number) of samples per pixel (16x16)
+	scene->setSamplesPerPixel(4);
+	
 	// Create an emissive material
 	auto lightMaterial = std::make_shared<IMaterial>();
 	lightMaterial->setEmissiveness(1.0f);
 
-	// Create a red diffuse material
-	auto redMaterial = std::make_shared<IMaterial>();
-	redMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(1, 0, 0)));
+	// Create a green diffuse material
+	auto greenMaterial = std::make_shared<IMaterial>();
+	greenMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(0.2f, 0.4f, 0.2f)));
 
 	// Create a mesh and add it to the scene
 	auto mesh = std::make_shared<MeshGeometry>(&MyMesh);
-	//mesh->setAccelerationStructure(std::make_shared<BTreeAccelerator>());
 	scene->addGeometry(mesh);
-
-	// Create a with an emissive material and add it to the scene
-	auto sphere = std::make_shared<SphereGeometry>(Vec3Df(0.5f, 1, 0.5f), 0.125f);
-	sphere->setMaterial(lightMaterial);
-	//scene.addGeometry(sphere);
-	//scene.addLight(std::make_shared<PointLight>(Vec3Df(0.5f, 1, 0.5f), Vec3Df(0.8f, 0.8f, 0.8f)));
-
-	// Create a light source from the sphere and add it to the scene
-	auto sphereLight = std::make_shared<AreaLight>(sphere);
-	sphereLight->setIntensity(10.0f);
-	//scene.addLight(sphereLight);
-
-	// Create a back plane
-	auto backPlane = std::make_shared<PlaneGeometry>(Vec3Df(0, 0, 1), -1);
-	//scene.addGeometry(backPlane);
 
 	// Create a floor plane
 	auto floorPlane = std::make_shared<PlaneGeometry>(Vec3Df(0, 1, 0), 0.209548995f);
+	floorPlane->setMaterial(greenMaterial);
 	scene->addGeometry(floorPlane);
 
 	// Create a point light at every light position
 	for (std::vector<Vec3Df>::iterator it = MyLightPositions.begin(); it != MyLightPositions.end(); ++it) {
-		//scene.addLight(std::make_shared<PointLight>((*it), Vec3Df(0.8f, 0.8f, 0.8f)));
 		// Create a disk
 		Vec3Df position = (*it);
-		Vec3Df normal = Vec3Df(0, 0.21f, 0) - position;
+		Vec3Df target = Vec3Df(0, 0.21f, 0);
+		Vec3Df normal = target - position;
 		normal.normalize();
 
+		// Create a disk at position facing to target with radius 0.125f
 		auto disk = std::make_shared<DiskGeometry>(normal, position, 0.125f);
 		disk->setMaterial(lightMaterial);
 		scene->addGeometry(disk);
 
+		// Create a light source from the disk
 		auto diskLight = std::make_shared<AreaLight>(disk);
-		diskLight->setIntensity(0.035f);
+		diskLight->setIntensity(1.0f);
+		diskLight->setFalloff(0.01f);
 		scene->addLight(diskLight);
 	}
 }
@@ -236,19 +233,36 @@ void createScene2(Scene *scene) {
 	scene->addGeometry(whiteSphere);
 
 	scene->addLight(diskLight);
-
-	//scene->setAmbientLight(Vec3Df(0.5f, 0.5f, 0.5f));
 }
+
+#define SCENE 1
+#define DEPTH_OF_FIELD 0
 
 void rayTrace() {
 	std::cout << "Raytracing" << std::endl;
-	// Create a scene
+
 	Scene scene;
+
+#if SCENE == 1
+	// Create a scene
+	createScene1(&scene);
+
+	// Create a perspective camera
+	auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget, MyCameraUp);
+#elif SCENE == 2
+	// Create a scene
 	createScene2(&scene);
 
 	// Create a perspective camera
-	//auto camera = std::make_shared<PerspectiveCamera>(MyCameraPosition, MyCameraTarget, MyCameraUp);
 	auto camera = std::make_shared<PerspectiveCamera>(Vec3Df(0, -0.1f, 1.5f), Vec3Df(), Vec3Df(0, 1, 0));
+#else
+ #error No scene specified
+#endif
+
+#if DEPTH_OF_FIELD == 1
+	camera->setAperatureRadius(0.025f);
+	camera->setFocalDistance(1.1f);
+#endif
 
 	// Render the scene
 	std::shared_ptr<Image> result = scene.render(camera, WindowSize_X, WindowSize_Y);
