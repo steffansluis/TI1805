@@ -141,6 +141,8 @@
     <ClInclude Include="MeshGeometry.h" />
     <ClInclude Include="MeshTriangleGeometry.h" />
     <ClInclude Include="NoAccelerationStructure.h" />
+    <ClInclude Include="Octree.h" />
+    <ClInclude Include="OctreeNode.h" />
     <ClInclude Include="OrenNayarBRDF.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PhongBRDF.h" />
@@ -188,6 +190,8 @@
     <ClCompile Include="MeshGeometry.cpp" />
     <ClCompile Include="MeshTriangleGeometry.cpp" />
     <ClCompile Include="NoAccelerationStructure.cpp" />
+    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="OctreeNode.cpp" />
     <ClCompile Include="OrenNayarBRDF.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PhongBRDF.cpp" />

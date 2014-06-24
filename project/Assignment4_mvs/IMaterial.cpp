@@ -22,7 +22,7 @@ IMaterial::IMaterial() :
 texture(nullptr),
 ambientReflectance(1.0f),
 diffuseReflectance(1.0f),
-specularReflectance(1.0f),
+specularReflectance(0.0f),
 emissiveness(0.0f),
 transparency(0.0f),
 absorbance(0.0f),

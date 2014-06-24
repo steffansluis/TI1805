@@ -105,6 +105,12 @@
     <ClCompile Include="DiskGeometry.cpp">
       <Filter>Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="OctreeNode.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Acceleration Structures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
@@ -217,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="DiskGeometry.h">
       <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="OctreeNode.h">
+      <Filter>Acceleration Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Acceleration Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

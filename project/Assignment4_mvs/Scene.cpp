@@ -23,6 +23,7 @@ lights(std::make_shared<std::vector<std::shared_ptr<ILight>>>()),
 lightSampleDensity(1.0f),
 samplesPerPixel(1),
 ambientOcclusionSamples(0),
+maxTraceDepth(4),
 pathTracingEnabled(false)
 {
 	// Set the acceleration structure
@@ -193,7 +194,8 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 				result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
 
 				// Printing is sloooow
-				//std::cout << "Pixel: " << iterationCounter++ << std::endl;
+				if (iterationCounter++ % width == 0)
+				std::cout << "Pixel: " << iterationCounter << " / " << (width * height) << std::endl;
 			}
 		}
 	}

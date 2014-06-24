@@ -7,6 +7,7 @@
 #include "MeshGeometry.h"
 #include "MeshTriangleGeometry.h"
 #include "NoAccelerationStructure.h"
+#include "Octree.h"
 #include "Random.h"
 #include "SurfacePoint.h"
 
@@ -19,7 +20,7 @@ totalArea(0),
 triangles(MeshGeometry::generateTriangles(mesh)){
 	assert(mesh);
 
-	this->setAccelerationStructure(std::make_shared<NoAccelerationStructure>());
+	this->setAccelerationStructure(std::make_shared<Octree>());
 }
 
 MeshGeometry::~MeshGeometry() {

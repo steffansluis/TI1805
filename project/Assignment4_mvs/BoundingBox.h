@@ -36,6 +36,13 @@ public:
 	bool intersects(const Vec3Df &origin, const Vec3Df &dir, float &distance) const;
 
 	/**
+	 * Tests whether this bounding box intersects with the given bounding box.
+	 * @param[in] A bounding box.
+	 * @return True if the bounding boxes intersect; otherwise false.
+	 */
+	bool intersects(const BoundingBox &other) const;
+
+	/**
 	 * Computes the center of the bounding box.
 	 * @return The center of the bounding box.
 	 */

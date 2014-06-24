@@ -45,6 +45,13 @@ bool BoundingBox::intersects(const Vec3Df &origin, const Vec3Df &dir, float &dis
 	return true;
 }
 
+bool BoundingBox::intersects(const BoundingBox &other) const {
+	return 
+		this->max[0] >= other.min[0] && this->min[0] <= other.max[0] &&
+		this->max[1] >= other.min[1] && this->min[1] <= other.max[1] && 
+		this->max[2] >= other.min[2] && this->min[2] <= other.max[2];
+}
+
 Vec3Df BoundingBox::getCenter() const {
 	return (this->min + this->max) * 0.5f;
 }

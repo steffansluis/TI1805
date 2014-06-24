@@ -8,7 +8,7 @@ project/Assignment4_mvs/ipch/
 project/Assignment4_mvs/build/
 
 # Ignore the output files
-project/Assignment4_mvs/Render/
+project/Assignment4_mvs/Render/*
 
 project/Assignment4_mvs/Debug/*
 !project/Assignment4_mvs/Debug/models/
