@@ -291,8 +291,8 @@ Vec3Df IMaterial::calculateRefractedVector(
 	float cz = (normal[0]*iRay[1]) - (normal[1]*iRay[0]);
 	Vec3Df axis = Vec3Df(cx, cy, cz);
 	
-	float c = std::cos(angle1-angle2);
-	float s = std::sin(angle1-angle2);
+	float c = std::cos(angle2-angle1);
+	float s = std::sin(angle2-angle1);
 	float Kx = axis[0];
 	float Ky = axis[1];
 	float Kz = axis[2];
