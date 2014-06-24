@@ -8,8 +8,8 @@
 #include "Random.h"
 
 #ifndef WIN32
-static __thread bool Random::initialized;
-static __thread unsigned int Random::seed;
+__thread bool Random::initialized;
+__thread unsigned int Random::seed;
 #endif
 
 unsigned int Random::rand() {
