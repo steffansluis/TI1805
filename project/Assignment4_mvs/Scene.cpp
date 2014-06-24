@@ -175,16 +175,16 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 
 	clock_t start = clock();
 
+	std::cout << "Beginning rendering (" << height << "x" << width << ")" << std::endl;
+
 #pragma omp parallel shared(camera, result)
 	{
 		// Set the random seed for each thread
 		srand(time(NULL) ^ omp_get_thread_num());
 
-		std::cout << "Beginning rendering (" << height << "x" << width << ")" << std::endl;
-
 		// Iterate through each pixel, collapse the calculation into separate threads if not on windows (seems like MVC doesnt support collapse)
 #ifdef WIN32
-#pragma omp for schedule(dynamic)
+#pragma omp for reduction(+:iterationCounter) schedule(dynamic)
 #else
 #pragma omp for reduction(+:iterationCounter) collapse(2) schedule(dynamic)
 #endif
