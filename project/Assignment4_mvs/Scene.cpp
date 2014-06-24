@@ -126,6 +126,7 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	int iterationCounter = 0;
 
 	// Iterate through each pixel
+	printf("beginrender");
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++, iterationCounter++) {
 			Vec3Df origin;
@@ -138,15 +139,28 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 				std::cout << "iteration: " << iterationCounter << "\n";
 			}
 #endif
+			// Get a number of rays per pixel for the depth of field effect.
+			float raysPerPixel = 25;
+			float red=0;
+			float green=0;
+			float blue=0;
+			Vec3Df color;
+			for (int i = 0; i < raysPerPixel; i++){
+				// Get the ray from the camera through the current pixel
+				camera->getRay(x, y, origin, dir);
+				Vec3Df color = this->rayTracer->performRayTracing(origin, dir);
+				red += color[0];
+				green += color[1];
+				blue += color[2];
+				printf("depthopfieldray");
 
-			// Get the ray from the camera through the current pixel
-			camera->getRay(x, y, origin, dir);
-
-			// Trace the ray through the scene
-			Vec3Df color = this->rayTracer->performRayTracing(origin, dir);
-
+			}
+			red /= raysPerPixel;
+			green /= raysPerPixel;
+			blue /= raysPerPixel;
+			result->setPixel(x, y, RGBValue(red, green, blue));
 			// Set the resulting color in the image
-			result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
+			
 		}
 
 		std::cout << "Row " << y << std::endl;
