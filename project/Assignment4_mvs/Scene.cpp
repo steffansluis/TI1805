@@ -172,12 +172,15 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	// A counter for the iteration of the ray-tracing algorithm. 
 	int iterationCounter = 0;
 
+
 	clock_t start = clock();
 
 #pragma omp parallel shared(camera, result)
 	{
 		// Set the random seed for each thread
 		srand(time(NULL) ^ omp_get_thread_num());
+
+		std::cout << "Beginning rendering (" << height << "x" << width << ")" << std::endl;
 
 		// Iterate through each pixel, collapse the calculation into separate threads if not on windows (seems like MVC doesnt support collapse)
 #ifdef WIN32
@@ -186,16 +189,15 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 #pragma omp for reduction(+:iterationCounter) collapse(2) schedule(dynamic)
 #endif
 		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+			for (int x = 0; x < width; x++, iterationCounter++) {
 				// Render the pixel
 				Vec3Df color = this->renderPixel(camera, x, y);
 
 				// Set the resulting color in the image
 				result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
 
-				// Printing is sloooow
 				if (iterationCounter++ % width == 0)
-				std::cout << "Pixel: " << iterationCounter << " / " << (width * height) << std::endl;
+					std::cout << "Pixel: " << iterationCounter << " / " << (width * height) << std::endl;
 			}
 		}
 	}
@@ -207,6 +209,7 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 
 	return result;
 }
+		
 
 void Scene::preprocess() {
 	// Preprocess all geometry

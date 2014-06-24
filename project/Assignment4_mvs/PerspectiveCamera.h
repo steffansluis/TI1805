@@ -46,12 +46,17 @@ protected:
 	 */
 	void getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) const;
 
+
+
 private:
 	float fieldOfView;
 	Vec3Df right;
 	Vec3Df up;
 	Vec3Df forward;
 	Vec3Df imagePlaneOffset;
+	float ApertureRadius;
+	Vec3Df xApertureRadius;
+	Vec3Df yApertureRadius;
 };
 
 #endif

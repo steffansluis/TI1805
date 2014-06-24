@@ -153,9 +153,9 @@ int main(int argc, char** argv)
     glutMouseFunc(tbMouseFunc);    // traqueboule utilise la souris
     glutMotionFunc(tbMotionFunc);  // traqueboule utilise la souris
     glutIdleFunc( animate);
-	
-	init();
 
+	init();
+	
     // lancement de la boucle principale
     glutMainLoop();
         

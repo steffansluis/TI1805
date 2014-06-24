@@ -51,6 +51,7 @@ void init()
 	//at least ONE light source has to be in the scene!!!
 	//here, we set it to the current location of the camera
 	MyLightPositions.push_back(MyCameraPosition);
+
 }
 
 void yourDebugDraw()
@@ -241,7 +242,6 @@ void createScene2(Scene *scene) {
 
 void rayTrace() {
 	std::cout << "Raytracing" << std::endl;
-
 	// Create a scene
 	Scene scene;
 	createScene2(&scene);

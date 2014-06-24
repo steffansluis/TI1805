@@ -2,6 +2,8 @@
 
 #include "Constants.h"
 #include "PerspectiveCamera.h"
+#include "Random.h"
+
 
 PerspectiveCamera::PerspectiveCamera()
 : ICamera(), fieldOfView(Constants::PiOver4) {
@@ -39,6 +41,17 @@ void PerspectiveCamera::preprocess(int width, int height) {
 	// TODO: Think and verify this, tired atm
 	float distance = 0.5f / tanf(0.5f * this->fieldOfView);
 
+	//Values needed for depth of field
+
+	//Distance to the image the focus if on
+	float focalDistance = this->getPosition().getLength() - this->getLookAt().getLength();
+	//half width of the view plane
+	float halfWidth = distance * tanf(fieldOfView / 2);
+	//radius of the "eyeball", I will play with this a bit, i dont know what a good radius would be
+	this->ApertureRadius = 0.01f;
+	this->xApertureRadius = this->right*ApertureRadius;
+	this->yApertureRadius = this->up*ApertureRadius;
+	
 	// Offset from position to centre of the image plane
 	this->imagePlaneOffset = this->forward * distance;
 }
@@ -47,7 +60,15 @@ void PerspectiveCamera::getRay(float u, float v, Vec3Df &origin, Vec3Df &dir) co
 	// Get the vector towards centre of the image plane and offset it 
 	// by the right and up vectors scaled by u and v respectivly.
 	dir = this->imagePlaneOffset + this->right * u - this->up * v;
+
+	// Calculate two random vectors for the offset to somewhere in our "eye"
+	float r1;
+	float r2;
+	Random::sampleUnitDisk(r1, r2);
+
+	Vec3Df randomisedEyePoint = Vec3Df::addition(r1 * this->xApertureRadius, r2 * this->yApertureRadius);
+	origin = randomisedEyePoint;
+	origin.normalize();
 	dir.normalize();
 
-	origin = this->getPosition();
 }
