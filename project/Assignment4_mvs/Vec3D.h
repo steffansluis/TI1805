@@ -128,6 +128,7 @@ public:
         return (*this);
     };
 
+
     //---------------------------------------------------------------
 
     inline Vec3D & init (T x, T y, T z) {
@@ -193,6 +194,15 @@ public:
         result[2] = a[0] * b[1] - a[1] * b[0];
         return(result);
     }
+
+	static inline Vec3D addition(const Vec3D & a, const Vec3D & b) {
+		Vec3D result;
+		result[0] = a[0] + b[0];
+		result[1] = a[1] + b[1];
+		result[2] = a[2] + b[2];
+		return(result);
+	}
+
     static inline T dotProduct(const Vec3D & a, const Vec3D & b) {
         return (a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
     }
@@ -277,6 +287,9 @@ template <class T> inline Vec3D<T> swap (Vec3D<T> & P, Vec3D<T> & Q) {
     P = Q;
     Q = tmp;
 }
+
+
+
 
 template <class T> std::ostream & operator<< (std::ostream & output, const Vec3D<T> & v) {
     output << v[0] << " " << v[1] << " " << v[2];
