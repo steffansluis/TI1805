@@ -8,6 +8,8 @@ project/Assignment4_mvs/ipch/
 project/Assignment4_mvs/build/
 
 # Ignore the output files
+project/Assignment4_mvs/Render/
+
 project/Assignment4_mvs/Debug/*
 !project/Assignment4_mvs/Debug/models/
 !project/Assignment4_mvs/Debug/glut32.dll
@@ -17,8 +19,6 @@ project/Assignment4_mvs/Release/*
 !project/Assignment4_mvs/Release/glut32.dll
 
 project/Assignment4_mvs/Test/
-#project/Assignment4_mvs/Test/*
-#!project/Assignment4_mvs/Test/Assignment4_mvs.lib
 
 project/Assignment4_Testing/Debug/
 project/Assignment4_Testing/Release/
