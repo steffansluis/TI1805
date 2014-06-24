@@ -46,7 +46,7 @@ void PerspectiveCamera::preprocess(int width, int height) {
 	//half width of the view plane
 	halfWidth = distance*tan(fieldOfView / 2);
 	//radius of the "eyeball", I will play with this a bit, i dont know what a good radius would be
-	this->ApertureRadius = 100;
+	this->ApertureRadius = 10;
 	this->xApertureRadius = this->right*ApertureRadius;
 	this->yApertureRadius = this->up*ApertureRadius;
 	

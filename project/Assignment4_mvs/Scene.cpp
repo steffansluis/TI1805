@@ -171,7 +171,7 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 	// A counter for the iteration of the ray-tracing algorithm. 
 	int iterationCounter = 0;
 
-<<<<<<< HEAD
+
 	clock_t start = clock();
 
 #pragma omp parallel shared(camera, result)
@@ -185,65 +185,57 @@ std::shared_ptr<Image> Scene::render(std::shared_ptr<ICamera> camera, int width,
 #else
 #pragma omp for reduction(+:iterationCounter) collapse(2) schedule(dynamic)
 #endif
+
+		// Iterate through each pixel
+		printf("beginrender");
 		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				// Render the pixel
-				Vec3Df color = this->renderPixel(camera, x, y);
-
-				// Set the resulting color in the image
-				result->setPixel(x, y, RGBValue(color[0], color[1], color[2]));
-
-				// Printing is sloooow
-				//std::cout << "Pixel: " << iterationCounter++ << std::endl;
-			}
-=======
-	// Iterate through each pixel
-	printf("beginrender");
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++, iterationCounter++) {
-			Vec3Df origin;
-			Vec3Df dir;
+			for (int x = 0; x < width; x++, iterationCounter++) {
+				Vec3Df origin;
+				Vec3Df dir;
 
 #if _DEBUG	// _DEBUG is probably not defined in GCC
-			// print the iteration
-			if (iterationCounter % 100 == 0)
-			{
-				std::cout << "iteration: " << iterationCounter << "\n";
-			}
+				// print the iteration
+				if (iterationCounter % 100 == 0)
+				{
+					std::cout << "iteration: " << iterationCounter << "\n";
+				}
 #endif
-			// Get a number of rays per pixel for the depth of field effect.
-			float raysPerPixel = 25;
-			float red=0;
-			float green=0;
-			float blue=0;
-			Vec3Df color;
-			for (int i = 0; i < raysPerPixel; i++){
-				// Get the ray from the camera through the current pixel
-				camera->getRay(x, y, origin, dir);
-				Vec3Df color = this->rayTracer->performRayTracing(origin, dir);
-				red += color[0];
-				green += color[1];
-				blue += color[2];
-				printf("depthopfieldray");
+				// Get a number of rays per pixel for the depth of field effect.
+				float raysPerPixel = 25;
+				float red = 0;
+				float green = 0;
+				float blue = 0;
+				Vec3Df color;
+				for (int i = 0; i < raysPerPixel; i++){
+					// Get the ray from the camera through the current pixel
+					camera->getRay(x, y, origin, dir);
+					Vec3Df color = this->rayTracer->performRayTracing(origin, dir);
+					red += color[0];
+					green += color[1];
+					blue += color[2];
+					printf("depthopfieldray");
+
+				}
+				red /= raysPerPixel;
+				green /= raysPerPixel;
+				blue /= raysPerPixel;
+				result->setPixel(x, y, RGBValue(red, green, blue));
+				// Set the resulting color in the image
+
 
 			}
-			red /= raysPerPixel;
-			green /= raysPerPixel;
-			blue /= raysPerPixel;
-			result->setPixel(x, y, RGBValue(red, green, blue));
-			// Set the resulting color in the image
-			
->>>>>>> origin/DoF
 		}
+
+
+		clock_t end = clock();
+		std::cout << "Time: " << (end - start) / (double)CLOCKS_PER_SEC;
+
+		std::cout << "Done!" << std::endl;
+
+		return result;
 	}
-
-	clock_t end = clock();
-	std::cout << "Time: " << (end - start) / (double)CLOCKS_PER_SEC;
-
-	std::cout << "Done!" << std::endl;
-
-	return result;
 }
+		
 
 void Scene::preprocess() {
 	// Preprocess all geometry
