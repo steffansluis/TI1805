@@ -18,10 +18,12 @@
 #include "DiskGeometry.h"
 #include "ILight.h"
 #include "IMaterial.h"
+#include "MeshGeometry.h"
+#include "Octree.h"
+#include "OrenNayarBRDF.h"
 #include "PerspectiveCamera.h"
 #include "PlaneGeometry.h"
 #include "PointLight.h"
-#include "MeshGeometry.h"
 #include "RayTracer.h"
 #include "Scene.h"
 #include "SphereGeometry.h"
@@ -308,26 +310,76 @@ void createScene3(Scene *scene) {
 	scene->addGeometry(sphere8);
 }
 
+// Because destructors...
+Mesh bunnyMesh;
+Mesh teapotMesh;
+Mesh suzanneMesh;
+
 void createCornellBox(Scene *scene) {
-	//scene->setAmbientLight(Vec3Df(0.1f, 0.1f, 0.1f));
-	scene->setSamplesPerPixel(8);
-	scene->setMaxTraceDepth(6);
+	scene->setSamplesPerPixel(4);
+	scene->setMaxTraceDepth(5);
 	scene->setPathTracingEnabled(true);
+
+	bunnyMesh.loadMesh("models/bunny2.obj", true);
+	bunnyMesh.computeVertexNormals();
+
+	teapotMesh.loadMesh("models/teapot.obj", true);
+	teapotMesh.computeVertexNormals();
+
+	suzanneMesh.loadMesh("models/suzanne.obj", true);
+	suzanneMesh.computeVertexNormals();
+
+	auto bunny = std::make_shared<MeshGeometry>(&bunnyMesh);
+	auto teapot = std::make_shared<MeshGeometry>(&teapotMesh);
+	auto suzanne = std::make_shared<MeshGeometry>(&suzanneMesh);
+
+	auto bunnyMaterial = std::make_shared<IMaterial>();
+	bunnyMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1)));
+	bunnyMaterial->setDiffuseReflectance(0.0f);
+	bunnyMaterial->setSpecularReflectance(0.0f);
+	bunnyMaterial->setTransparency(1.0f);
+	bunnyMaterial->setAbsorbance(0.01f);
+	bunnyMaterial->setRefractiveIndex(1.517f);
+
+	auto teapotMaterial = std::make_shared<IMaterial>();
+	teapotMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1)));
+	teapotMaterial->setDiffuseReflectance(0.0f);
+	teapotMaterial->setSpecularReflectance(1.0f);
+
+	auto suzanneMaterial = std::make_shared<IMaterial>();
+	suzanneMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1)));
+	suzanneMaterial->setDiffuseReflectance(1.0f);
+	suzanneMaterial->setSpecularReflectance(1.0f);
+	suzanneMaterial->setShininess(80.0f);
+	suzanneMaterial->setRoughness(0.3f);
+	suzanneMaterial->setDiffuseBRDF<OrenNayarBRDF>();
+	suzanneMaterial->setSpecularBRDF<BlinnPhongBRDF>();
+
+	bunny->setMaterial(bunnyMaterial);
+	teapot->setMaterial(teapotMaterial);
+	suzanne->setMaterial(suzanneMaterial);
+
+	scene->addGeometry(bunny);
+	scene->addGeometry(teapot);
+	scene->addGeometry(suzanne);
 
 	auto darkGreen = std::make_shared<IMaterial>();
 	darkGreen->setTexture(std::make_shared<ConstantTexture>(Vec3Df(0.000000f, 0.320000f, 0.000000f)));
 	darkGreen->setDiffuseReflectance(1.0f);
 	darkGreen->setSpecularReflectance(0.0f);
+	darkGreen->setSpecularBRDF<BlinnPhongBRDF>();
 
 	auto halveRed = std::make_shared<IMaterial>();
 	halveRed->setTexture(std::make_shared<ConstantTexture>(Vec3Df(0.560024f, 0.000000f, 0.000000f)));
 	halveRed->setDiffuseReflectance(1.0f);
 	halveRed->setSpecularReflectance(0.0f);
+	halveRed->setSpecularBRDF<BlinnPhongBRDF>();
 
 	auto kahki = std::make_shared<IMaterial>();
 	kahki->setTexture(std::make_shared<ConstantTexture>(Vec3Df(0.800000f, 0.659341f, 0.439560f)));
 	kahki->setDiffuseReflectance(1.0f);
 	kahki->setSpecularReflectance(0.0f);
+	kahki->setSpecularBRDF<BlinnPhongBRDF>();
 
 	auto areaLightMaterial = std::make_shared<IMaterial>();
 	areaLightMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(1, 1, 1)));
@@ -339,11 +391,6 @@ void createCornellBox(Scene *scene) {
 	boxMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(0, 0, 1)));
 	boxMaterial->setDiffuseReflectance(1.0f);
 	boxMaterial->setSpecularReflectance(0.0f);
-
-	auto bunnyMaterial = std::make_shared<IMaterial>();
-	bunnyMaterial->setTexture(std::make_shared<ConstantTexture>(Vec3Df(0, 0, 1)));
-	bunnyMaterial->setDiffuseReflectance(1.0f);
-	bunnyMaterial->setSpecularReflectance(0.0f);
 
 	Vec3Df tallBoxVerts[8];
 	Vec3Df tallBoxTranslation = Vec3Df(-3.68500f, 1.64720f, -3.51631f);
@@ -428,8 +475,6 @@ void createCornellBox(Scene *scene) {
 	auto boxTopTri2 = std::make_shared<TriangleGeometry>(boxVerts[7], boxVerts[6], boxVerts[4]);
 	auto boxBottomTri1 = std::make_shared<TriangleGeometry>(boxVerts[0], boxVerts[1], boxVerts[2]);
 	auto boxBottomTri2 = std::make_shared<TriangleGeometry>(boxVerts[2], boxVerts[3], boxVerts[0]);
-
-	auto bunny = std::make_shared<MeshGeometry>(&MyMesh);
 
 	auto areaLightTri1Light = std::make_shared<AreaLight>(areaLightTri1);
 	auto areaLightTri2Light = std::make_shared<AreaLight>(areaLightTri2);
@@ -521,8 +566,6 @@ void createCornellBox(Scene *scene) {
 	scene->addGeometry(boxTopTri2);
 	scene->addGeometry(boxBottomTri1);
 	scene->addGeometry(boxBottomTri2);
-
-	scene->addGeometry(bunny);
 
 	scene->addLight(areaLightTri1Light);
 	scene->addLight(areaLightTri2Light);
