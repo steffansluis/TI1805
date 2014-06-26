@@ -269,6 +269,10 @@ Vec3Df IMaterial::transmittedLight(
 		// Sample the reflected vector, reflectance, refracted vector and transmittance
 		Vec3Df refractedVector = IMaterial::calculateRefractedVector(incomingVector, surface.normal, n1, n2);
 
+		if (refractedVector.getSquaredLength() == 0.0f) {
+			return Vec3Df();
+		}
+
 		float distance;
 
 		// Trace the refraction ray
@@ -309,35 +313,15 @@ Vec3Df IMaterial::calculateRefractedVector(
 	const Vec3Df &incomingVector,
 	const Vec3Df &normal,
 	float n1,
-	float n2) {
-	
-	float IdotN = Vec3Df::dotProduct(incomingVector, normal);
-	if (IdotN < 0) {
+	float n2)
+{
+	float n = n1 / n2;
+	float cosI = Vec3Df::dotProduct(normal, incomingVector);
+	float sinT2 = n * n * (1.0f - cosI * cosI);
+
+	if (cosI < 0.0f || sinT2 > 1.0f) {
 		return Vec3Df();
 	}
-	
-	float angle1 = std::acos(IdotN);
-	float angle2 = std::asin(n1 * std::sin(angle1) / n2);
-	
-	Vec3Df iRay = -1 * incomingVector;
-	
-	// Take the cross product of iRay and normal and use this as the axis to rotate iRay towards the normal. (the rotation is counter-clockwise)
-	float cx = (normal[1]*iRay[2]) - (normal[2]*iRay[1]);
-	float cy = (normal[2]*iRay[0]) - (normal[0]*iRay[2]);
-	float cz = (normal[0]*iRay[1]) - (normal[1]*iRay[0]);
-	Vec3Df axis = Vec3Df(cx, cy, cz);
-	
-	float c = std::cos(angle2-angle1);
-	float s = std::sin(angle2-angle1);
-	float Kx = axis[0];
-	float Ky = axis[1];
-	float Kz = axis[2];
-	Vec3Df xMultiplier = Vec3Df(Kx*Kx*(1-c) + c, Kx*Ky*(1-c) - Kz*s, Kx*Kz*(1-c) + Ky*s);
-	float x = Vec3Df::dotProduct(xMultiplier, iRay);
-	Vec3Df yMultiplier = Vec3Df(Ky*Kx*(1-c) + Kz*s, Ky*Ky*(1-c) + c, Ky*Kz*(1-c) - Kx*s);
-	float y = Vec3Df::dotProduct(yMultiplier, iRay);
-	Vec3Df zMultiplier = Vec3Df(Kz*Kx*(1-c) - Ky*s, Kz*Ky*(1-c) + Kx*s, Kz*Kz*(1-c) + c);
-	float z = Vec3Df::dotProduct(zMultiplier, iRay);
-	
-	return Vec3Df(x,y,z);
+
+	return n * incomingVector - (n + sqrtf(1.0f - sinT2)) * normal;
 }
