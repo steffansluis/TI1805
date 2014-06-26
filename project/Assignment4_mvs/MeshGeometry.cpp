@@ -42,11 +42,13 @@ void MeshGeometry::setAccelerationStructure(std::shared_ptr<IAccelerationStructu
 void MeshGeometry::preprocess() {
 	float totalArea = 0.0f;
 	float maxTriangleArea = 0.0f;
+	std::shared_ptr<const IMaterial> material = this->getMaterial();
 
 	// Preprocess all triangles and calculate the total surface area and
 	// the surface area of the biggest triangle
 	for (std::vector<std::shared_ptr<IGeometry>>::const_iterator it = this->triangles->begin(); it != this->triangles->end(); ++it) {
 		(*it)->preprocess();
+		(*it)->setMaterial(material);
 
 		float area = (*it)->getArea();
 		totalArea += area;

@@ -47,6 +47,6 @@ Vec3Df OrenNayarBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &r
 	float alhpa = std::max(thetaI, thetaR);
 	float beta = std::min(thetaI, thetaR);
 
-	Vec3Df Lr = (rho / Constants::Pi) * cosThetaI * (A + (B * std::max(0.f, cosPhiDiff) * std::sin(alhpa) * std::tan(beta))) * light;
+	Vec3Df Lr = rho * cosThetaI * (A + (B * std::max(0.f, cosPhiDiff) * std::sin(alhpa) * std::tan(beta))) * light;
 	return Lr;
 }

@@ -16,6 +16,6 @@ Vec3Df LambertianBRDF::reflectance(const Vec3Df &incommingVector, const Vec3Df &
 	Vec3Df rho = this->material->sampleColor(texCoords);
 	float cosThetaI = std::max(0.0f, Vec3Df::dotProduct(incommingVector, normal));
 
-	Vec3Df Lr = (rho / Constants::Pi) * cosThetaI * light;
+	Vec3Df Lr = rho * cosThetaI * light;
 	return Lr;
 }

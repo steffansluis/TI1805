@@ -74,8 +74,8 @@ bool OctreeNode::calculateClosestIntersection(const Vec3Df &origin, const Vec3Df
 		for (int i = 0; i < 8; i++) {
 			bool intersects = this->children[i]->calculateClosestIntersection(origin, dir, intersection);
 
-			// If this is the first intersection, set it intersection the the last intersection
-			if (!intersects) {
+			// If there is any intersection, set the intersectsAny flag
+			if (intersects) {
 				intersectsAny = true;
 			}
 		}
