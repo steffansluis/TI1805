@@ -1,0 +1,26 @@
+﻿Build started 20-6-2014 07:00:21.
+     1>Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_Testing\Assignment4_Testing.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Test\Assignment4Testing.pch" /Fo"Test\\" /Fd"Test\vc120.pdb" /TP /wd4756 /wd4056 /FU"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Test\Assignment4Testing.pch" /Fo"Test\\" /Fd"Test\vc120.pdb" /TP /wd4756 /wd4056 /FU"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib AssemblyInfo.cpp BTreeTest.cpp
+         AssemblyInfo.cpp
+         BTreeTest.cpp
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Test\\" /Fd"Test\vc120.pdb" /TP /wd4756 /wd4056 /analyze- /errorReport:prompt "C:\Users\Bas\AppData\Local\Temp\.NETFramework,Version=v4.0.AssemblyAttributes.cpp"
+         .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"Test\app.res" app.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Test\Assignment4Testing.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Test" Assignment4_mvs.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Test\Assignment4Testing.pdb" /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 /SAFESEH /DLL Test\app.res
+         Test\AssemblyInfo.obj
+         Test\stdafx.obj
+         Test\BTreeTest.obj
+         "Test\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Test\Assignment4_mvs.lib"
+     1>LINK : fatal error LNK1104: cannot open file 'Assignment4_mvs.lib'
+     1>Done Building Project "C:\Users\Bas\Dropbox\TU Delft\Jaar 3\TI1805 Computer Graphics\Assignments\Assignment 4\project\Assignment4_mvs\Assignment4_Testing\Assignment4_Testing.vcxproj" (Rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:02.52
