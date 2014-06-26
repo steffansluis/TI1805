@@ -85,8 +85,8 @@ void yourKeyboardFunc(unsigned char t, int x, int y)
 	switch (t)
 	{
 	case 'r':
-		// reset the counter
-		rayIteration = 0;
+
+		break;
 	}
 
 
