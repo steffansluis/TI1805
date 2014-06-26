@@ -1,6 +1,6 @@
 # Blender v2.70 (sub 0) OBJ File: 'cornellboxandbunny_empty.blend'
 # www.blender.org
-mtllib teapot2.mtl
+mtllib teapot.mtl
 o Object001
 v -3.144546 4.349164 -3.285593
 v -3.136863 4.317685 -3.282324
